@@ -12,17 +12,18 @@
         <plugin>
           <groupId>io.swagger.codegen.v3</groupId>
           <artifactId>swagger-codegen-maven-plugin</artifactId>
-          <version>3.0.20</version>
+          <version>3.0.21</version>
           <executions>
             <execution>
               <goals>
                 <goal>generate</goal>
               </goals>
               <configuration>
+                <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/2f67ecea36e429e104442692936f8874171350f7/reference/REST/openapiv3.json</inputSpec>
                 <!--
                 <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/master/reference/REST/openapiv3.json</inputSpec>
-                -->
                 <inputSpec>/home/fussybeaver/projects/praiya/codegen/pagerduty.json</inputSpec>
+                -->
                 <language>praiya.PraiyaCodegen</language>
                 <output>${project.build.directory}/generated-sources</output>
                 <generateApis>true</generateApis>
@@ -46,27 +47,21 @@
       </plugins>
     </build>
 
+    <properties>
+      <maven.compiler.source>8</maven.compiler.source>
+      <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.swagger.codegen.v3</groupId>
             <artifactId>swagger-codegen</artifactId>
-            <version>3.0.20</version>
+            <version>3.0.21</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.codegen.v3</groupId>
             <artifactId>swagger-codegen-generators</artifactId>
-            <version>1.0.20</version>
-        </dependency>
-        <dependency>
-            <groupId>io.burt</groupId>
-            <artifactId>jmespath</artifactId>
-            <version>0.5.0</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>io.burt</groupId>
-            <artifactId>jmespath-jackson</artifactId>
-            <version>0.5.0</version>
+            <version>1.0.21</version>
         </dependency>
     </dependencies>
 </project>
