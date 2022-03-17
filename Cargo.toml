@@ -16,7 +16,6 @@ hyper = "0.13.6"
 hyper-rustls = "0.20.0"
 log = "0.4.8"
 pin-project = "0.4.20"
-praiya-stubs = { version = "2.0.0", path = "codegen/target/generated-sources/" }
 rustls = "0.17"
 rustls-native-certs = "0.3.0"
 serde = "1.0.114"
@@ -28,6 +27,10 @@ tokio = { version = "0.2.17", features = ["time", "fs"] }
 tokio-util = { version = "0.3.1", features = ["codec"] }
 url = "2.1.1"
 webpki-roots = "0.20.0"
+
+chrono = { version = "0.4", features = ["serde"] }
+serde_urlencoded = { version = "0.7" }
+uuid = { version = "0.8", features = ["serde"] }
 
 [dev-dependencies]
 slugify = "0.1.0"

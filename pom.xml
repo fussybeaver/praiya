@@ -1,0 +1,84 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pagerduty-models</groupId>
+    <artifactId>pagerduty-models-codegen</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>pagerduty-models</name>
+
+    <!-- build with: mvn clean compiler:compile generate-resources -->
+
+    <build>
+      <sourceDirectory>${project.basedir}/java</sourceDirectory>
+      <plugins>
+        <plugin>
+          <groupId>io.swagger.codegen.v3</groupId>
+          <artifactId>swagger-codegen-maven-plugin</artifactId>
+          <version>3.0.29</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+              <configuration>
+                <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/master/reference/REST/openapiv3.json</inputSpec>
+                <!--
+                <inputSpec>/home/fussybeaver/projects/praiya/openapiv3.json</inputSpec>
+                -->
+                <language>pagerduty.PagerDutyCodegen</language>
+                <output>${project.basedir}</output>
+                <generateApis>true</generateApis>
+                <templateDirectory>${project.basedir}/templates</templateDirectory>
+                <configOptions>
+                  <packageName>pagerduty-models-models</packageName>
+                  <packageVersion>0</packageVersion>
+                </configOptions>
+              </configuration>
+            </execution>
+          <!--
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+              <configuration>
+                <inputSpec>/home/fussybeaver/projects/praiya/slack/openapiv3.json</inputSpec>
+                <language>pagerduty.PagerDutyCodegen</language>
+                <output>${project.basedir}/slack</output>
+                <generateApis>true</generateApis>
+                <templateDirectory>${project.basedir}/templates</templateDirectory>
+                <configOptions>
+                  <packageName>pagerduty-slack-models</packageName>
+                  <packageVersion>0</packageVersion>
+                </configOptions>
+              </configuration>
+            </execution>
+                -->
+          </executions>
+          <dependencies>
+              <dependency>
+                  <groupId>pagerduty-models</groupId>
+                  <artifactId>pagerduty-models-codegen</artifactId>
+                  <version>0.1.0-SNAPSHOT</version>
+              </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </build>
+
+    <properties>
+      <maven.compiler.source>8</maven.compiler.source>
+      <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger.codegen.v3</groupId>
+            <artifactId>swagger-codegen</artifactId>
+            <version>3.0.29</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.codegen.v3</groupId>
+            <artifactId>swagger-codegen-generators</artifactId>
+            <version>1.0.29</version>
+        </dependency>
+    </dependencies>
+</project>
