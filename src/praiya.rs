@@ -17,10 +17,11 @@ use hyper::{Body, Method, Request, Response};
 use hyper_rustls::HttpsConnector;
 use serde::de::DeserializeOwned;
 use serde::ser;
+use log::{debug, warn};
 
 use crate::errors::Error::*;
 use crate::errors::{self, Error};
-use praiya_stubs::models::*;
+use crate::models::*;
 
 type Client = hyper::Client<HttpsConnector<HttpConnector>>;
 type TSMiddleware = Box<dyn Middleware + Send + Sync + 'static>;
@@ -138,9 +139,9 @@ impl Praiya {
             .body(body)?)
     }
 
-    fn parse_url<'a>(path: &str, query: &str) -> Result<Uri<'a>, Error> {
-        debug!("{}", path);
-        let mut url = url::Url::parse(PAGERDUTY_API_HOST)?;
+    pub(crate) fn parse_url<'a>(host: &str, path: &str, query: &str) -> Result<Uri<'a>, Error> {
+        debug!("parse url path: {}", path);
+        let mut url = url::Url::parse(host)?;
         url = url.join(path)?;
         url.set_query(Some(query));
 
@@ -438,7 +439,7 @@ impl RequestBuilder for BaseRequest {
     }
 }
 
-trait SubSystem {
+pub(crate) trait SubSystem {
     fn path(&self) -> &'static str;
 }
 
@@ -604,7 +605,7 @@ impl<'a> ServiceListOptionsBuilder<'a> {
 }
 
 #[derive(Debug, PartialEq, Serialize)]
-pub struct PaginationQueryComponent {
+pub(crate) struct PaginationQueryComponent {
     pub offset: usize,
     pub limit: usize,
 }
@@ -663,7 +664,7 @@ impl BaseOption for ServiceGetOptions {
     }
 }
 
-const DEFAULT_PAGERDUTY_API_LIMIT: usize = 25;
+pub const DEFAULT_PAGERDUTY_API_LIMIT: usize = 25;
 
 impl Services {
     pub fn list(

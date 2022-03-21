@@ -592,6 +592,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
                                         if (mdl.getVendorExtensions().get("x-codegen-pagination-response-inner") != null) {
                                             res.getVendorExtensions().put("x-codegen-pagination-response-inner", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
                                             operation.getVendorExtensions().put("x-codegen-is-list-fn", "true");
+                                            operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
+                                            operation.getVendorExtensions().put("x-codegen-response-plural-snake-case", underscore(res.dataType.replace("Response", "")));
+                                            operation.getVendorExtensions().put("x-codegen-response-single", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
                                         }
                                     }
                                 }
@@ -610,6 +613,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
         objs = super.postProcessOperations(objs);
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         if (operations != null) {
+            //LOGGER.info(" *** " + operations.keySet() );
+            //operations.getVendorExtensions().put("x-rustgen-plural-snake-case", "fooofooo");
+
             List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
             for (final CodegenOperation operation : ops) {
                 if (operation.notes != null) {
@@ -639,6 +645,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                         if (resName != null) {
                             res.dataType = toModelName(resName);
                         }
+                        //operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
                     }
                 }
                 if (!hasDefaultResponse) {
@@ -704,7 +711,10 @@ public class PagerDutyCodegen extends RustServerCodegen {
         if (body.getExtensions() != null) {
             Object operationName = body.getExtensions().get("x-codegen-operation-name");
             if (operationName != null && !operationName.toString().isEmpty() && name != null) {
-                patchOperationBodyNames.put(camelize(name), removeVerb(operationName.toString()));
+                LOGGER.info(" *** " + removeVerb(operationName.toString()));
+                //patchOperationBodyNames.put(camelize(name), removeVerb(operationName.toString() + "Body"));
+                patchOperationBodyNames.put(camelize(name), operationName + "Body");
+
             }
         }
 
@@ -730,9 +740,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
         if (response.getExtensions() != null) {
             Object operationName = response.getExtensions().get("x-codegen-operation-name");
             if (operationName != null && !operationName.toString().isEmpty() && res.getDataType() != null
-                    && res.getDataType().startsWith("InlineResponse")) {
+                    && res.getDataType().startsWith("InlineResponse") && responseCode.equals("200")) {
                 patchOperationResponseNames.put(camelize(res.getDataType()),
-                        removeVerb(operationName.toString()) + "Response");
+                        operationName.toString() + "Response");
             }
         }
 

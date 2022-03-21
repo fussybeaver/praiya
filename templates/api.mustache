@@ -4,28 +4,53 @@
 )]
 {{>partial_header}}
 
-use serde::Deserialize;
 
+use crate::{
+    BaseOption, BaseRequest, Praiya, PaginatedResponse, PaginationQueryComponent,
+    SingleResponse, SubSystem, DEFAULT_PAGERDUTY_API_LIMIT
+};
+use crate::errors::Error;
 use crate::models::*;
 
 use std::collections::HashMap;
+use std::sync::Arc;
+
+use futures_core::Stream;
+use futures_util::stream::StreamExt;
+use http::request::Builder;
+use hyper::{Body, Method};
+use serde::{Deserialize, Serialize};
 use serde_json::value::Value;
+use url::form_urlencoded;
 
 pub struct {{classname}}Client {
     pub(crate) api_endpoint: String,
-    pub(crate) client: PagerDuty,
+    pub(crate) workspace: String,
+    pub(crate) client: Praiya,
 }
 
 {{#operations}}
 
-{{#operation}}{{#contents}}{{#hasQueryParams}}
+{{#operation}}{{#contents}}
+{{#vendorExtensions.x-codegen-is-list-fn}}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct {{vendorExtensions.x-codegen-response-plural}} {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub {{vendorExtensions.x-codegen-response-plural-snake-case}}: Vec<{{vendorExtensions.x-codegen-response-single}}>, //pub slack_connections: Vec<SlackConnection>
+}
+
+{{/vendorExtensions.x-codegen-is-list-fn}}{{#hasQueryParams}}
 /// Query parameters for the [{{summary}}]({{classname}}::{{operationId}}()) endpoint.
 #[derive(Default, Serialize)]
-pub struct {{classname}}{{operationIdCamelCase}}Params<'req> {
+pub struct {{classname}}{{operationIdCamelCase}}Params {
     pub(crate) qs: String,
 }
 
-pub struct {{classname}}{{operationIdCamelCase}}ParamsBuilder {
+pub struct {{classname}}{{operationIdCamelCase}}ParamsBuilder<'req> {
     qs: form_urlencoded::Serializer<'req, String>,
 }
 
@@ -41,10 +66,10 @@ impl<'req> {{classname}}{{operationIdCamelCase}}ParamsBuilder<'req> {
     pub fn {{paramName}}{{#vendorExtensions.x-codegen-list-container-string}}<I: IntoIterator<Item = &'req str>>{{/vendorExtensions.x-codegen-list-container-string}}(&mut self, {{paramName}}: {{#isString}}&'req str{{/isString}}{{#isUuid}}&'req str{{/isUuid}}{{^isString}}{{^isUuid}}{{#vendorExtensions.x-codegen-list-container-string}}I{{/vendorExtensions.x-codegen-list-container-string}}{{^vendorExtensions.x-codegen-list-container-string}}{{{dataType}}}{{/vendorExtensions.x-codegen-list-container-string}}{{/isUuid}}{{/isString}}) -> &mut Self {
         {{#vendorExtensions.x-codegen-list-container-string}}
         for item in {{paramName}} {
-            self.qs.append_pair("{{paramName}}[]", serde_urlencoded::to_string(item));
+            self.qs.append_pair("{{paramName}}[]", &item);
         }{{/vendorExtensions.x-codegen-list-container-string ~}}
         {{^vendorExtensions.x-codegen-list-container-string}}
-        self.qs.append_pair("{{paramName}}", serde_urlencoded::to_string({{paramName}}));
+        self.qs.append_pair("{{paramName}}", &{{paramName}});
         {{/vendorExtensions.x-codegen-list-container-string}}
 
         self
@@ -52,16 +77,15 @@ impl<'req> {{classname}}{{operationIdCamelCase}}ParamsBuilder<'req> {
     {{/vendorExtensions.x-codegen-ignore}}{{/queryParams}}
 }
 
-{{/hasQueryParams}}
-
 impl BaseOption for {{classname}}{{operationIdCamelCase}}Params {
     fn build_paginated_query_string(&self, pagination: PaginationQueryComponent) -> String {
-        let mut query = form_urlencoded::Serializer::new(form_urlencoded::Serializer::Clone(&self.qs))
-        query.append_pair("offset", &pagination.offset.to_string());
+      let mut query = form_urlencoded::Serializer::new(self.qs.clone());
+      query.append_pair("offset", &pagination.offset.to_string());
         query.append_pair("offset", &pagination.limit.to_string());
         query.finish()
     }
 }
+{{/hasQueryParams}}
 {{/contents}}{{/operation}}
 
 impl {{classname}}Client {
@@ -84,17 +108,25 @@ impl {{classname}}Client {
         };
 
         self.client
-            .process_into_paginated_stream::<{{#responses}}{{#vendorExtensions.x-is-default}}{{{dataType}}}{{/vendorExtensions.x-is-default}}{{/responses}}{{#vendorExtensions.x-codegen-response-empty-default}}(){{/vendorExtensions.x-codegen-response-empty-default}}, >
+            .process_into_paginated_stream::<{{#responses}}{{#vendorExtensions.x-is-default}}{{{dataType}}}{{/vendorExtensions.x-is-default}}{{/responses}}{{#vendorExtensions.x-codegen-response-empty-default}}(){{/vendorExtensions.x-codegen-response-empty-default}}, {{vendorExtensions.x-codegen-response-plural}}>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
     {{/vendorExtensions.x-codegen-is-list-fn}}
     {{^vendorExtensions.x-codegen-is-list-fn}}
     pub async fn {{operationId}}(&self{{#hasParams}}, {{/hasParams}}{{#pathParams}}{{paramName}}: {{#nullable}}Option<{{#isString}}&str{{/isString}}{{#isUuid}}&str{{/isUuid}}{{^isString}}{{^isUuid}}{{{dataType}}}{{/isUuid}}{{/isString}}>{{/nullable}}{{^nullable}}{{#isString}}&str{{/isString}}{{#isUuid}}&str{{/isUuid}}{{^isString}}{{^isUuid}}{{{dataType}}}{{/isUuid}}{{/isString}}{{/nullable}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}{{#hasQueryParams}}{{#hasPathParams}}, {{/hasPathParams}}query_params: {{classname}}{{operationIdCamelCase}}Params{{#hasBodyParam}}, {{/hasBodyParam}}{{/hasQueryParams}}{{#hasBodyParam}}{{^hasQueryParams}}{{#hasPathParams}}, {{/hasPathParams}}{{/hasQueryParams}}body: {{#bodyParam}}{{{dataType}}}{{/bodyParam}}{{/hasBodyParam}}) -> Result<{{#responses}}{{#vendorExtensions.x-is-default}}{{{dataType}}}{{/vendorExtensions.x-is-default}}{{/responses}}{{#vendorExtensions.x-codegen-response-empty-default}}(){{/vendorExtensions.x-codegen-response-empty-default}}, Error> {
-        let uri = PagerDuty::parse_url(&self.api_endpoint, {{#hasPathParams}}format!("{}/{}", &self.path(), {{#pathParams}}&{{paramName}}{{/pathParams}}){{/hasPathParams}}{{^hasPathParams}}&self.path(){{/hasPathParams}}, {{#hasQueryParams}}{{classname}}{{operationIdCamelCase}}ParamsBuilder::new().build().qs{{/hasQueryParams}}{{^hasQueryParams}}""{{/hasQueryParams}})?;
+        let uri = Praiya::parse_url(&self.api_endpoint, {{#hasPathParams}}format!("{}/{}", &self.path(), {{#pathParams}}&{{paramName}}{{/pathParams}}){{/hasPathParams}}{{^hasPathParams}}&self.path(){{/hasPathParams}}, {{#hasQueryParams}}{{classname}}{{operationIdCamelCase}}ParamsBuilder::new().build().qs{{/hasQueryParams}}{{^hasQueryParams}}""{{/hasQueryParams}})?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::{{httpMethod}}),
-            {{#hasBodyParam}}Some(PagerDuty::serialize_payload({{#bodyParam}}{{{dataType}}}{{/bodyParam}})?){{/hasBodyParam}}{{^hasBodyParam}}Body::empty(){{/hasBodyParam}});
+            {{#hasBodyParam}}Some(Praiya::serialize_payload({{#bodyParam}}{{{dataType}}}{{/bodyParam}})?){{/hasBodyParam}}{{^hasBodyParam}}Body::empty(){{/hasBodyParam}});
 
 
         self.client
