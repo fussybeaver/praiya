@@ -34,12 +34,12 @@ pub struct ExtensionSchemasClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListExtensionSchemasListResponse {
+pub struct InlineListResponse20012 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_extension_schemas: Vec<ExtensionSchema>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20012: Vec<ExtensionSchema>,
 }
 
 /// Query parameters for the [List extension schemas](ExtensionSchemas::list_extension_schemas()) endpoint.
@@ -56,6 +56,12 @@ impl<'req> ExtensionSchemasListExtensionSchemasParamsBuilder<'req> {
     pub fn new() -> Self {
         Self {
             qs: form_urlencoded::Serializer::new(String::new())
+        }
+    }
+
+    pub fn build(&mut self) -> ExtensionSchemasListExtensionSchemasParams {
+        ExtensionSchemasListExtensionSchemasParams {
+            qs: self.qs.finish(),
         }
     }
 }
@@ -82,8 +88,8 @@ impl ExtensionSchemasClient {
     /// 
     /// 
     /// ---
-    pub async fn get_extension_schema(&self, id: &str) -> Result<GetExtensionSchemaResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_extension_schema(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/extension_schemas/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -92,7 +98,7 @@ impl ExtensionSchemasClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionSchemasGetExtensionSchemaResponse>(req)
             .await
     }
 
@@ -113,11 +119,11 @@ impl ExtensionSchemasClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(ExtensionSchemasListExtensionSchemasParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/extension_schemas"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListExtensionSchemasResponse, ListExtensionSchemasListResponse>(
+            .process_into_paginated_stream::<ExtensionSchema, InlineListResponse20012>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

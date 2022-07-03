@@ -56,6 +56,12 @@ impl<'req> EscalationPoliciesGetEscalationPolicyParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> EscalationPoliciesGetEscalationPolicyParams {
+        EscalationPoliciesGetEscalationPolicyParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for EscalationPoliciesGetEscalationPolicyParams {
@@ -68,12 +74,12 @@ impl BaseOption for EscalationPoliciesGetEscalationPolicyParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListEscalationPoliciesListResponse {
+pub struct InlineListResponse20010 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_escalation_policies: Vec<EscalationPolicy>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20010: Vec<EscalationPolicy>,
 }
 
 /// Query parameters for the [List escalation policies](EscalationPolicies::list_escalation_policies()) endpoint.
@@ -130,6 +136,12 @@ impl<'req> EscalationPoliciesListEscalationPoliciesParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> EscalationPoliciesListEscalationPoliciesParams {
+        EscalationPoliciesListEscalationPoliciesParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for EscalationPoliciesListEscalationPoliciesParams {
@@ -154,17 +166,17 @@ impl EscalationPoliciesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_escalation_policy(&self, body: CreateEscalationPolicyBody) -> Result<EscalationPoliciesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_escalation_policy(&self, body: CreateEscalationPolicy) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/escalation_policies", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateEscalationPolicyBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, EscalationPoliciesCreateEscalationPolicyResponse>(req)
             .await
     }
 
@@ -181,7 +193,7 @@ impl EscalationPoliciesClient {
     /// 
     /// ---
     pub async fn delete_escalation_policy(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/escalation_policies/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -190,7 +202,7 @@ impl EscalationPoliciesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, EscalationPoliciesDeleteEscalationPolicyResponse>(req)
             .await
     }
 
@@ -206,8 +218,8 @@ impl EscalationPoliciesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_escalation_policy(&self, id: &str, query_params: EscalationPoliciesGetEscalationPolicyParams) -> Result<EscalationPoliciesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), EscalationPoliciesGetEscalationPolicyParamsBuilder::new().build().qs)?;
+    pub async fn get_escalation_policy(&self, id: &str, query_params: EscalationPoliciesGetEscalationPolicyParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/escalation_policies/{}", &id), &EscalationPoliciesGetEscalationPolicyParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -216,7 +228,7 @@ impl EscalationPoliciesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, EscalationPoliciesGetEscalationPolicyResponse>(req)
             .await
     }
 
@@ -237,11 +249,11 @@ impl EscalationPoliciesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(EscalationPoliciesListEscalationPoliciesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/escalation_policies"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListEscalationPoliciesResponse, ListEscalationPoliciesListResponse>(
+            .process_into_paginated_stream::<EscalationPolicy, InlineListResponse20010>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -270,8 +282,8 @@ impl EscalationPoliciesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_escalation_policy_audit_records(&self, id: &str) -> Result<ListUsersAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_escalation_policy_audit_records(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/escalation_policies/{}/audit/records", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -280,7 +292,7 @@ impl EscalationPoliciesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, EscalationPoliciesListEscalationPolicyAuditRecordsResponse>(req)
             .await
     }
 
@@ -296,17 +308,17 @@ impl EscalationPoliciesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_escalation_policy(&self, id: &str, body: UpdateEscalationPolicyBody) -> Result<EscalationPoliciesIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_escalation_policy(&self, id: &str, body: UpdateEscalationPolicy) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/escalation_policies/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateEscalationPolicyBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, EscalationPoliciesUpdateEscalationPolicyResponse>(req)
             .await
     }
 

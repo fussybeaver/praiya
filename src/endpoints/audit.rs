@@ -51,14 +51,14 @@ impl<'req> AuditListAuditRecordsParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search. If not specified, defaults to `now() - 24 hours` (past 24 hours)
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search. If not specified, defaults to `now()`
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
@@ -106,6 +106,12 @@ impl<'req> AuditListAuditRecordsParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> AuditListAuditRecordsParams {
+        AuditListAuditRecordsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for AuditListAuditRecordsParams {
@@ -142,8 +148,8 @@ impl AuditClient {
     /// 
     /// 
     /// ---
-    pub async fn list_audit_records(&self, query_params: AuditListAuditRecordsParams) -> Result<ListAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), AuditListAuditRecordsParamsBuilder::new().build().qs)?;
+    pub async fn list_audit_records(&self, query_params: AuditListAuditRecordsParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/audit/records", &AuditListAuditRecordsParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -152,7 +158,7 @@ impl AuditClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AuditListAuditRecordsResponse>(req)
             .await
     }
 

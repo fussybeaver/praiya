@@ -4,15 +4,15 @@ use ureq::{Request, Response};
 
 use log::debug;
 
-use crate::auth::Auth;
 use super::{FromJson, GitHubRequest, GitHubRequestBuilder, GitHubResponseExt};
+use crate::auth::Auth;
 
 use serde::{ser, Deserialize};
 use serde_json::value::Value;
 
 pub(crate) struct RequestWithBody {
     pub(crate) req: Request,
-    pub(crate) body: Option<Value>
+    pub(crate) body: Option<Value>,
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -27,7 +27,7 @@ pub enum AdapterError {
 
 pub(crate) fn fetch(request: RequestWithBody) -> Result<Response, AdapterError> {
     match if let Some(body) = request.body {
-        request.req.send_json(body) 
+        request.req.send_json(body)
     } else {
         request.req.call()
     } {
@@ -54,7 +54,9 @@ impl GitHubResponseExt for Response {
     }
 }
 
-pub(crate) fn to_json<E: for<'de> Deserialize<'de> + std::fmt::Debug>(res: Response) -> Result<E, AdapterError> {
+pub(crate) fn to_json<E: for<'de> Deserialize<'de> + std::fmt::Debug>(
+    res: Response,
+) -> Result<E, AdapterError> {
     let json = res.into_json()?;
 
     debug!("Response: {:?}", &json);
@@ -62,7 +64,9 @@ pub(crate) fn to_json<E: for<'de> Deserialize<'de> + std::fmt::Debug>(res: Respo
     Ok(json)
 }
 
-pub(crate) async fn to_json_async<E: for<'de> Deserialize<'de> + Unpin + std::fmt::Debug>(_res: Response) -> Result<E, AdapterError> {
+pub(crate) async fn to_json_async<E: for<'de> Deserialize<'de> + Unpin + std::fmt::Debug>(
+    _res: Response,
+) -> Result<E, AdapterError> {
     unimplemented!("Ureq adapter only has sync json conversion implemented");
 }
 
@@ -71,15 +75,13 @@ where
     E: ser::Serialize + std::fmt::Debug,
 {
     fn from_json(model: E) -> Result<Value, serde_json::Error> {
-
         debug!("Error: {:?}", model);
 
         Ok(serde_json::to_value(&model)?.into())
     }
 }
 
-impl GitHubRequestBuilder<Value> for RequestWithBody
-{
+impl GitHubRequestBuilder<Value> for RequestWithBody {
     fn build(req: GitHubRequest<Value>, auth: &Auth) -> Result<Self, AdapterError> {
         let mut builder = ureq::request(req.method, &req.uri);
 
@@ -87,7 +89,7 @@ impl GitHubRequestBuilder<Value> for RequestWithBody
             .set(ACCEPT.as_str(), "application/vnd.github.v3+json")
             .set(USER_AGENT.as_str(), "roctogen")
             .set(CONTENT_TYPE.as_str(), "application/json");
-        
+
         for header in req.headers.iter() {
             builder = builder.set(header.0, header.1);
         }
@@ -101,10 +103,15 @@ impl GitHubRequestBuilder<Value> for RequestWithBody
                 )
             }
             Auth::Token(token) => builder.set(AUTHORIZATION.as_str(), &format!("token {}", token)),
-            Auth::Bearer(bearer) => builder.set(AUTHORIZATION.as_str(), &format!("Bearer {}", bearer)),
+            Auth::Bearer(bearer) => {
+                builder.set(AUTHORIZATION.as_str(), &format!("Bearer {}", bearer))
+            }
             Auth::None => builder,
         };
 
-        Ok(RequestWithBody { req: builder, body: req.body })
+        Ok(RequestWithBody {
+            req: builder,
+            body: req.body,
+        })
     }
 }

@@ -49,7 +49,7 @@ impl AbilitiesClient {
     /// 
     /// ---
     pub async fn get_ability(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/abilities/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -58,7 +58,7 @@ impl AbilitiesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AbilitiesGetAbilityResponse>(req)
             .await
     }
 
@@ -76,8 +76,8 @@ impl AbilitiesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_abilities(&self) -> Result<ListAbilitiesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn list_abilities(&self) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/abilities", "")?;
             
         let req = self.client.build_request(
             uri,
@@ -86,7 +86,7 @@ impl AbilitiesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AbilitiesListAbilitiesResponse>(req)
             .await
     }
 

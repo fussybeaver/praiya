@@ -34,12 +34,12 @@ pub struct BusinessServicesClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListBusinessServicesListResponse {
+pub struct InlineListResponse2008 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_business_services: Vec<BusinessService>, //pub slack_connections: Vec<SlackConnection>
+    pub inline2008: Vec<BusinessService>,
 }
 
 /// Query parameters for the [List business services](BusinessServices::list_business_services()) endpoint.
@@ -61,16 +61,22 @@ impl<'req> BusinessServicesListBusinessServicesParamsBuilder<'req> {
 
     /// Offset to start pagination search results.
     pub fn offset(&mut self, offset: i32) -> &mut Self {
-        self.qs.append_pair("offset", &offset);
+        self.qs.append_pair("offset", &serde_urlencoded::to_string(&offset).unwrap_or_default());
 
         self
     }
 
     /// Limit on number of results to load
     pub fn limit(&mut self, limit: i32) -> &mut Self {
-        self.qs.append_pair("limit", &limit);
+        self.qs.append_pair("limit", &serde_urlencoded::to_string(&limit).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> BusinessServicesListBusinessServicesParams {
+        BusinessServicesListBusinessServicesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -96,17 +102,17 @@ impl BusinessServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_business_service(&self, body: CreateBusinessServiceBody) -> Result<UpdateBusinessServiceResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_business_service(&self, body: CreateBusinessService) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/business_services", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateBusinessServiceBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, BusinessServicesCreateBusinessServiceResponse>(req)
             .await
     }
 
@@ -125,7 +131,7 @@ impl BusinessServicesClient {
     /// 
     /// ---
     pub async fn delete_business_service(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/business_services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -134,7 +140,7 @@ impl BusinessServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, BusinessServicesDeleteBusinessServiceResponse>(req)
             .await
     }
 
@@ -150,8 +156,8 @@ impl BusinessServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_business_service(&self, id: &str) -> Result<UpdateBusinessServiceResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_business_service(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/business_services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -160,7 +166,7 @@ impl BusinessServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, BusinessServicesGetBusinessServiceResponse>(req)
             .await
     }
 
@@ -181,11 +187,11 @@ impl BusinessServicesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(BusinessServicesListBusinessServicesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/business_services"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListBusinessServicesResponse, ListBusinessServicesListResponse>(
+            .process_into_paginated_stream::<BusinessService, InlineListResponse2008>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -208,17 +214,17 @@ impl BusinessServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_business_service(&self, id: &str, body: UpdateBusinessServiceBody) -> Result<UpdateBusinessServiceResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_business_service(&self, id: &str, body: UpdateBusinessService) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/business_services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateBusinessServiceBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, BusinessServicesUpdateBusinessServiceResponse>(req)
             .await
     }
 

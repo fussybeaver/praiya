@@ -34,12 +34,12 @@ pub struct OnCallsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListOnCallsListResponse {
+pub struct InlineListResponse20029 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_on_calls: Vec<Oncall>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20029: Vec<Oncall>,
 }
 
 /// Query parameters for the [List all of the on-calls](OnCalls::list_on_calls()) endpoint.
@@ -100,23 +100,29 @@ impl<'req> OnCallsListOnCallsParamsBuilder<'req> {
 
     /// The start of the time range over which you want to search. If an on-call period overlaps with the range, it will be included in the result. Defaults to current time. The search range cannot exceed 3 months.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the time range over which you want to search. If an on-call period overlaps with the range, it will be included in the result. Defaults to current time. The search range cannot exceed 3 months, and the `until` time cannot be before the `since` time.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
 
     /// This will filter on-calls such that only the earliest on-call for each combination of escalation policy, escalation level, and user is returned. This is useful for determining when the \"next\" on-calls are for a given set of filters.
     pub fn earliest(&mut self, earliest: bool) -> &mut Self {
-        self.qs.append_pair("earliest", &earliest);
+        self.qs.append_pair("earliest", &serde_urlencoded::to_string(&earliest).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> OnCallsListOnCallsParams {
+        OnCallsListOnCallsParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -147,11 +153,11 @@ impl OnCallsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(OnCallsListOnCallsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/oncalls"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListOnCallsResponse, ListOnCallsListResponse>(
+            .process_into_paginated_stream::<Oncall, InlineListResponse20029>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

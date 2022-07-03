@@ -34,12 +34,12 @@ pub struct NotificationsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListNotificationsListResponse {
+pub struct InlineListResponse20028 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_notifications: Vec<Notification>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20028: Vec<Notification>,
 }
 
 /// Query parameters for the [List notifications](Notifications::list_notifications()) endpoint.
@@ -68,14 +68,14 @@ impl<'req> NotificationsListNotificationsParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search. The time element is optional.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search. This should be in the same format as since. The size of the date range must be less than 3 months.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
@@ -93,6 +93,12 @@ impl<'req> NotificationsListNotificationsParamsBuilder<'req> {
             self.qs.append_pair("include[]", &item);
         }
         self
+    }
+
+    pub fn build(&mut self) -> NotificationsListNotificationsParams {
+        NotificationsListNotificationsParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -123,11 +129,11 @@ impl NotificationsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(NotificationsListNotificationsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/notifications"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListNotificationsResponse, ListNotificationsListResponse>(
+            .process_into_paginated_stream::<Notification, InlineListResponse20028>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

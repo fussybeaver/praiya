@@ -34,12 +34,12 @@ pub struct VendorsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListVendorsListResponse {
+pub struct InlineListResponse20055 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_vendors: Vec<Vendor>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20055: Vec<Vendor>,
 }
 
 /// Query parameters for the [List vendors](Vendors::list_vendors()) endpoint.
@@ -56,6 +56,12 @@ impl<'req> VendorsListVendorsParamsBuilder<'req> {
     pub fn new() -> Self {
         Self {
             qs: form_urlencoded::Serializer::new(String::new())
+        }
+    }
+
+    pub fn build(&mut self) -> VendorsListVendorsParams {
+        VendorsListVendorsParams {
+            qs: self.qs.finish(),
         }
     }
 }
@@ -82,8 +88,8 @@ impl VendorsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_vendor(&self, id: &str) -> Result<GetVendorResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_vendor(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/vendors/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -92,7 +98,7 @@ impl VendorsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, VendorsGetVendorResponse>(req)
             .await
     }
 
@@ -113,11 +119,11 @@ impl VendorsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(VendorsListVendorsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/vendors"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListVendorsResponse, ListVendorsListResponse>(
+            .process_into_paginated_stream::<Vendor, InlineListResponse20055>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

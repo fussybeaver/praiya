@@ -56,6 +56,12 @@ impl<'req> MaintenanceWindowsGetMaintenanceWindowParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> MaintenanceWindowsGetMaintenanceWindowParams {
+        MaintenanceWindowsGetMaintenanceWindowParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for MaintenanceWindowsGetMaintenanceWindowParams {
@@ -68,12 +74,12 @@ impl BaseOption for MaintenanceWindowsGetMaintenanceWindowParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListMaintenanceWindowsListResponse {
+pub struct InlineListResponse20027 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_maintenance_windows: Vec<MaintenanceWindow>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20027: Vec<MaintenanceWindow>,
 }
 
 /// Query parameters for the [List maintenance windows](MaintenanceWindows::list_maintenance_windows()) endpoint.
@@ -130,6 +136,12 @@ impl<'req> MaintenanceWindowsListMaintenanceWindowsParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> MaintenanceWindowsListMaintenanceWindowsParams {
+        MaintenanceWindowsListMaintenanceWindowsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for MaintenanceWindowsListMaintenanceWindowsParams {
@@ -154,17 +166,17 @@ impl MaintenanceWindowsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_maintenance_window(&self, body: CreateMaintenanceWindowBody) -> Result<MaintenanceWindowsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_maintenance_window(&self, body: CreateMaintenanceWindow) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/maintenance_windows", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateMaintenanceWindowBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, MaintenanceWindowsCreateMaintenanceWindowResponse>(req)
             .await
     }
 
@@ -181,7 +193,7 @@ impl MaintenanceWindowsClient {
     /// 
     /// ---
     pub async fn delete_maintenance_window(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/maintenance_windows/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -190,7 +202,7 @@ impl MaintenanceWindowsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, MaintenanceWindowsDeleteMaintenanceWindowResponse>(req)
             .await
     }
 
@@ -206,8 +218,8 @@ impl MaintenanceWindowsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_maintenance_window(&self, id: &str, query_params: MaintenanceWindowsGetMaintenanceWindowParams) -> Result<MaintenanceWindowsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), MaintenanceWindowsGetMaintenanceWindowParamsBuilder::new().build().qs)?;
+    pub async fn get_maintenance_window(&self, id: &str, query_params: MaintenanceWindowsGetMaintenanceWindowParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/maintenance_windows/{}", &id), &MaintenanceWindowsGetMaintenanceWindowParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -216,7 +228,7 @@ impl MaintenanceWindowsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, MaintenanceWindowsGetMaintenanceWindowResponse>(req)
             .await
     }
 
@@ -237,11 +249,11 @@ impl MaintenanceWindowsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(MaintenanceWindowsListMaintenanceWindowsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/maintenance_windows"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListMaintenanceWindowsResponse, ListMaintenanceWindowsListResponse>(
+            .process_into_paginated_stream::<MaintenanceWindow, InlineListResponse20027>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -264,17 +276,17 @@ impl MaintenanceWindowsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_maintenance_window(&self, id: &str, body: UpdateMaintenanceWindowBody) -> Result<MaintenanceWindowsIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_maintenance_window(&self, id: &str, body: UpdateMaintenanceWindow) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/maintenance_windows/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateMaintenanceWindowBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, MaintenanceWindowsUpdateMaintenanceWindowResponse>(req)
             .await
     }
 

@@ -46,17 +46,17 @@ impl ServiceDependenciesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_service_dependency(&self, body: CreateServiceDependencyBody) -> Result<GetTechnicalServiceServiceDependenciesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_service_dependency(&self, body: CreateServiceDependency) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/service_dependencies/associate", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateServiceDependencyBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServiceDependenciesCreateServiceDependencyResponse>(req)
             .await
     }
 
@@ -72,17 +72,17 @@ impl ServiceDependenciesClient {
     /// 
     /// 
     /// ---
-    pub async fn delete_service_dependency(&self, body: DeleteServiceDependencyBody) -> Result<GetTechnicalServiceServiceDependenciesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn delete_service_dependency(&self, body: DeleteServiceDependency) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/service_dependencies/disassociate", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(DeleteServiceDependencyBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServiceDependenciesDeleteServiceDependencyResponse>(req)
             .await
     }
 
@@ -98,8 +98,8 @@ impl ServiceDependenciesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_business_service_service_dependencies(&self, id: &str) -> Result<GetBusinessServiceServiceDependenciesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_business_service_service_dependencies(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/service_dependencies/business_services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -108,7 +108,7 @@ impl ServiceDependenciesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServiceDependenciesGetBusinessServiceServiceDependenciesResponse>(req)
             .await
     }
 
@@ -123,8 +123,8 @@ impl ServiceDependenciesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_technical_service_service_dependencies(&self, id: &str) -> Result<GetTechnicalServiceServiceDependenciesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_technical_service_service_dependencies(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/service_dependencies/technical_services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -133,7 +133,7 @@ impl ServiceDependenciesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServiceDependenciesGetTechnicalServiceServiceDependenciesResponse>(req)
             .await
     }
 

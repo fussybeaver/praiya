@@ -56,6 +56,12 @@ impl<'req> ServicesGetServiceParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> ServicesGetServiceParams {
+        ServicesGetServiceParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for ServicesGetServiceParams {
@@ -90,6 +96,12 @@ impl<'req> ServicesGetServiceIntegrationParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> ServicesGetServiceIntegrationParams {
+        ServicesGetServiceIntegrationParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for ServicesGetServiceIntegrationParams {
@@ -102,12 +114,12 @@ impl BaseOption for ServicesGetServiceIntegrationParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListServicesListResponse {
+pub struct InlineListResponse20040 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_services: Vec<Service>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20040: Vec<Service>,
 }
 
 /// Query parameters for the [List services](Services::list_services()) endpoint.
@@ -163,6 +175,12 @@ impl<'req> ServicesListServicesParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> ServicesListServicesParams {
+        ServicesListServicesParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for ServicesListServicesParams {
@@ -187,17 +205,17 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_service(&self, body: CreateServiceBody) -> Result<ServicesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_service(&self, body: CreateService) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/services", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateServiceBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesCreateServiceResponse>(req)
             .await
     }
 
@@ -213,17 +231,17 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_service_integration(&self, id: &str, body: CreateServiceIntegrationBody) -> Result<IdIntegrationsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_service_integration(&self, id: &str, body: CreateServiceIntegration) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}/integrations", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateServiceIntegrationBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesCreateServiceIntegrationResponse>(req)
             .await
     }
 
@@ -242,7 +260,7 @@ impl ServicesClient {
     /// 
     /// ---
     pub async fn delete_service(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -251,7 +269,7 @@ impl ServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesDeleteServiceResponse>(req)
             .await
     }
 
@@ -267,8 +285,8 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_service(&self, id: &str, query_params: ServicesGetServiceParams) -> Result<ServicesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), ServicesGetServiceParamsBuilder::new().build().qs)?;
+    pub async fn get_service(&self, id: &str, query_params: ServicesGetServiceParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}", &id), &ServicesGetServiceParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -277,7 +295,7 @@ impl ServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesGetServiceResponse>(req)
             .await
     }
 
@@ -293,8 +311,8 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_service_integration(&self, id: &str, integration_id: &str, query_params: ServicesGetServiceIntegrationParams) -> Result<IdIntegrationsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&integration_id), ServicesGetServiceIntegrationParamsBuilder::new().build().qs)?;
+    pub async fn get_service_integration(&self, id: &str, integration_id: &str, query_params: ServicesGetServiceIntegrationParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}/integrations/{}", &id, &integration_id), &ServicesGetServiceIntegrationParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -303,7 +321,7 @@ impl ServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesGetServiceIntegrationResponse>(req)
             .await
     }
 
@@ -326,8 +344,8 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_service_audit_records(&self, id: &str) -> Result<ListUsersAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_service_audit_records(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}/audit/records", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -336,7 +354,7 @@ impl ServicesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesListServiceAuditRecordsResponse>(req)
             .await
     }
 
@@ -357,11 +375,11 @@ impl ServicesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(ServicesListServicesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/services"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListServicesResponse, ListServicesListResponse>(
+            .process_into_paginated_stream::<Service, InlineListResponse20040>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -384,17 +402,17 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_service(&self, id: &str, body: UpdateServiceBody) -> Result<ServicesIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_service(&self, id: &str, body: UpdateService) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateServiceBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesUpdateServiceResponse>(req)
             .await
     }
 
@@ -410,17 +428,17 @@ impl ServicesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_service_integration(&self, id: &str, integration_id: &str, body: UpdateServiceIntegrationBody) -> Result<IntegrationsIntegrationIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&integration_id), "")?;
+    pub async fn update_service_integration(&self, id: &str, integration_id: &str, body: UpdateServiceIntegration) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/services/{}/integrations/{}", &id, &integration_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateServiceIntegrationBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ServicesUpdateServiceIntegrationResponse>(req)
             .await
     }
 

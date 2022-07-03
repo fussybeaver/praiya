@@ -56,6 +56,12 @@ impl<'req> ExtensionsGetExtensionParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> ExtensionsGetExtensionParams {
+        ExtensionsGetExtensionParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for ExtensionsGetExtensionParams {
@@ -68,12 +74,12 @@ impl BaseOption for ExtensionsGetExtensionParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListExtensionsListResponse {
+pub struct InlineListResponse20014 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_extensions: Vec<Extension>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20014: Vec<Extension>,
 }
 
 /// Query parameters for the [List extensions](Extensions::list_extensions()) endpoint.
@@ -121,6 +127,12 @@ impl<'req> ExtensionsListExtensionsParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> ExtensionsListExtensionsParams {
+        ExtensionsListExtensionsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for ExtensionsListExtensionsParams {
@@ -145,17 +157,17 @@ impl ExtensionsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_extension(&self, body: CreateExtensionBody) -> Result<ExtensionsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_extension(&self, body: CreateExtension) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/extensions", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateExtensionBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionsCreateExtensionResponse>(req)
             .await
     }
 
@@ -174,7 +186,7 @@ impl ExtensionsClient {
     /// 
     /// ---
     pub async fn delete_extension(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/extensions/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -183,7 +195,7 @@ impl ExtensionsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionsDeleteExtensionResponse>(req)
             .await
     }
 
@@ -199,8 +211,8 @@ impl ExtensionsClient {
     /// 
     /// 
     /// ---
-    pub async fn enable_extension(&self, id: &str) -> Result<ExtensionsIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn enable_extension(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/extensions/{}/enable", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -209,7 +221,7 @@ impl ExtensionsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionsEnableExtensionResponse>(req)
             .await
     }
 
@@ -225,8 +237,8 @@ impl ExtensionsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_extension(&self, id: &str, query_params: ExtensionsGetExtensionParams) -> Result<ExtensionsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), ExtensionsGetExtensionParamsBuilder::new().build().qs)?;
+    pub async fn get_extension(&self, id: &str, query_params: ExtensionsGetExtensionParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/extensions/{}", &id), &ExtensionsGetExtensionParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -235,7 +247,7 @@ impl ExtensionsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionsGetExtensionResponse>(req)
             .await
     }
 
@@ -256,11 +268,11 @@ impl ExtensionsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(ExtensionsListExtensionsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/extensions"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListExtensionsResponse, ListExtensionsListResponse>(
+            .process_into_paginated_stream::<Extension, InlineListResponse20014>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -283,17 +295,17 @@ impl ExtensionsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_extension(&self, id: &str, body: UpdateExtensionBody) -> Result<ExtensionsIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_extension(&self, id: &str, body: UpdateExtension) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/extensions/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateExtensionBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ExtensionsUpdateExtensionResponse>(req)
             .await
     }
 

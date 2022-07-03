@@ -34,12 +34,12 @@ pub struct PrioritiesClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListPrioritiesListResponse {
+pub struct InlineListResponse20030 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_priorities: Vec<Priority>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20030: Vec<Priority>,
 }
 
 /// Query parameters for the [List priorities](Priorities::list_priorities()) endpoint.
@@ -56,6 +56,12 @@ impl<'req> PrioritiesListPrioritiesParamsBuilder<'req> {
     pub fn new() -> Self {
         Self {
             qs: form_urlencoded::Serializer::new(String::new())
+        }
+    }
+
+    pub fn build(&mut self) -> PrioritiesListPrioritiesParams {
+        PrioritiesListPrioritiesParams {
+            qs: self.qs.finish(),
         }
     }
 }
@@ -87,11 +93,11 @@ impl PrioritiesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(PrioritiesListPrioritiesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/priorities"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListPrioritiesResponse, ListPrioritiesListResponse>(
+            .process_into_paginated_stream::<Priority, InlineListResponse20030>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

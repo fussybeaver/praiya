@@ -58,9 +58,15 @@ impl<'req> ResponsePlaysListResponsePlaysParamsBuilder<'req> {
 
     /// When this parameter is present, only those Response Plays that can be run manually will be returned.
     pub fn filter_for_manual_run(&mut self, filter_for_manual_run: bool) -> &mut Self {
-        self.qs.append_pair("filter_for_manual_run", &filter_for_manual_run);
+        self.qs.append_pair("filter_for_manual_run", &serde_urlencoded::to_string(&filter_for_manual_run).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> ResponsePlaysListResponsePlaysParams {
+        ResponsePlaysListResponsePlaysParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -86,17 +92,17 @@ impl ResponsePlaysClient {
     /// 
     /// 
     /// ---
-    pub async fn create_response_play(&self, body: CreateResponsePlayBody) -> Result<UpdateResponsePlayResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_response_play(&self, body: CreateResponsePlay) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/response_plays", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateResponsePlayBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysCreateResponsePlayResponse>(req)
             .await
     }
 
@@ -115,7 +121,7 @@ impl ResponsePlaysClient {
     /// 
     /// ---
     pub async fn delete_response_play(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/response_plays/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -124,7 +130,7 @@ impl ResponsePlaysClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysDeleteResponsePlayResponse>(req)
             .await
     }
 
@@ -140,8 +146,8 @@ impl ResponsePlaysClient {
     /// 
     /// 
     /// ---
-    pub async fn get_response_play(&self, id: &str) -> Result<UpdateResponsePlayResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_response_play(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/response_plays/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -150,7 +156,7 @@ impl ResponsePlaysClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysGetResponsePlayResponse>(req)
             .await
     }
 
@@ -166,8 +172,8 @@ impl ResponsePlaysClient {
     /// 
     /// 
     /// ---
-    pub async fn list_response_plays(&self, query_params: ResponsePlaysListResponsePlaysParams) -> Result<ListResponsePlaysResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), ResponsePlaysListResponsePlaysParamsBuilder::new().build().qs)?;
+    pub async fn list_response_plays(&self, query_params: ResponsePlaysListResponsePlaysParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/response_plays", &ResponsePlaysListResponsePlaysParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -176,7 +182,7 @@ impl ResponsePlaysClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysListResponsePlaysResponse>(req)
             .await
     }
 
@@ -192,17 +198,17 @@ impl ResponsePlaysClient {
     /// 
     /// 
     /// ---
-    pub async fn run_response_play(&self, response_play_id: &str, body: RunResponsePlayBody) -> Result<RunResponsePlayResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &response_play_id), "")?;
+    pub async fn run_response_play(&self, response_play_id: &str, body: RunResponsePlay) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/response_plays/{}/run", &response_play_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(RunResponsePlayBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysRunResponsePlayResponse>(req)
             .await
     }
 
@@ -218,17 +224,17 @@ impl ResponsePlaysClient {
     /// 
     /// 
     /// ---
-    pub async fn update_response_play(&self, id: &str, body: UpdateResponsePlayBody) -> Result<UpdateResponsePlayResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_response_play(&self, id: &str, body: UpdateResponsePlay) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/response_plays/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateResponsePlayBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, ResponsePlaysUpdateResponsePlayResponse>(req)
             .await
     }
 

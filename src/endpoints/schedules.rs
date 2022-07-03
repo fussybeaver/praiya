@@ -51,9 +51,15 @@ impl<'req> SchedulesCreateScheduleParamsBuilder<'req> {
 
     /// Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter `overflow=true` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from `2011-06-01T10:00:00Z` to `2011-06-01T14:00:00Z`:   - If you don't pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T10:00:00Z` and end of `2011-06-01T14:00:00Z`. - If you do pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T00:00:00Z` and end of `2011-06-02T00:00:00Z`. 
     pub fn overflow(&mut self, overflow: bool) -> &mut Self {
-        self.qs.append_pair("overflow", &overflow);
+        self.qs.append_pair("overflow", &serde_urlencoded::to_string(&overflow).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesCreateScheduleParams {
+        SchedulesCreateScheduleParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -84,23 +90,29 @@ impl<'req> SchedulesCreateSchedulePreviewParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
 
     /// Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter `overflow=true` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from `2011-06-01T10:00:00Z` to `2011-06-01T14:00:00Z`:   - If you don't pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T10:00:00Z` and end of `2011-06-01T14:00:00Z`. - If you do pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T00:00:00Z` and end of `2011-06-02T00:00:00Z`. 
     pub fn overflow(&mut self, overflow: bool) -> &mut Self {
-        self.qs.append_pair("overflow", &overflow);
+        self.qs.append_pair("overflow", &serde_urlencoded::to_string(&overflow).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesCreateSchedulePreviewParams {
+        SchedulesCreateSchedulePreviewParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -138,16 +150,22 @@ impl<'req> SchedulesGetScheduleParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesGetScheduleParams {
+        SchedulesGetScheduleParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -178,30 +196,36 @@ impl<'req> SchedulesListScheduleOverridesParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
 
     /// When this parameter is present, only editable overrides will be returned. The result will only include the id of the override if this parameter is present. Only future overrides are editable.
     pub fn editable(&mut self, editable: bool) -> &mut Self {
-        self.qs.append_pair("editable", &editable);
+        self.qs.append_pair("editable", &serde_urlencoded::to_string(&editable).unwrap_or_default());
 
         self
     }
 
     /// Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter overflow=true is passed. This parameter defaults to false.
     pub fn overflow(&mut self, overflow: bool) -> &mut Self {
-        self.qs.append_pair("overflow", &overflow);
+        self.qs.append_pair("overflow", &serde_urlencoded::to_string(&overflow).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesListScheduleOverridesParams {
+        SchedulesListScheduleOverridesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -232,16 +256,22 @@ impl<'req> SchedulesListScheduleUsersParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesListScheduleUsersParams {
+        SchedulesListScheduleUsersParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -255,12 +285,12 @@ impl BaseOption for SchedulesListScheduleUsersParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListSchedulesListResponse {
+pub struct InlineListResponse20035 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_schedules: Vec<Schedule>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20035: Vec<Schedule>,
 }
 
 /// Query parameters for the [List schedules](Schedules::list_schedules()) endpoint.
@@ -285,6 +315,12 @@ impl<'req> SchedulesListSchedulesParamsBuilder<'req> {
         self.qs.append_pair("query", &query);
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesListSchedulesParams {
+        SchedulesListSchedulesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -315,9 +351,15 @@ impl<'req> SchedulesUpdateScheduleParamsBuilder<'req> {
 
     /// Any on-call schedule entries that pass the date range bounds will be truncated at the bounds, unless the parameter `overflow=true` is passed. This parameter defaults to false. For instance, if your schedule is a rotation that changes daily at midnight UTC, and your date range is from `2011-06-01T10:00:00Z` to `2011-06-01T14:00:00Z`:   - If you don't pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T10:00:00Z` and end of `2011-06-01T14:00:00Z`. - If you do pass the `overflow=true` parameter, you will get one schedule entry returned with a start of `2011-06-01T00:00:00Z` and end of `2011-06-02T00:00:00Z`. 
     pub fn overflow(&mut self, overflow: bool) -> &mut Self {
-        self.qs.append_pair("overflow", &overflow);
+        self.qs.append_pair("overflow", &serde_urlencoded::to_string(&overflow).unwrap_or_default());
 
         self
+    }
+
+    pub fn build(&mut self) -> SchedulesUpdateScheduleParams {
+        SchedulesUpdateScheduleParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -343,17 +385,17 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_schedule(&self, query_params: SchedulesCreateScheduleParams, body: CreateScheduleBody) -> Result<SchedulesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), SchedulesCreateScheduleParamsBuilder::new().build().qs)?;
+    pub async fn create_schedule(&self, query_params: SchedulesCreateScheduleParams, body: CreateSchedule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/schedules", &SchedulesCreateScheduleParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateScheduleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesCreateScheduleResponse>(req)
             .await
     }
 
@@ -369,17 +411,17 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_schedule_override(&self, id: &str, body: CreateScheduleOverrideBody) -> Result<IdOverridesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_schedule_override(&self, id: &str, body: CreateScheduleOverride) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}/overrides", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateScheduleOverrideBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesCreateScheduleOverrideResponse>(req)
             .await
     }
 
@@ -395,17 +437,17 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn create_schedule_preview(&self, query_params: SchedulesCreateSchedulePreviewParams, body: CreateSchedulePreviewBody) -> Result<SchedulesPreviewBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), SchedulesCreateSchedulePreviewParamsBuilder::new().build().qs)?;
+    pub async fn create_schedule_preview(&self, query_params: SchedulesCreateSchedulePreviewParams, body: CreateSchedulePreview) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/schedules/preview", &SchedulesCreateSchedulePreviewParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateSchedulePreviewBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesCreateSchedulePreviewResponse>(req)
             .await
     }
 
@@ -422,7 +464,7 @@ impl SchedulesClient {
     /// 
     /// ---
     pub async fn delete_schedule(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -431,7 +473,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesDeleteScheduleResponse>(req)
             .await
     }
 
@@ -454,7 +496,7 @@ impl SchedulesClient {
     /// 
     /// ---
     pub async fn delete_schedule_override(&self, id: &str, override_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&override_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}/overrides/{}", &id, &override_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -463,7 +505,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesDeleteScheduleOverrideResponse>(req)
             .await
     }
 
@@ -474,8 +516,8 @@ impl SchedulesClient {
     /// Show detailed information about a schedule, including entries for each layer and sub-schedule.
     /// 
     /// ---
-    pub async fn get_schedule(&self, id: &str, query_params: SchedulesGetScheduleParams) -> Result<SchedulesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), SchedulesGetScheduleParamsBuilder::new().build().qs)?;
+    pub async fn get_schedule(&self, id: &str, query_params: SchedulesGetScheduleParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}", &id), &SchedulesGetScheduleParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -484,7 +526,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesGetScheduleResponse>(req)
             .await
     }
 
@@ -500,8 +542,8 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_schedule_overrides(&self, id: &str, query_params: SchedulesListScheduleOverridesParams) -> Result<ListScheduleOverridesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), SchedulesListScheduleOverridesParamsBuilder::new().build().qs)?;
+    pub async fn list_schedule_overrides(&self, id: &str, query_params: SchedulesListScheduleOverridesParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}/overrides", &id), &SchedulesListScheduleOverridesParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -510,7 +552,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesListScheduleOverridesResponse>(req)
             .await
     }
 
@@ -526,8 +568,8 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_schedule_users(&self, id: &str, query_params: SchedulesListScheduleUsersParams) -> Result<ListScheduleUsersResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), SchedulesListScheduleUsersParamsBuilder::new().build().qs)?;
+    pub async fn list_schedule_users(&self, id: &str, query_params: SchedulesListScheduleUsersParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}/users", &id), &SchedulesListScheduleUsersParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -536,7 +578,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesListScheduleUsersResponse>(req)
             .await
     }
 
@@ -557,11 +599,11 @@ impl SchedulesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(SchedulesListSchedulesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/schedules"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListSchedulesResponse, ListSchedulesListResponse>(
+            .process_into_paginated_stream::<Schedule, InlineListResponse20035>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -591,8 +633,8 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn list_schedules_audit_records(&self, id: &str) -> Result<ListUsersAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_schedules_audit_records(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}/audit/records", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -601,7 +643,7 @@ impl SchedulesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesListSchedulesAuditRecordsResponse>(req)
             .await
     }
 
@@ -617,17 +659,17 @@ impl SchedulesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_schedule(&self, id: &str, query_params: SchedulesUpdateScheduleParams, body: UpdateScheduleBody) -> Result<SchedulesIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), SchedulesUpdateScheduleParamsBuilder::new().build().qs)?;
+    pub async fn update_schedule(&self, id: &str, query_params: SchedulesUpdateScheduleParams, body: UpdateSchedule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/schedules/{}", &id), &SchedulesUpdateScheduleParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateScheduleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, SchedulesUpdateScheduleResponse>(req)
             .await
     }
 

@@ -13,16 +13,17 @@
         <plugin>
           <groupId>io.swagger.codegen.v3</groupId>
           <artifactId>swagger-codegen-maven-plugin</artifactId>
-          <version>3.0.29</version>
+          <version>3.0.33</version>
           <executions>
             <execution>
+              <id>default</id>
               <goals>
                 <goal>generate</goal>
               </goals>
               <configuration>
                 <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/master/reference/REST/openapiv3.json</inputSpec>
                 <!--
-                <inputSpec>/home/fussybeaver/projects/praiya/openapiv3.json</inputSpec>
+                <inputSpec>/Users/fussybeaver/projects/praiya/openapiv3.json</inputSpec>
                 -->
                 <language>pagerduty.PagerDutyCodegen</language>
                 <output>${project.basedir}</output>
@@ -31,6 +32,28 @@
                 <configOptions>
                   <packageName>pagerduty-models-models</packageName>
                   <packageVersion>0</packageVersion>
+                  <targetApiPrefix>default</targetApiPrefix>
+                </configOptions>
+              </configuration>
+            </execution>
+            <execution>
+              <id>slack</id>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+              <configuration>
+                <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/main/reference/integration-slack-service/openapiv3.json</inputSpec>
+                <!--
+                <inputSpec>/Users/fussybeaver/projects/praiya/openapiv3.json</inputSpec>
+                -->
+                <language>pagerduty.PagerDutyCodegen</language>
+                <output>${project.basedir}</output>
+                <generateApis>true</generateApis>
+                <templateDirectory>${project.basedir}/templates</templateDirectory>
+                <configOptions>
+                  <packageName>pagerduty-models-models</packageName>
+                  <packageVersion>0</packageVersion>
+                  <targetApiPrefix>slack</targetApiPrefix>
                 </configOptions>
               </configuration>
             </execution>
@@ -73,12 +96,12 @@
         <dependency>
             <groupId>io.swagger.codegen.v3</groupId>
             <artifactId>swagger-codegen</artifactId>
-            <version>3.0.29</version>
+            <version>3.0.33</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.codegen.v3</groupId>
             <artifactId>swagger-codegen-generators</artifactId>
-            <version>1.0.29</version>
+            <version>1.0.32</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,2 @@
+2022.04.25 15:38:04 INFO  tracing is disabled for protocol LSP, to enable tracing of incoming and outgoing JSON messages create an empty file at /Users/fussybeaver/projects/praiya/java/pagerduty/.metals/lsp.trace.json or /Users/fussybeaver/Library/Caches/org.scalameta.metals/lsp.trace.json[0m
+2022.04.25 15:38:05 INFO  logging to file /Users/fussybeaver/projects/praiya/.metals/metals.log[0m

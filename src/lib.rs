@@ -14,13 +14,12 @@
 //! $ mvn -D org.slf4j.simpleLogger.defaultLogLevel=info clean compiler:compile generate-resources
 //! ```
 //!
-#![allow(
-    missing_docs,
-    unused_imports,
-)]
+#![allow(missing_docs, unused_imports)]
 
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+mod gen;
 
 use std::collections::HashMap;
 
@@ -30,15 +29,14 @@ pub mod errors;
 pub mod models;
 mod praiya;
 
+pub(crate) use crate::praiya::{
+    BaseOption, BaseRequest, PaginatedResponse, PaginationQueryComponent, SingleResponse, SubSystem,
+};
 pub use crate::praiya::{Praiya, DEFAULT_PAGERDUTY_API_LIMIT};
-pub(crate) use crate::praiya::{BaseOption, BaseRequest, PaginatedResponse, PaginationQueryComponent, SingleResponse, SubSystem};
 
 pub mod auth {
     pub enum Auth {
-        Basic {
-            user: String,
-            pass: String,
-        },
+        Basic { user: String, pass: String },
         Token(String),
         Bearer(String),
         None,

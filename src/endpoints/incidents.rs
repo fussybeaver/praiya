@@ -34,12 +34,22 @@ pub struct IncidentsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct UpdateIncidentAlertsListResponse {
+pub struct InlineListResponse20024 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub update_incident_alerts: Vec<Alert>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20024: Vec<Value>,
+}
+
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct InlineListResponse20017 {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub inline20017: Vec<Alert>,
 }
 
 /// Query parameters for the [List alerts for an incident](Incidents::list_incident_alerts()) endpoint.
@@ -89,6 +99,12 @@ impl<'req> IncidentsListIncidentAlertsParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> IncidentsListIncidentAlertsParams {
+        IncidentsListIncidentAlertsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for IncidentsListIncidentAlertsParams {
@@ -101,12 +117,12 @@ impl BaseOption for IncidentsListIncidentAlertsParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListLogEntriesListResponse {
+pub struct InlineListResponse20019 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_log_entries: Vec<LogEntry>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20019: Vec<LogEntry>,
 }
 
 /// Query parameters for the [List log entries for an incident](Incidents::list_incident_log_entries()) endpoint.
@@ -135,21 +151,21 @@ impl<'req> IncidentsListIncidentLogEntriesParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
 
     /// If `true`, will return a subset of log entries that show only the most important changes to the incident.
     pub fn is_overview(&mut self, is_overview: bool) -> &mut Self {
-        self.qs.append_pair("is_overview", &is_overview);
+        self.qs.append_pair("is_overview", &serde_urlencoded::to_string(&is_overview).unwrap_or_default());
 
         self
     }
@@ -160,6 +176,12 @@ impl<'req> IncidentsListIncidentLogEntriesParamsBuilder<'req> {
             self.qs.append_pair("include[]", &item);
         }
         self
+    }
+
+    pub fn build(&mut self) -> IncidentsListIncidentLogEntriesParams {
+        IncidentsListIncidentLogEntriesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -173,12 +195,12 @@ impl BaseOption for IncidentsListIncidentLogEntriesParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct UpdateIncidentsListResponse {
+pub struct InlineListResponse20015 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub update_incidents: Vec<Incident>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20015: Vec<Incident>,
 }
 
 /// Query parameters for the [List incidents](Incidents::list_incidents()) endpoint.
@@ -200,14 +222,14 @@ impl<'req> IncidentsListIncidentsParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
@@ -288,6 +310,12 @@ impl<'req> IncidentsListIncidentsParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> IncidentsListIncidentsParams {
+        IncidentsListIncidentsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for IncidentsListIncidentsParams {
@@ -298,6 +326,16 @@ impl BaseOption for IncidentsListIncidentsParams {
         query.finish()
     }
 }
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct InlineListResponse20017 {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub inline20017: Vec<Alert>,
+}
+
 /// Query parameters for the [Manage alerts](Incidents::update_incident_alerts()) endpoint.
 #[derive(Default, Serialize)]
 pub struct IncidentsUpdateIncidentAlertsParams {
@@ -314,6 +352,12 @@ impl<'req> IncidentsUpdateIncidentAlertsParamsBuilder<'req> {
             qs: form_urlencoded::Serializer::new(String::new())
         }
     }
+
+    pub fn build(&mut self) -> IncidentsUpdateIncidentAlertsParams {
+        IncidentsUpdateIncidentAlertsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for IncidentsUpdateIncidentAlertsParams {
@@ -324,6 +368,16 @@ impl BaseOption for IncidentsUpdateIncidentAlertsParams {
         query.finish()
     }
 }
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct InlineListResponse20015 {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub inline20015: Vec<Incident>,
+}
+
 /// Query parameters for the [Manage incidents](Incidents::update_incidents()) endpoint.
 #[derive(Default, Serialize)]
 pub struct IncidentsUpdateIncidentsParams {
@@ -338,6 +392,12 @@ impl<'req> IncidentsUpdateIncidentsParamsBuilder<'req> {
     pub fn new() -> Self {
         Self {
             qs: form_urlencoded::Serializer::new(String::new())
+        }
+    }
+
+    pub fn build(&mut self) -> IncidentsUpdateIncidentsParams {
+        IncidentsUpdateIncidentsParams {
+            qs: self.qs.finish(),
         }
     }
 }
@@ -364,17 +424,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_incident(&self, body: CreateIncidentBody) -> Result<GetIncidentResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_incident(&self, body: CreateIncident) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/incidents", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentResponse>(req)
             .await
     }
 
@@ -390,17 +450,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_incident_note(&self, id: &str, body: CreateIncidentNoteBody) -> Result<IdNotesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_incident_note(&self, id: &str, body: CreateIncidentNote) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/notes", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentNoteBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentNoteResponse>(req)
             .await
     }
 
@@ -415,17 +475,17 @@ impl IncidentsClient {
     /// > This endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.
     /// 
     /// ---
-    pub async fn create_incident_notification_subscriber(&self, id: &str, body: CreateIncidentNotificationSubscriberBody) -> Result<CreateIncidentNotificationSubscriberResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_incident_notification_subscriber(&self, id: &str, body: CreateIncidentNotificationSubscriber) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/status_updates/subscribers", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentNotificationSubscriberBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentNotificationSubscriberResponse>(req)
             .await
     }
 
@@ -441,17 +501,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_incident_responder_request(&self, id: &str, body: CreateIncidentResponderRequestBody) -> Result<CreateIncidentResponderRequestResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_incident_responder_request(&self, id: &str, body: CreateIncidentResponderRequest) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/responder_requests", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentResponderRequestBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentResponderRequestResponse>(req)
             .await
     }
 
@@ -467,17 +527,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_incident_snooze(&self, id: &str, body: CreateIncidentSnoozeBody) -> Result<GetIncidentResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_incident_snooze(&self, id: &str, body: CreateIncidentSnooze) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/snooze", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentSnoozeBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentSnoozeResponse>(req)
             .await
     }
 
@@ -493,17 +553,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_incident_status_update(&self, id: &str, body: CreateIncidentStatusUpdateBody) -> Result<CreateIncidentStatusUpdateResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_incident_status_update(&self, id: &str, body: CreateIncidentStatusUpdate) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/status_updates", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateIncidentStatusUpdateBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsCreateIncidentStatusUpdateResponse>(req)
             .await
     }
 
@@ -519,8 +579,8 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_incident(&self, id: &str) -> Result<GetIncidentResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_incident(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -529,7 +589,7 @@ impl IncidentsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsGetIncidentResponse>(req)
             .await
     }
 
@@ -547,8 +607,8 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_incident_alert(&self, id: &str, alert_id: &str) -> Result<GetIncidentAlertResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&alert_id), "")?;
+    pub async fn get_incident_alert(&self, id: &str, alert_id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/alerts/{}", &id, &alert_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -557,7 +617,7 @@ impl IncidentsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsGetIncidentAlertResponse>(req)
             .await
     }
 
@@ -573,18 +633,24 @@ impl IncidentsClient {
     /// > Users must be added through `POST /incident/{id}/status_updates/subscribers` to be returned from this endpoint.
     /// 
     /// ---
-    pub async fn get_incident_notification_subscribers(&self, id: &str) -> Result<GetIncidentNotificationSubscribersResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
-            
-        let req = self.client.build_request(
-            uri,
-            Builder::new().method(Method::GET),
-            Body::empty());
-
+    pub fn get_incident_notification_subscribers(&self, id: &str) -> impl Stream<Item = Result<Value, Error>> + '_ {
+        let base_request = BaseRequest {
+            host: String::clone(&self.api_endpoint),
+            method: Method::GET,
+            options: Arc::new(IncidentsGetIncidentNotificationSubscribersParamsBuilder::new().build()),
+            path: String::from("/incidents/{}/status_updates/subscribers"),
+        };
 
         self.client
-            .process_into_value(req)
-            .await
+            .process_into_paginated_stream::<Value, InlineListResponse20024>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
 
     /// ---
@@ -604,11 +670,11 @@ impl IncidentsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(IncidentsListIncidentAlertsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/incidents/{}/alerts"),
         };
 
         self.client
-            .process_into_paginated_stream::<UpdateIncidentAlertsResponse, UpdateIncidentAlertsListResponse>(
+            .process_into_paginated_stream::<Alert, InlineListResponse20017>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -638,11 +704,11 @@ impl IncidentsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(IncidentsListIncidentLogEntriesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/incidents/{}/log_entries"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListLogEntriesResponse, ListLogEntriesListResponse>(
+            .process_into_paginated_stream::<LogEntry, InlineListResponse20019>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -665,8 +731,8 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn list_incident_notes(&self, id: &str) -> Result<ListIncidentNotesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_incident_notes(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/notes", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -675,7 +741,7 @@ impl IncidentsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsListIncidentNotesResponse>(req)
             .await
     }
 
@@ -696,11 +762,11 @@ impl IncidentsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(IncidentsListIncidentsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/incidents"),
         };
 
         self.client
-            .process_into_paginated_stream::<UpdateIncidentsResponse, UpdateIncidentsListResponse>(
+            .process_into_paginated_stream::<Incident, InlineListResponse20015>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -723,17 +789,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn merge_incidents(&self, id: &str, body: MergeIncidentsBody) -> Result<MergeIncidentsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn merge_incidents(&self, id: &str, body: MergeIncidents) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/merge", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(MergeIncidentsBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsMergeIncidentsResponse>(req)
             .await
     }
 
@@ -749,7 +815,7 @@ impl IncidentsClient {
     /// 
     /// ---
     pub async fn remove_incident_notification_subscriber(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/status_updates/unsubscribe", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -758,7 +824,7 @@ impl IncidentsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsRemoveIncidentNotificationSubscriberResponse>(req)
             .await
     }
 
@@ -774,17 +840,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_incident(&self, id: &str, body: UpdateIncidentBody) -> Result<UpdateIncidentResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_incident(&self, id: &str, body: UpdateIncident) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateIncidentBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsUpdateIncidentResponse>(req)
             .await
     }
 
@@ -802,17 +868,17 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_incident_alert(&self, id: &str, alert_id: &str, body: UpdateIncidentAlertBody) -> Result<AlertsAlertIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&alert_id), "")?;
+    pub async fn update_incident_alert(&self, id: &str, alert_id: &str, body: UpdateIncidentAlert) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/alerts/{}", &id, &alert_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateIncidentAlertBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, IncidentsUpdateIncidentAlertResponse>(req)
             .await
     }
 
@@ -830,18 +896,24 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_incident_alerts(&self, id: &str, query_params: IncidentsUpdateIncidentAlertsParams, body: UpdateIncidentAlertsBody) -> Result<UpdateIncidentAlertsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), IncidentsUpdateIncidentAlertsParamsBuilder::new().build().qs)?;
-            
-        let req = self.client.build_request(
-            uri,
-            Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateIncidentAlertsBody)?));
-
+    pub fn update_incident_alerts(&self, id: &str, query_params: IncidentsUpdateIncidentAlertsParams) -> impl Stream<Item = Result<Alert, Error>> + '_ {
+        let base_request = BaseRequest {
+            host: String::clone(&self.api_endpoint),
+            method: Method::PUT,
+            options: Arc::new(IncidentsUpdateIncidentAlertsParamsBuilder::new().build()),
+            path: String::from("/incidents/{}/alerts"),
+        };
 
         self.client
-            .process_into_value(req)
-            .await
+            .process_into_paginated_stream::<Alert, InlineListResponse20017>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
 
     /// ---
@@ -858,18 +930,24 @@ impl IncidentsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_incidents(&self, query_params: IncidentsUpdateIncidentsParams, body: UpdateIncidentsBody) -> Result<UpdateIncidentsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), IncidentsUpdateIncidentsParamsBuilder::new().build().qs)?;
-            
-        let req = self.client.build_request(
-            uri,
-            Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateIncidentsBody)?));
-
+    pub fn update_incidents(&self, query_params: IncidentsUpdateIncidentsParams) -> impl Stream<Item = Result<Incident, Error>> + '_ {
+        let base_request = BaseRequest {
+            host: String::clone(&self.api_endpoint),
+            method: Method::PUT,
+            options: Arc::new(IncidentsUpdateIncidentsParamsBuilder::new().build()),
+            path: String::from("/incidents"),
+        };
 
         self.client
-            .process_into_value(req)
-            .await
+            .process_into_paginated_stream::<Incident, InlineListResponse20015>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
 
 }

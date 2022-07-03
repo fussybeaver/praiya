@@ -34,12 +34,12 @@ pub struct RulesetsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListRulesetEventRulesListResponse {
+pub struct InlineListResponse20034 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_ruleset_event_rules: Vec<Value>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20034: Vec<Value>,
 }
 
 /// Query parameters for the [List event rules](Rulesets::list_ruleset_event_rules()) endpoint.
@@ -58,6 +58,12 @@ impl<'req> RulesetsListRulesetEventRulesParamsBuilder<'req> {
             qs: form_urlencoded::Serializer::new(String::new())
         }
     }
+
+    pub fn build(&mut self) -> RulesetsListRulesetEventRulesParams {
+        RulesetsListRulesetEventRulesParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for RulesetsListRulesetEventRulesParams {
@@ -70,12 +76,12 @@ impl BaseOption for RulesetsListRulesetEventRulesParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListRulesetsListResponse {
+pub struct InlineListResponse20033 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_rulesets: Vec<Value>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20033: Vec<Value>,
 }
 
 /// Query parameters for the [List rulesets](Rulesets::list_rulesets()) endpoint.
@@ -92,6 +98,12 @@ impl<'req> RulesetsListRulesetsParamsBuilder<'req> {
     pub fn new() -> Self {
         Self {
             qs: form_urlencoded::Serializer::new(String::new())
+        }
+    }
+
+    pub fn build(&mut self) -> RulesetsListRulesetsParams {
+        RulesetsListRulesetsParams {
+            qs: self.qs.finish(),
         }
     }
 }
@@ -118,17 +130,17 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_ruleset(&self, body: CreateRulesetBody) -> Result<UpdateRulesetResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_ruleset(&self, body: CreateRuleset) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/rulesets", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateRulesetBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsCreateRulesetResponse>(req)
             .await
     }
 
@@ -144,17 +156,17 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_ruleset_event_rule(&self, id: &str, body: CreateRulesetEventRuleBody) -> Result<UpdateRulesetEventRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_ruleset_event_rule(&self, id: &str, body: CreateRulesetEventRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}/rules", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateRulesetEventRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsCreateRulesetEventRuleResponse>(req)
             .await
     }
 
@@ -171,7 +183,7 @@ impl RulesetsClient {
     /// 
     /// ---
     pub async fn delete_ruleset(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -180,7 +192,7 @@ impl RulesetsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsDeleteRulesetResponse>(req)
             .await
     }
 
@@ -197,7 +209,7 @@ impl RulesetsClient {
     /// 
     /// ---
     pub async fn delete_ruleset_event_rule(&self, id: &str, rule_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&rule_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}/rules/{}", &id, &rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -206,7 +218,7 @@ impl RulesetsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsDeleteRulesetEventRuleResponse>(req)
             .await
     }
 
@@ -222,8 +234,8 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_ruleset(&self, id: &str) -> Result<UpdateRulesetResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_ruleset(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -232,7 +244,7 @@ impl RulesetsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsGetRulesetResponse>(req)
             .await
     }
 
@@ -248,8 +260,8 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_ruleset_event_rule(&self, id: &str, rule_id: &str) -> Result<UpdateRulesetEventRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&rule_id), "")?;
+    pub async fn get_ruleset_event_rule(&self, id: &str, rule_id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}/rules/{}", &id, &rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -258,7 +270,7 @@ impl RulesetsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsGetRulesetEventRuleResponse>(req)
             .await
     }
 
@@ -279,11 +291,11 @@ impl RulesetsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(RulesetsListRulesetEventRulesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/rulesets/{}/rules"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListRulesetEventRulesResponse, ListRulesetEventRulesListResponse>(
+            .process_into_paginated_stream::<Value, InlineListResponse20034>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -311,11 +323,11 @@ impl RulesetsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(RulesetsListRulesetsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/rulesets"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListRulesetsResponse, ListRulesetsListResponse>(
+            .process_into_paginated_stream::<Value, InlineListResponse20033>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -338,17 +350,17 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_ruleset(&self, id: &str, body: UpdateRulesetBody) -> Result<UpdateRulesetResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_ruleset(&self, id: &str, body: UpdateRuleset) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateRulesetBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsUpdateRulesetResponse>(req)
             .await
     }
 
@@ -364,17 +376,17 @@ impl RulesetsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_ruleset_event_rule(&self, id: &str, rule_id: &str, body: UpdateRulesetEventRuleBody) -> Result<UpdateRulesetEventRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&rule_id), "")?;
+    pub async fn update_ruleset_event_rule(&self, id: &str, rule_id: &str, body: UpdateRulesetEventRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/rulesets/{}/rules/{}", &id, &rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateRulesetEventRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, RulesetsUpdateRulesetEventRuleResponse>(req)
             .await
     }
 

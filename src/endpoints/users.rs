@@ -56,6 +56,12 @@ impl<'req> UsersGetCurrentUserParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> UsersGetCurrentUserParams {
+        UsersGetCurrentUserParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for UsersGetCurrentUserParams {
@@ -89,6 +95,12 @@ impl<'req> UsersGetUserParamsBuilder<'req> {
             self.qs.append_pair("include[]", &item);
         }
         self
+    }
+
+    pub fn build(&mut self) -> UsersGetUserParams {
+        UsersGetUserParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -124,6 +136,12 @@ impl<'req> UsersGetUserNotificationRuleParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> UsersGetUserNotificationRuleParams {
+        UsersGetUserNotificationRuleParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for UsersGetUserNotificationRuleParams {
@@ -157,6 +175,12 @@ impl<'req> UsersGetUserNotificationRulesParamsBuilder<'req> {
             self.qs.append_pair("include[]", &item);
         }
         self
+    }
+
+    pub fn build(&mut self) -> UsersGetUserNotificationRulesParams {
+        UsersGetUserNotificationRulesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -192,6 +216,12 @@ impl<'req> UsersGetUserStatusUpdateNotificationRuleParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> UsersGetUserStatusUpdateNotificationRuleParams {
+        UsersGetUserStatusUpdateNotificationRuleParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for UsersGetUserStatusUpdateNotificationRuleParams {
@@ -226,6 +256,12 @@ impl<'req> UsersGetUserStatusUpdateNotificationRulesParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> UsersGetUserStatusUpdateNotificationRulesParams {
+        UsersGetUserStatusUpdateNotificationRulesParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for UsersGetUserStatusUpdateNotificationRulesParams {
@@ -238,12 +274,12 @@ impl BaseOption for UsersGetUserStatusUpdateNotificationRulesParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListUsersListResponse {
+pub struct InlineListResponse20044 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_users: Vec<User>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20044: Vec<User>,
 }
 
 /// Query parameters for the [List users](Users::list_users()) endpoint.
@@ -285,6 +321,12 @@ impl<'req> UsersListUsersParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> UsersListUsersParams {
+        UsersListUsersParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for UsersListUsersParams {
@@ -309,17 +351,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn create_user(&self, body: CreateUserBody) -> Result<UsersBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_user(&self, body: CreateUser) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/users", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateUserBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersCreateUserResponse>(req)
             .await
     }
 
@@ -335,17 +377,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn create_user_contact_method(&self, id: &str, body: CreateUserContactMethodBody) -> Result<UpdateUserContactMethodResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_user_contact_method(&self, id: &str, body: CreateUserContactMethod) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/contact_methods", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateUserContactMethodBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersCreateUserContactMethodResponse>(req)
             .await
     }
 
@@ -361,17 +403,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn create_user_notification_rule(&self, id: &str, body: CreateUserNotificationRuleBody) -> Result<IdNotificationRulesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_user_notification_rule(&self, id: &str, body: CreateUserNotificationRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_rules", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateUserNotificationRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersCreateUserNotificationRuleResponse>(req)
             .await
     }
 
@@ -386,17 +428,17 @@ impl UsersClient {
     /// > This endpoint is in Early Access and may change at any time. You must pass in the X-EARLY-ACCESS header to access it.
     /// 
     /// ---
-    pub async fn create_user_notification_subscription(&self, id: &str, body: CreateUserNotificationSubscriptionBody) -> Result<CreateUserNotificationSubscriptionResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_user_notification_subscription(&self, id: &str, body: CreateUserNotificationSubscription) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_subscriptions", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateUserNotificationSubscriptionBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersCreateUserNotificationSubscriptionResponse>(req)
             .await
     }
 
@@ -416,17 +458,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn create_user_status_update_notification_rule(&self, id: &str, body: CreateUserStatusUpdateNotificationRuleBody) -> Result<InlineResponse2016, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn create_user_status_update_notification_rule(&self, id: &str, body: CreateUserStatusUpdateNotificationRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/status_update_notification_rules", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateUserStatusUpdateNotificationRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersCreateUserStatusUpdateNotificationRuleResponse>(req)
             .await
     }
 
@@ -449,7 +491,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -458,7 +500,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserResponse>(req)
             .await
     }
 
@@ -475,7 +517,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user_contact_method(&self, id: &str, contact_method_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&contact_method_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/contact_methods/{}", &id, &contact_method_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -484,7 +526,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserContactMethodResponse>(req)
             .await
     }
 
@@ -501,7 +543,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user_notification_rule(&self, id: &str, notification_rule_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&notification_rule_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_rules/{}", &id, &notification_rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -510,7 +552,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserNotificationRuleResponse>(req)
             .await
     }
 
@@ -527,7 +569,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user_session(&self, id: &str, _type: &str, session_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&_type&session_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/sessions/{}/{}", &id, &_type, &session_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -536,7 +578,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserSessionResponse>(req)
             .await
     }
 
@@ -553,7 +595,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user_sessions(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/sessions", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -562,7 +604,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserSessionsResponse>(req)
             .await
     }
 
@@ -583,7 +625,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn delete_user_status_update_notification_rule(&self, id: &str, status_update_notification_rule_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&status_update_notification_rule_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/status_update_notification_rules/{}", &id, &status_update_notification_rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -592,7 +634,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersDeleteUserStatusUpdateNotificationRuleResponse>(req)
             .await
     }
 
@@ -610,8 +652,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_current_user(&self, query_params: UsersGetCurrentUserParams) -> Result<UsersIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), UsersGetCurrentUserParamsBuilder::new().build().qs)?;
+    pub async fn get_current_user(&self, query_params: UsersGetCurrentUserParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/users/me", &UsersGetCurrentUserParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -620,7 +662,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetCurrentUserResponse>(req)
             .await
     }
 
@@ -636,8 +678,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user(&self, id: &str, query_params: UsersGetUserParams) -> Result<UsersBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), UsersGetUserParamsBuilder::new().build().qs)?;
+    pub async fn get_user(&self, id: &str, query_params: UsersGetUserParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}", &id), &UsersGetUserParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -646,7 +688,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserResponse>(req)
             .await
     }
 
@@ -662,8 +704,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_contact_method(&self, id: &str, contact_method_id: &str) -> Result<UpdateUserContactMethodResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&contact_method_id), "")?;
+    pub async fn get_user_contact_method(&self, id: &str, contact_method_id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/contact_methods/{}", &id, &contact_method_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -672,7 +714,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserContactMethodResponse>(req)
             .await
     }
 
@@ -688,8 +730,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_contact_methods(&self, id: &str) -> Result<GetUserContactMethodsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_user_contact_methods(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/contact_methods", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -698,7 +740,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserContactMethodsResponse>(req)
             .await
     }
 
@@ -714,8 +756,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_notification_rule(&self, id: &str, notification_rule_id: &str, query_params: UsersGetUserNotificationRuleParams) -> Result<IdNotificationRulesBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&notification_rule_id), UsersGetUserNotificationRuleParamsBuilder::new().build().qs)?;
+    pub async fn get_user_notification_rule(&self, id: &str, notification_rule_id: &str, query_params: UsersGetUserNotificationRuleParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_rules/{}", &id, &notification_rule_id), &UsersGetUserNotificationRuleParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -724,7 +766,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserNotificationRuleResponse>(req)
             .await
     }
 
@@ -740,8 +782,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_notification_rules(&self, id: &str, query_params: UsersGetUserNotificationRulesParams) -> Result<GetUserNotificationRulesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), UsersGetUserNotificationRulesParamsBuilder::new().build().qs)?;
+    pub async fn get_user_notification_rules(&self, id: &str, query_params: UsersGetUserNotificationRulesParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_rules", &id), &UsersGetUserNotificationRulesParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -750,7 +792,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserNotificationRulesResponse>(req)
             .await
     }
 
@@ -766,8 +808,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_notification_subscriptions(&self, id: &str) -> Result<GetUserNotificationSubscriptionsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_user_notification_subscriptions(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_subscriptions", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -776,7 +818,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserNotificationSubscriptionsResponse>(req)
             .await
     }
 
@@ -792,8 +834,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_session(&self, id: &str, _type: &str, session_id: &str) -> Result<GetUserSessionResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&_type&session_id), "")?;
+    pub async fn get_user_session(&self, id: &str, _type: &str, session_id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/sessions/{}/{}", &id, &_type, &session_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -802,7 +844,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserSessionResponse>(req)
             .await
     }
 
@@ -818,8 +860,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_sessions(&self, id: &str) -> Result<GetUserSessionsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_user_sessions(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/sessions", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -828,7 +870,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserSessionsResponse>(req)
             .await
     }
 
@@ -848,8 +890,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_status_update_notification_rule(&self, id: &str, status_update_notification_rule_id: &str, query_params: UsersGetUserStatusUpdateNotificationRuleParams) -> Result<GetUserStatusUpdateNotificationRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&status_update_notification_rule_id), UsersGetUserStatusUpdateNotificationRuleParamsBuilder::new().build().qs)?;
+    pub async fn get_user_status_update_notification_rule(&self, id: &str, status_update_notification_rule_id: &str, query_params: UsersGetUserStatusUpdateNotificationRuleParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/status_update_notification_rules/{}", &id, &status_update_notification_rule_id), &UsersGetUserStatusUpdateNotificationRuleParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -858,7 +900,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserStatusUpdateNotificationRuleResponse>(req)
             .await
     }
 
@@ -878,8 +920,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn get_user_status_update_notification_rules(&self, id: &str, query_params: UsersGetUserStatusUpdateNotificationRulesParams) -> Result<GetUserStatusUpdateNotificationRulesResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), UsersGetUserStatusUpdateNotificationRulesParamsBuilder::new().build().qs)?;
+    pub async fn get_user_status_update_notification_rules(&self, id: &str, query_params: UsersGetUserStatusUpdateNotificationRulesParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/status_update_notification_rules", &id), &UsersGetUserStatusUpdateNotificationRulesParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -888,7 +930,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersGetUserStatusUpdateNotificationRulesResponse>(req)
             .await
     }
 
@@ -909,11 +951,11 @@ impl UsersClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(UsersListUsersParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/users"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListUsersResponse, ListUsersListResponse>(
+            .process_into_paginated_stream::<User, InlineListResponse20044>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -946,8 +988,8 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn list_users_audit_records(&self, id: &str) -> Result<ListUsersAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_users_audit_records(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/audit/records", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -956,7 +998,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersListUsersAuditRecordsResponse>(req)
             .await
     }
 
@@ -972,7 +1014,7 @@ impl UsersClient {
     /// 
     /// ---
     pub async fn unsubscribe_user_notification_subscription(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_subscriptions/unsubscribe", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -981,7 +1023,7 @@ impl UsersClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersUnsubscribeUserNotificationSubscriptionResponse>(req)
             .await
     }
 
@@ -997,17 +1039,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn update_user(&self, id: &str, body: UpdateUserBody) -> Result<UsersIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_user(&self, id: &str, body: UpdateUser) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateUserBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersUpdateUserResponse>(req)
             .await
     }
 
@@ -1023,17 +1065,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn update_user_contact_method(&self, id: &str, contact_method_id: &str, body: UpdateUserContactMethodBody) -> Result<UpdateUserContactMethodResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&contact_method_id), "")?;
+    pub async fn update_user_contact_method(&self, id: &str, contact_method_id: &str, body: UpdateUserContactMethod) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/contact_methods/{}", &id, &contact_method_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateUserContactMethodBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersUpdateUserContactMethodResponse>(req)
             .await
     }
 
@@ -1049,17 +1091,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn update_user_notification_rule(&self, id: &str, notification_rule_id: &str, body: UpdateUserNotificationRuleBody) -> Result<UpdateUserNotificationRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&notification_rule_id), "")?;
+    pub async fn update_user_notification_rule(&self, id: &str, notification_rule_id: &str, body: UpdateUserNotificationRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/notification_rules/{}", &id, &notification_rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateUserNotificationRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersUpdateUserNotificationRuleResponse>(req)
             .await
     }
 
@@ -1079,17 +1121,17 @@ impl UsersClient {
     /// 
     /// 
     /// ---
-    pub async fn update_user_status_update_notification_rule(&self, id: &str, status_update_notification_rule_id: &str, body: UpdateUserStatusUpdateNotificationRuleBody) -> Result<UpdateUserStatusUpdateNotificationRuleResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&status_update_notification_rule_id), "")?;
+    pub async fn update_user_status_update_notification_rule(&self, id: &str, status_update_notification_rule_id: &str, body: UpdateUserStatusUpdateNotificationRule) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/users/{}/status_update_notification_rules/{}", &id, &status_update_notification_rule_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateUserStatusUpdateNotificationRuleBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, UsersUpdateUserStatusUpdateNotificationRuleResponse>(req)
             .await
     }
 

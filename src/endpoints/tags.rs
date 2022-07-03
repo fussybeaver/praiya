@@ -32,6 +32,16 @@ pub struct TagsClient {
 }
 
 
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct InlineListResponse200 {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub inline200: Vec<Tag>,
+}
+
 /// Query parameters for the [Get tags for entities](Tags::get_entity_type_by_id_tags()) endpoint.
 #[derive(Default, Serialize)]
 pub struct TagsGetEntityTypeByIdTagsParams {
@@ -48,6 +58,12 @@ impl<'req> TagsGetEntityTypeByIdTagsParamsBuilder<'req> {
             qs: form_urlencoded::Serializer::new(String::new())
         }
     }
+
+    pub fn build(&mut self) -> TagsGetEntityTypeByIdTagsParams {
+        TagsGetEntityTypeByIdTagsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TagsGetEntityTypeByIdTagsParams {
@@ -58,6 +74,16 @@ impl BaseOption for TagsGetEntityTypeByIdTagsParams {
         query.finish()
     }
 }
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct InlineListResponse20041 {
+    pub offset: usize,
+    pub more: bool,
+    pub limit: usize,
+    pub total: Option<u64>,
+    pub inline20041: Vec<EntityReference>,
+}
+
 /// Query parameters for the [Get connected entities](Tags::get_tags_by_entity_type()) endpoint.
 #[derive(Default, Serialize)]
 pub struct TagsGetTagsByEntityTypeParams {
@@ -74,6 +100,12 @@ impl<'req> TagsGetTagsByEntityTypeParamsBuilder<'req> {
             qs: form_urlencoded::Serializer::new(String::new())
         }
     }
+
+    pub fn build(&mut self) -> TagsGetTagsByEntityTypeParams {
+        TagsGetTagsByEntityTypeParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TagsGetTagsByEntityTypeParams {
@@ -86,12 +118,12 @@ impl BaseOption for TagsGetTagsByEntityTypeParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListTagsListResponse {
+pub struct InlineListResponse200 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_tags: Vec<Tag>, //pub slack_connections: Vec<SlackConnection>
+    pub inline200: Vec<Tag>,
 }
 
 /// Query parameters for the [List tags](Tags::list_tags()) endpoint.
@@ -117,6 +149,12 @@ impl<'req> TagsListTagsParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> TagsListTagsParams {
+        TagsListTagsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TagsListTagsParams {
@@ -141,17 +179,17 @@ impl TagsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_entity_type_by_id_change_tags(&self, entity_type: &str, id: &str, body: CreateEntityTypeByIdChangeTagsBody) -> Result<HashMap<String, Value>, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &entity_type&id), "")?;
+    pub async fn create_entity_type_by_id_change_tags(&self, entity_type: &str, id: &str, body: CreateEntityTypeByIdChangeTags) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/{}/{}/change_tags", &entity_type, &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateEntityTypeByIdChangeTagsBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TagsCreateEntityTypeByIdChangeTagsResponse>(req)
             .await
     }
 
@@ -167,17 +205,17 @@ impl TagsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_tags(&self, body: CreateTagsBody) -> Result<TagsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_tags(&self, body: CreateTags) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/tags", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateTagsBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TagsCreateTagsResponse>(req)
             .await
     }
 
@@ -194,7 +232,7 @@ impl TagsClient {
     /// 
     /// ---
     pub async fn delete_tag(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/tags/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -203,7 +241,7 @@ impl TagsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TagsDeleteTagResponse>(req)
             .await
     }
 
@@ -219,18 +257,24 @@ impl TagsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_entity_type_by_id_tags(&self, entity_type: &str, id: &str, query_params: TagsGetEntityTypeByIdTagsParams) -> Result<ListTagsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &entity_type&id), TagsGetEntityTypeByIdTagsParamsBuilder::new().build().qs)?;
-            
-        let req = self.client.build_request(
-            uri,
-            Builder::new().method(Method::GET),
-            Body::empty());
-
+    pub fn get_entity_type_by_id_tags(&self, entity_type: &str, id: &str, query_params: TagsGetEntityTypeByIdTagsParams) -> impl Stream<Item = Result<Tag, Error>> + '_ {
+        let base_request = BaseRequest {
+            host: String::clone(&self.api_endpoint),
+            method: Method::GET,
+            options: Arc::new(TagsGetEntityTypeByIdTagsParamsBuilder::new().build()),
+            path: String::from("/{}/{}/tags"),
+        };
 
         self.client
-            .process_into_value(req)
-            .await
+            .process_into_paginated_stream::<Tag, InlineListResponse200>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
 
     /// ---
@@ -245,8 +289,8 @@ impl TagsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_tag(&self, id: &str) -> Result<TagsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_tag(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/tags/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -255,7 +299,7 @@ impl TagsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TagsGetTagResponse>(req)
             .await
     }
 
@@ -271,18 +315,24 @@ impl TagsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_tags_by_entity_type(&self, id: &str, entity_type: &str, query_params: TagsGetTagsByEntityTypeParams) -> Result<GetTagsByEntityTypeResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&entity_type), TagsGetTagsByEntityTypeParamsBuilder::new().build().qs)?;
-            
-        let req = self.client.build_request(
-            uri,
-            Builder::new().method(Method::GET),
-            Body::empty());
-
+    pub fn get_tags_by_entity_type(&self, id: &str, entity_type: &str, query_params: TagsGetTagsByEntityTypeParams) -> impl Stream<Item = Result<EntityReference, Error>> + '_ {
+        let base_request = BaseRequest {
+            host: String::clone(&self.api_endpoint),
+            method: Method::GET,
+            options: Arc::new(TagsGetTagsByEntityTypeParamsBuilder::new().build()),
+            path: String::from("/tags/{}/{}"),
+        };
 
         self.client
-            .process_into_value(req)
-            .await
+            .process_into_paginated_stream::<EntityReference, InlineListResponse20041>(
+                base_request,
+                PaginationQueryComponent {
+                    offset: 0,
+                    limit: DEFAULT_PAGERDUTY_API_LIMIT,
+                },
+            )
+            .boxed()
+
     }
 
     /// ---
@@ -302,11 +352,11 @@ impl TagsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(TagsListTagsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/tags"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListTagsResponse, ListTagsListResponse>(
+            .process_into_paginated_stream::<Tag, InlineListResponse200>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,

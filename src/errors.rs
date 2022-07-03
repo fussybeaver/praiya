@@ -20,6 +20,8 @@ pub enum Error {
     JsonDataError { message: String, column: usize },
     #[error("Timeout error")]
     RequestTimeoutError,
+    #[error("Oversized payload error")]
+    OversizedPayloadError { len: u64 },
     #[error(transparent)]
     JsonDeserializeError {
         #[from]

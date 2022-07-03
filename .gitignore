@@ -1,3 +1,7 @@
 **/target
 **/workspace
 /.settings
+/.idea
+/.metals
+/.swagger-codegen
+/.vscode

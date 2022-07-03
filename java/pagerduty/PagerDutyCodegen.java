@@ -16,19 +16,11 @@ import java.util.stream.Stream;
 
 import com.github.jknack.handlebars.Handlebars;
 
+import io.swagger.codegen.v3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.swagger.codegen.v3.CodegenConstants;
-import io.swagger.codegen.v3.CodegenModel;
-import io.swagger.codegen.v3.CodegenModelFactory;
-import io.swagger.codegen.v3.CodegenModelType;
-import io.swagger.codegen.v3.CodegenOperation;
-import io.swagger.codegen.v3.CodegenParameter;
-import io.swagger.codegen.v3.CodegenProperty;
-import io.swagger.codegen.v3.CodegenResponse;
-import io.swagger.codegen.v3.SupportingFile;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Info;
@@ -54,12 +46,27 @@ public class PagerDutyCodegen extends RustServerCodegen {
     public PagerDutyCodegen() {
         super();
 
+        supportingFiles.remove(new SupportingFile("endpoints.mustache", "src/endpoints", "mod.rs"));
+        cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         additionalProperties.put("tags", tagList.values());
-        supportingFiles.add(new SupportingFile("lib.mustache", "src", "lib.rs"));
+        //supportingFiles.add(new SupportingFile("lib.mustache", "src", "lib.rs"));
+        supportingFiles.remove(new SupportingFile("models.mustache", "src", "models.rs"));
+    }
+
+    @Override
+    public void processOpts() {
+        super.processOpts();
+
+        if (additionalProperties.get("targetApiPrefix") != null) {
+            LOGGER.info(" *** " + additionalProperties.get("targetApiPrefix"));
+            supportingFiles.add(new SupportingFile("models.mustache", "src", String.format("%s_models.rs", additionalProperties.get("targetApiPrefix"))));
+        }
+
     }
 
     private static HashMap<String, Object> patchOperationBodyNames = new HashMap();
     private static HashMap<String, Object> patchOperationResponseNames = new HashMap();
+    private static HashMap<String, List<CodegenProperty>> patchProperties = new HashMap();
     private static HashMap<String, HashMap<String, Object>> patchOneOfProperties = new HashMap();
 
     @Override
@@ -73,6 +80,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
 
         info.setVersion(StringUtils.join(versionComponents, "."));
+
 
         super.preprocessOpenAPI(openAPI);
     }
@@ -92,6 +100,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
     @Override
     public CodegenModel fromModel(String name, Schema schema, Map<String, Schema> allDefinitions) {
+        // This model schema crashes the generator - do not remove 
         if (name.equals("inline_response_200_11")) {
             final CodegenModel codegenModel = CodegenModelFactory.newInstance(CodegenModelType.MODEL);
             if (reservedWords.contains(name)) {
@@ -121,150 +130,112 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 for (Schema subSchema : schemas) {
                     String type = getTypeDeclaration(subSchema);
 
-                    // Deal with recursive 'allOf' in Reference types
+                    // For types that indicate they inherit the `Reference`
+                    // type, we manually add properties from the `Tag` Schema,
+                    // because of limitations in the swagger code generator,
+                    // that isn't able to copy deeply inherited composed
+                    // schemas.
+
                     if (type.equals("Tag/allOf/0") || type.equals("Reference")) {
                         Schema refSchema = null;
                         String ref = io.swagger.codegen.v3.generators.util.OpenAPIUtil.getSimpleRef("Tag");
+
+                        // Some fields on a `Reference` are required and can be
+                        // auto-filled. These are special-cased in the handlebars template.
+                        List<Map<String, String>> defaultImpl = new ArrayList();
+                        Map<String, String> labelImpl = new HashMap();
+                        labelImpl.put("key", "label");
+                        labelImpl.put("value", name);
+                        defaultImpl.add(labelImpl);
+                        Map<String, String> typeImpl = new HashMap();
+                        typeImpl.put("key", "_type");
+                        typeImpl.put("value", underscore(name));
+                        defaultImpl.add(typeImpl);
+
+                        // Marking the model with a default impl will trigger a non-derived Default
+                        mdl.getVendorExtensions().put("x-rustgen-default-impl", defaultImpl);
+                        mdl.getVendorExtensions().put("x-rustgen-has-default-impl", true);
+
                         if (allDefinitions != null) {
                             refSchema = allDefinitions.get(ref);
-                            if (refSchema instanceof ComposedSchema) {
+                            // TODO: remove this condition?
+                            if (refSchema instanceof ObjectSchema) {
+                                Schema interfaceSchema = refSchema;
+                                if (interfaceSchema.getProperties() != null) {
+
+                                    List<Map.Entry<String, Schema>> propertyList = new ArrayList<Map.Entry<String, Schema>>(
+                                            interfaceSchema.getProperties().entrySet());
+                                    final int totalCount = propertyList.size();
+                                    for (int i = 0; i < totalCount; i++) {
+                                        Map.Entry<String, Schema> entry = propertyList.get(i);
+
+                                        final String key = entry.getKey();
+                                        final Schema propertySchema = entry.getValue();
+
+                                        if (mdl.vars.stream().filter(p -> p.baseName.equals(key))
+                                                .collect(java.util.stream.Collectors.toList()).isEmpty()) {
+                                            final CodegenProperty codegenProperty = fromProperty(key,
+                                                    propertySchema);
+                                            mdl.vars.add(0, codegenProperty);
+                                        }
+                                    }
+                                }
+                            } else if (refSchema instanceof ComposedSchema) {
                                 final ComposedSchema refComposed = (ComposedSchema) refSchema;
                                 final List<Schema> allOf = refComposed.getAllOf();
                                 if (allOf != null && !allOf.isEmpty()) {
-                                    Schema interfaceSchema = allOf.get(0);
-                                    if (interfaceSchema.getProperties() != null) {
+                                    for (Schema interfaceSchema : allOf) {
+                                        if (interfaceSchema.getProperties() != null) {
 
-                                        List<Map.Entry<String, Schema>> propertyList = new ArrayList<Map.Entry<String, Schema>>(
-                                                interfaceSchema.getProperties().entrySet());
-                                        final int totalCount = propertyList.size();
-                                        for (int i = 0; i < totalCount; i++) {
-                                            Map.Entry<String, Schema> entry = propertyList.get(i);
+                                            List<Map.Entry<String, Schema>> propertyList = new ArrayList<Map.Entry<String, Schema>>(
+                                                    interfaceSchema.getProperties().entrySet());
+                                            final int totalCount = propertyList.size();
+                                            for (int i = 0; i < totalCount; i++) {
+                                                Map.Entry<String, Schema> entry = propertyList.get(i);
 
-                                            final String key = entry.getKey();
-                                            final Schema propertySchema = entry.getValue();
+                                                final String key = entry.getKey();
+                                                final Schema propertySchema = entry.getValue();
 
-                                            if (mdl.vars.stream().filter(p -> p.baseName.equals(key))
-                                                    .collect(java.util.stream.Collectors.toList()).isEmpty()) {
-                                                final CodegenProperty codegenProperty = fromProperty(key,
-                                                        propertySchema);
-                                                mdl.vars.add(0, codegenProperty);
-                                                mdl.requiredVars.add(0, codegenProperty);
+                                                if (mdl.vars.stream().filter(p -> p.baseName.equals(key))
+                                                        .collect(java.util.stream.Collectors.toList()).isEmpty()) {
+                                                    final CodegenProperty codegenProperty = fromProperty(key,
+                                                            propertySchema);
+                                                    mdl.vars.add(0, codegenProperty);
+                                                }
                                             }
                                         }
-
-
                                     }
                                 }
                             }
                         }
+                        for (CodegenProperty codegenProperty : mdl.vars) {
+                            if (codegenProperty.name.equals("label") || codegenProperty.name.equals("_type")) {
+                                codegenProperty.getVendorExtensions().put("x-rustgen-is-required", true);
+
+                                // Marking the property with a default impl
+                                // ensures that properties like `type` are set
+                                // appropriately in a non-derive Default
+                                // implementation
+                                if (codegenProperty.name.equals("_type")) {
+                                    codegenProperty.getVendorExtensions().put("x-rustgen-default-impl", underscore(mdl.name));
+                                } else {
+                                    codegenProperty.getVendorExtensions().put("x-rustgen-default-impl", mdl.name);
+                                }
+                                codegenProperty.getVendorExtensions().put("x-rustgen-has-default-impl", true);
+                            }
+                        }
                     }
 
-                    // Tag pagination models with their inner data type
+                    // Tag pagination models with their inner data type.
                     if (type.equals("Pagination")) {
                         for (CodegenProperty item : mdl.vars) {
                             if (item.containerType != null && item.containerType.equals("array")) {
-                                if (item.items.datatype.startsWith("Incident")) {
-                                    LOGGER.info( " === " + mdl.classname + ", " + patchOperationResponseNames.get(mdl.classname) + " - " + item.items.datatype);
-                                }
                                 mdl.getVendorExtensions().put("x-codegen-pagination-response-inner", item.items.datatype);
                             }
                         }
                     }
+
                 }
-            }
-            if (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null) {
-                List<Schema> schemas;
-                if (composedSchema.getOneOf() != null) {
-                    schemas = composedSchema.getOneOf();
-                } else {
-                    schemas = composedSchema.getAnyOf();
-                }
-                mdl.getVendorExtensions().put("x-rustgen-enum-one-of", "true");
-
-                int i = 0;
-
-                Map<String, Object> allowableValues = new HashMap<String, Object>();
-                List<CodegenProperty> subModels = (List<CodegenProperty>) new ArrayList();
-                allowableValues.put("count", schemas.size());
-                Boolean allDisplayableTypes = true;
-
-                for (Schema subSchema : schemas) {
-                    String subName = name + "_sub_" + i;
-                    CodegenProperty subMdl = fromProperty(subName, subSchema);
-                    String type = getTypeDeclaration(subSchema);
-                    if (subSchema instanceof ArraySchema) {
-
-                        final ArraySchema arraySchema = (ArraySchema) subSchema;
-                        Schema inner = arraySchema.getItems();
-                        if (inner == null) {
-                            LOGGER.warn("warning!  No inner type supplied for array parameter \"" + subMdl.getName()
-                                    + "\", using String");
-                            inner = new StringSchema().description("//TODO automatically added by swagger-codegen");
-                            arraySchema.setItems(inner);
-
-                        }
-
-                        CodegenProperty item = fromProperty("inner", inner);
-                        if (item != null && !getSchemaType(inner).equals("object")) {
-                            item.setDatatype(toModelName(item.getDatatype()));
-                        }
-                        subMdl.items = item;
-                        updatePropertyForArray(subMdl, item);
-
-                        subMdl.getVendorExtensions().put(CodegenConstants.IS_LIST_CONTAINER_EXT_NAME, Boolean.TRUE);
-                        subMdl.getVendorExtensions().put(CodegenConstants.IS_CONTAINER_EXT_NAME, Boolean.TRUE);
-
-                        allDisplayableTypes = false;
-                    } else if (subSchema.getProperties() != null) {
-
-                        if (isObjectSchema(subSchema)) {
-                            subMdl.getVendorExtensions().put("x-is-object", Boolean.TRUE);
-                        }
-
-                        Map<String, Schema> properties = subSchema.getProperties();
-                        Iterator<Schema> values = properties.values().iterator();
-
-                        // We concern ourselves with the first type in an object - this is probably
-                        // wrong for more complex definitions.
-                        if (values.hasNext()) {
-                            subMdl.getVendorExtensions().put(CodegenConstants.IS_MAP_CONTAINER_EXT_NAME, Boolean.TRUE);
-                            subMdl.getVendorExtensions().put(CodegenConstants.IS_CONTAINER_EXT_NAME, Boolean.TRUE);
-                            Schema innerSchema = values.next();
-                            CodegenProperty cp = fromProperty("inner", innerSchema);
-
-                            updatePropertyForMap(subMdl, cp);
-                        }
-                        allDisplayableTypes = false;
-                    } else if (!(subSchema instanceof NumberSchema) && !(subSchema instanceof IntegerSchema)
-                            && !(subSchema instanceof StringSchema) && type != null) {
-                        allDisplayableTypes = false;
-                        subMdl.datatype = toModelName(type);
-                    }
-
-                    // Don't re-add a type that's a duplicate (the use of Value can mean we get
-                    // dups)
-                    Boolean containsDatatype = false;
-                    for (CodegenProperty prop : subModels) {
-                        if (prop.datatype.equals(subMdl.datatype)) {
-                            containsDatatype = true;
-                        }
-                    }
-
-                    if (!containsDatatype) {
-                        subModels.add(subMdl);
-                        i++;
-                    }
-                }
-
-                // Some enums are used when generating a url, so they need to implement
-                // std::Display
-                if (allDisplayableTypes) {
-                    mdl.getVendorExtensions().put("x-rustgen-is-display", Boolean.TRUE);
-                }
-
-                mdl.setAllowableValues(allowableValues);
-                allowableValues.put("values", subModels);
-
             }
         }
 
@@ -379,6 +350,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
             String modelName = toModelName(entry.getKey());
             Map<String, Object> inner = (Map<String, Object>) entry.getValue();
             List<Map<String, Object>> models = (List<Map<String, Object>>) inner.get("models");
+            
             for (Map<String, Object> mo : models) {
                 CodegenModel cm = (CodegenModel) mo.get("model");
                 allModels.put(modelName, cm);
@@ -401,6 +373,10 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         for (Entry<String, CodegenModel> entry : allModels.entrySet()) {
             CodegenModel model = entry.getValue();
+
+            if (model.getDataType() != null && model.getDataType().equals("object")) {
+                model.setDataType(entry.getKey());
+            }
             if (model.getDataType() != null && model.getDataType().equals("boolean")) {
                 model.vendorExtensions.put("x-rustgen-is-bool", true);
                 model.vendorExtensions.put("has-vars", true);
@@ -425,17 +401,12 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 model.vendorExtensions.put("is-enum", true);
             }
 
-            // Patch in the enum values for a OneOf or AnyOf schema found in a previous
-            // model property.
-            if (model.classname != null) {
-                if (model.classname.startsWith("OneOf") || model.classname.startsWith("AnyOf")) {
-                    if (patchOneOfProperties.containsKey(model.classname)) {
-                        model.allowableValues = patchOneOfProperties.get(model.classname);
-                        model.getVendorExtensions().put("x-rustgen-enum-one-of", "true");
-                    } else {
-                        newObjs.remove(model.classname);
-                    }
-                }
+            // We remove all inline generated types, as these are now encoded
+            // into proc-macros and associated with individual endpoints. So,
+            // for example, a response type for a 'get incident' API will have
+            // an associated macro generated response struct.
+            if (model.name.startsWith("inline_response")) {
+                model.vendorExtensions.put("x-rustgen-noop", true);
             }
 
             for (CodegenProperty prop : model.vars) {
@@ -460,15 +431,86 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 if (prop.baseName.equals(prop.name)) {
                     prop.vendorExtensions.put("x-rustgen-serde-no-rename", true);
                 }
-                if (prop.datatype != null && prop.datatype.equals("String")) {
-                    prop.vendorExtensions.put("x-rustgen-is-string", true);
-                    model.vendorExtensions.put("x-rustgen-has-string", true);
-                }
 
                 if (prop.baseName.equals("score") && prop.datatype.equals("i64")) {
                     prop.datatype = "f32";
                 }
 
+                if (prop.baseName != null && !prop.baseName.equals("type") && prop.allowableValues != null) {
+                    ArrayList<HashMap<String, String>> vars = (ArrayList<HashMap<String, String>>) prop.allowableValues.get("enumVars");
+                    if (vars != null && vars.size() > 0) {
+                        prop.vendorExtensions.put("is-enum", true);
+                    }
+                }
+
+                if (prop.datatype != null && prop.datatype.equals("String") && prop.allowableValues == null) {
+                    prop.vendorExtensions.put("x-rustgen-is-string", true);
+                    model.vendorExtensions.put("x-rustgen-has-string", true);
+                }
+
+                // Many PagerDuty models have a `label` or `type` field that
+                // are required when creating or updating the API. We leverage
+                // Rust's `Default` trait to fill these.
+                //
+                // This codepath is usually triggered by PagerDuty models that
+                // reference the `Tag` model. Swagger code generator is able to
+                // merge these properties, unlike with models referencing the
+                // `Reference` model, so we need a second check on `label` and
+                // `type` properties to ensure they can both generate default
+                // values and have serde generate values if they are missing.
+
+                if (prop.baseName != null && (prop.baseName.equals("type") || prop.baseName.equals("label"))) {
+                    prop.vendorExtensions.put("x-rustgen-is-required", true);
+                    List<Map<String, String>> defaultImpl = (List<Map<String, String>>) model.getVendorExtensions().get("x-rustgen-default-impl");
+                    if (defaultImpl == null) {
+                        defaultImpl = new ArrayList();
+                    }
+
+                    Map<String, String> typeImpl = new HashMap();
+                    if (prop.baseName.equals("type")) {
+                        typeImpl.put("key", "_type");
+                    } else if (prop.baseName.equals("label")) {
+                        typeImpl.put("key", "label");
+                    }
+                    String typeValue = null;
+                    if (getBooleanValue(prop, CodegenConstants.IS_ENUM_EXT_NAME)) {
+                        ArrayList<HashMap<String, String>> vars = (ArrayList<HashMap<String, String>>) prop.allowableValues
+                                .get("enumVars");
+                        if (vars.size() > 0) {
+                            prop.vendorExtensions.put("is-enum", true);
+                        }
+
+                    } else {
+                        if (prop.baseName.equals("type")) {
+                            typeImpl.put("value", underscore(model.name));
+                            prop.getVendorExtensions().put("x-rustgen-default-impl", underscore(model.name));
+                        } else if (prop.baseName.equals("label")) {
+                            typeImpl.put("value", model.name);
+                            prop.getVendorExtensions().put("x-rustgen-default-impl", model.name);
+                        }
+                        if (!defaultImpl.contains(typeImpl)) {
+                            defaultImpl.add(typeImpl);
+                        }
+                        model.getVendorExtensions().put("x-rustgen-default-impl", defaultImpl);
+                        model.getVendorExtensions().put("x-rustgen-has-default-impl", true);
+                        prop.getVendorExtensions().put("x-rustgen-has-default-impl", true);
+                    }
+                }
+
+            }
+
+            // Required properties should not be wrapped in an Option.
+            //
+            // This codepath has quite a big effect on ergonomics in the
+            // library, as the swagger `required` block is honoured and values
+            // are no longer wrapped in the `Option` type. That does incur the
+            // risk though that the upstream API conforms closely to these
+            // required fields, or we will crash on deserialization.
+            for (CodegenProperty prop : model.requiredVars) {
+                // chrono does not implement Default
+                if (prop.datatype != null && !(prop.datatype.startsWith("chrono"))) {
+                    prop.vendorExtensions.put("x-rustgen-is-required", true);
+                }
             }
 
             if (mapLikeModels.containsKey(model.name)) {
@@ -513,10 +555,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
             if (opName != null) {
                 cm.setClassname(toModelName(opName));
                 cm.getVendorExtensions().put("x-rustgen-body-model", "true");
-            }
-            String resName = (String) patchOperationResponseNames.get(camelize(cm.getName()));
-            if (resName != null) {
-                cm.setClassname(toModelName(resName));
             }
 
             // Sanitize OneOf and AnyOf names, replace the /body[0-9]+/ naming with nicer
@@ -580,14 +618,13 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 List<CodegenOperation> ops = (List<CodegenOperation>) map.get("operation");
 
                 for (CodegenOperation operation : ops) {
-                    if (operation.operationId.startsWith("list_")) {
-
+                    //if (operation.operationId.startsWith("list_")) {
                         List<CodegenResponse> responses = operation.getResponses();
                         for (final CodegenResponse res : responses) {
                             if (res.getDataType() != null) {
                                 if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
                                     CodegenModel mdl = allTheModels.get(res.dataType);
-
+            
                                     if (mdl != null) {
                                         if (mdl.getVendorExtensions().get("x-codegen-pagination-response-inner") != null) {
                                             res.getVendorExtensions().put("x-codegen-pagination-response-inner", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
@@ -595,12 +632,18 @@ public class PagerDutyCodegen extends RustServerCodegen {
                                             operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
                                             operation.getVendorExtensions().put("x-codegen-response-plural-snake-case", underscore(res.dataType.replace("Response", "")));
                                             operation.getVendorExtensions().put("x-codegen-response-single", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
+                                        } else if (mdl.getVendorExtensions().get("x-codegen-single-response-datatype") != null) {
+                                            
+                                            operation.getVendorExtensions().put("x-codegen-single-response-datatype", mdl.getVendorExtensions().get("x-codegen-single-response-datatype"));
+                                            operation.getVendorExtensions().put("x-codegen-single-response-key", mdl.getVendorExtensions().get("x-codegen-single-response-key"));
                                         }
                                     }
                                 }
                             }
                         }
-                    }
+                    //} else {
+
+                    //}
                 }
             }
         }
@@ -613,8 +656,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
         objs = super.postProcessOperations(objs);
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         if (operations != null) {
-            //LOGGER.info(" *** " + operations.keySet() );
-            //operations.getVendorExtensions().put("x-rustgen-plural-snake-case", "fooofooo");
 
             List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
             for (final CodegenOperation operation : ops) {
@@ -631,7 +672,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 if (body != null) {
                     String opName = (String) patchOperationBodyNames.get(camelize(body.getDataType()));
                     if (opName != null) {
-                        body.dataType = toModelName(opName);
+                       body.dataType = toModelName(opName);
                     }
                 }
                 List<CodegenResponse> responses = operation.getResponses();
@@ -641,11 +682,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
                         if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
                             hasDefaultResponse = true;
                         }
-                        String resName = (String) patchOperationResponseNames.get(camelize(res.getDataType()));
-                        if (resName != null) {
-                            res.dataType = toModelName(resName);
-                        }
-                        //operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
                     }
                 }
                 if (!hasDefaultResponse) {
@@ -689,8 +725,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
         if (property.datatype.equals("isize")) {
             // needed for windows
             property.datatype = "i64";
+        } else if (property.datatype.equals("Override")) {
+            property.datatype = "ModelOverride";
         }
-
     }
 
     @Override
@@ -711,10 +748,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         if (body.getExtensions() != null) {
             Object operationName = body.getExtensions().get("x-codegen-operation-name");
             if (operationName != null && !operationName.toString().isEmpty() && name != null) {
-                LOGGER.info(" *** " + removeVerb(operationName.toString()));
-                //patchOperationBodyNames.put(camelize(name), removeVerb(operationName.toString() + "Body"));
-                patchOperationBodyNames.put(camelize(name), operationName + "Body");
-
+                patchOperationBodyNames.put(camelize(name), operationName);
             }
         }
 
@@ -735,18 +769,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
     @Override
     public CodegenResponse fromResponse(String responseCode, ApiResponse response) {
+
         CodegenResponse res = super.fromResponse(responseCode, response);
 
-        if (response.getExtensions() != null) {
-            Object operationName = response.getExtensions().get("x-codegen-operation-name");
-            if (operationName != null && !operationName.toString().isEmpty() && res.getDataType() != null
-                    && res.getDataType().startsWith("InlineResponse") && responseCode.equals("200")) {
-                patchOperationResponseNames.put(camelize(res.getDataType()),
-                        operationName.toString() + "Response");
-            }
-        }
-
-        // Special case
         if (res.getDataType() != null && res.getDataType().equals("SelectedActions")) {
             res.dataType = "PutActionsSetAllowedActionsRepository";
         }

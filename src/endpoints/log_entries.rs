@@ -63,6 +63,12 @@ impl<'req> LogEntriesGetLogEntryParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> LogEntriesGetLogEntryParams {
+        LogEntriesGetLogEntryParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for LogEntriesGetLogEntryParams {
@@ -75,12 +81,12 @@ impl BaseOption for LogEntriesGetLogEntryParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListLogEntriesListResponse {
+pub struct InlineListResponse20019 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_log_entries: Vec<LogEntry>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20019: Vec<LogEntry>,
 }
 
 /// Query parameters for the [List log entries](LogEntries::list_log_entries()) endpoint.
@@ -109,21 +115,21 @@ impl<'req> LogEntriesListLogEntriesParamsBuilder<'req> {
 
     /// The start of the date range over which you want to search.
     pub fn since(&mut self, since: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("since", &since);
+        self.qs.append_pair("since", &serde_urlencoded::to_string(&since).unwrap_or_default());
 
         self
     }
 
     /// The end of the date range over which you want to search.
     pub fn until(&mut self, until: chrono::DateTime<chrono::Utc>) -> &mut Self {
-        self.qs.append_pair("until", &until);
+        self.qs.append_pair("until", &serde_urlencoded::to_string(&until).unwrap_or_default());
 
         self
     }
 
     /// If `true`, will return a subset of log entries that show only the most important changes to the incident.
     pub fn is_overview(&mut self, is_overview: bool) -> &mut Self {
-        self.qs.append_pair("is_overview", &is_overview);
+        self.qs.append_pair("is_overview", &serde_urlencoded::to_string(&is_overview).unwrap_or_default());
 
         self
     }
@@ -134,6 +140,12 @@ impl<'req> LogEntriesListLogEntriesParamsBuilder<'req> {
             self.qs.append_pair("include[]", &item);
         }
         self
+    }
+
+    pub fn build(&mut self) -> LogEntriesListLogEntriesParams {
+        LogEntriesListLogEntriesParams {
+            qs: self.qs.finish(),
+        }
     }
 }
 
@@ -159,8 +171,8 @@ impl LogEntriesClient {
     /// 
     /// 
     /// ---
-    pub async fn get_log_entry(&self, id: &str, query_params: LogEntriesGetLogEntryParams) -> Result<GetLogEntryResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), LogEntriesGetLogEntryParamsBuilder::new().build().qs)?;
+    pub async fn get_log_entry(&self, id: &str, query_params: LogEntriesGetLogEntryParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/log_entries/{}", &id), &LogEntriesGetLogEntryParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -169,7 +181,7 @@ impl LogEntriesClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, LogEntriesGetLogEntryResponse>(req)
             .await
     }
 
@@ -190,11 +202,11 @@ impl LogEntriesClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(LogEntriesListLogEntriesParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/log_entries"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListLogEntriesResponse, ListLogEntriesListResponse>(
+            .process_into_paginated_stream::<LogEntry, InlineListResponse20019>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -215,17 +227,17 @@ impl LogEntriesClient {
     /// 
     /// 
     /// ---
-    pub async fn update_log_entry_channel(&self, id: &str, body: UpdateLogEntryChannelBody) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_log_entry_channel(&self, id: &str, body: UpdateLogEntryChannel) -> Result<(), Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/log_entries/{}/channel", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateLogEntryChannelBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, LogEntriesUpdateLogEntryChannelResponse>(req)
             .await
     }
 

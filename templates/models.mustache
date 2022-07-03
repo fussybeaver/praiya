@@ -14,7 +14,7 @@ use std::hash::Hash;
 
 use chrono::DateTime;
 use chrono::Utc;
-{{#models}}{{#model}}
+{{#models}}{{#model}}{{^vendorExtensions.x-rustgen-noop}}
 
 {{#description}}/// {{{description}}}
 {{/description}}{{#vendorExtensions.is-enum}}/// Enumeration of values.
@@ -92,36 +92,73 @@ pub type {{classname}} = String;
 pub type {{classname}} = DateTime<Utc>;
 {{/vendorExtensions.x-rustgen-is-datetime}}{{#vendorExtensions.x-rustgen-is-array}}
 pub type {{classname}} = Vec<{{arrayModelType}}>;
-{{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}
+{{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
 pub struct {{classname}} {     
 {{#vars}}{{#description}}    /// {{{.}}}
 {{/description}}{{^vendorExtensions.x-rustgen-serde-no-rename}}    #[serde(rename = "{{baseName}}")]
 {{/vendorExtensions.x-rustgen-serde-no-rename}}
+    {{#vendorExtensions.x-rustgen-is-required ~}}
+    {{~#vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.is-enum}}
+    #[serde(default="{{classname}}::{{name}}_default")]
+    {{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.x-rustgen-has-default-impl}}{{#vendorExtensions.x-rustgen-is-string}}
+    #[serde(skip_serializing_if="String::is_empty")]
+    {{/vendorExtensions.x-rustgen-is-string}}{{/vendorExtensions.x-rustgen-has-default-impl}}
+    pub {{name}}: {{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}},
+    {{/vendorExtensions.x-rustgen-is-required}}
+    {{^vendorExtensions.x-rustgen-is-required}}
     #[serde(skip_serializing_if="Option::is_none")]
     pub {{name}}: Option<{{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}}>,
+    {{/vendorExtensions.x-rustgen-is-required}}
 {{/vars}}
 }
-{{#vars}}{{#vendorExtensions.is-enum}}
+{{#vendorExtensions.x-rustgen-has-default-impl}}
+
+impl Default for {{classname}} {
+    fn default() -> Self {
+        Self {
+        {{#vars}}
+            {{#vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.is-enum}}
+            {{name}}: String::from("{{vendorExtensions.x-rustgen-default-impl}}"),
+            {{/vendorExtensions.is-enum}}{{#vendorExtensions.is-enum}}
+            {{name}}: Default::default(),
+            {{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-has-default-impl}}
+            {{^vendorExtensions.x-rustgen-has-default-impl}}
+            {{name}}: Default::default(),
+            {{/vendorExtensions.x-rustgen-has-default-impl}}
+        {{/vars}}
+        }
+    }
+}
+
+impl {{classname}} {
+    {{#vendorExtensions.x-rustgen-default-impl}}
+    fn {{key}}_default() -> String {
+        String::from("{{value}}")
+    }
+    {{/vendorExtensions.x-rustgen-default-impl}}
+}
+{{/vendorExtensions.x-rustgen-has-default-impl}}{{#vars}}{{#vendorExtensions.is-enum}}
+
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]{{#xmlName}}
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
-pub enum {{classname}}{{enumName}} { {{#vendorExtensions}}{{^x-rustgen-has-empty-enum}}
-    #[serde(rename = "")]
-    EMPTY,{{/x-rustgen-has-empty-enum}}{{/vendorExtensions}}{{#allowableValues}}{{#enumVars}}
+pub enum {{classname}}{{enumName}} { {{#allowableValues}}{{#enumVars}}
     #[serde(rename = {{{value}}})]
     {{name}},{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
     #[serde(rename = {{{value}}})]
     {{name}},{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
+    #[serde(other)]
+    UNKNOWN,
 }
 
 impl ::std::fmt::Display for {{classname}}{{enumName}} {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { {{#vendorExtensions}}{{^x-rustgen-has-empty-enum}}
-            {{classname}}{{enumName}}::EMPTY => write!(f, ""),{{/x-rustgen-has-empty-enum}}{{/vendorExtensions}}{{#allowableValues}}{{#enumVars}}
+        match *self { {{#allowableValues}}{{#enumVars}}
             {{classname}}{{enumName}}::{{name}} => write!(f, "{}", {{{value}}}),{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
             {{classname}}{{enumName}}::{{name}} => write!(f, "{}", {{{value}}}),{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
-
+            {{classname}}{{enumName}}::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
 }
@@ -129,8 +166,7 @@ impl ::std::fmt::Display for {{classname}}{{enumName}} {
 impl ::std::str::FromStr for {{classname}}{{enumName}} {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { {{#vendorExtensions}}{{^x-rustgen-has-empty-enum}}
-            "" => Ok({{classname}}{{enumName}}::EMPTY),{{/x-rustgen-has-empty-enum}}{{/vendorExtensions}}
+        match s { 
 {{#allowableValues}}{{#enumVars}}            {{{value}}} => Ok({{classname}}{{enumName}}::{{name}}),
 {{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}            {{{value}}} => Ok({{classname}}{{enumName}}::{{name}}),
 {{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}            x => Err(format!("Invalid enum type: {}", x)),
@@ -140,11 +176,20 @@ impl ::std::str::FromStr for {{classname}}{{enumName}} {
 
 impl ::std::convert::AsRef<str> for {{classname}}{{enumName}} {
     fn as_ref(&self) -> &str {
-        match self { {{#vendorExtensions}}{{^x-rustgen-has-empty-enum}}
-            {{classname}}{{enumName}}::EMPTY => "",{{/x-rustgen-has-empty-enum}}{{/vendorExtensions}}{{#allowableValues}}{{#enumVars}}
+        match self { {{#allowableValues}}{{#enumVars}}
             {{classname}}{{enumName}}::{{name}} => {{{value}}},{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
             {{classname}}{{enumName}}::{{name}} => {{{value}}},{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
+            {{classname}}{{enumName}}::UNKNOWN => "unknown"
         }
     }
 }
-{{/vendorExtensions.is-enum}}{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/model}}{{/models}}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for {{classname}}{{enumName}} {
+    fn default() -> Self {
+        {{#allowableValues}}{{#enumVars.[0]}}
+        {{classname}}{{enumName}}::{{name}}
+        {{/enumVars.[0]}}{{/allowableValues}}
+    }
+}
+{{/vendorExtensions.is-enum}}{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-noop}}{{/model}}{{/models}}

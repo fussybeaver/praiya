@@ -55,6 +55,12 @@ impl<'req> TeamsDeleteTeamParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> TeamsDeleteTeamParams {
+        TeamsDeleteTeamParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TeamsDeleteTeamParams {
@@ -89,6 +95,12 @@ impl<'req> TeamsGetTeamParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> TeamsGetTeamParams {
+        TeamsGetTeamParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TeamsGetTeamParams {
@@ -101,12 +113,12 @@ impl BaseOption for TeamsGetTeamParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListTeamUsersListResponse {
+pub struct InlineListResponse20043 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_team_users: Vec<InlineResponse20043Members>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20043: Vec<InlineResponse20043Members>,
 }
 
 /// Query parameters for the [List members of a team](Teams::list_team_users()) endpoint.
@@ -133,6 +145,12 @@ impl<'req> TeamsListTeamUsersParamsBuilder<'req> {
         }
         self
     }
+
+    pub fn build(&mut self) -> TeamsListTeamUsersParams {
+        TeamsListTeamUsersParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TeamsListTeamUsersParams {
@@ -145,12 +163,12 @@ impl BaseOption for TeamsListTeamUsersParams {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListTeamsListResponse {
+pub struct InlineListResponse20042 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_teams: Vec<Team>, //pub slack_connections: Vec<SlackConnection>
+    pub inline20042: Vec<Team>,
 }
 
 /// Query parameters for the [List teams](Teams::list_teams()) endpoint.
@@ -176,6 +194,12 @@ impl<'req> TeamsListTeamsParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> TeamsListTeamsParams {
+        TeamsListTeamsParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for TeamsListTeamsParams {
@@ -200,17 +224,17 @@ impl TeamsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_team(&self, body: CreateTeamBody) -> Result<TeamsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_team(&self, body: CreateTeam) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/teams", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateTeamBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsCreateTeamResponse>(req)
             .await
     }
 
@@ -233,7 +257,7 @@ impl TeamsClient {
     /// 
     /// ---
     pub async fn delete_team(&self, id: &str, query_params: TeamsDeleteTeamParams) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), TeamsDeleteTeamParamsBuilder::new().build().qs)?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}", &id), &TeamsDeleteTeamParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -242,7 +266,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsDeleteTeamResponse>(req)
             .await
     }
 
@@ -259,7 +283,7 @@ impl TeamsClient {
     /// 
     /// ---
     pub async fn delete_team_escalation_policy(&self, id: &str, escalation_policy_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&escalation_policy_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}/escalation_policies/{}", &id, &escalation_policy_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -268,7 +292,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsDeleteTeamEscalationPolicyResponse>(req)
             .await
     }
 
@@ -285,7 +309,7 @@ impl TeamsClient {
     /// 
     /// ---
     pub async fn delete_team_user(&self, id: &str, user_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&user_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}/users/{}", &id, &user_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -294,7 +318,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsDeleteTeamUserResponse>(req)
             .await
     }
 
@@ -310,8 +334,8 @@ impl TeamsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_team(&self, id: &str, query_params: TeamsGetTeamParams) -> Result<TeamsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), TeamsGetTeamParamsBuilder::new().build().qs)?;
+    pub async fn get_team(&self, id: &str, query_params: TeamsGetTeamParams) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}", &id), &TeamsGetTeamParamsBuilder::new().build().qs)?;
             
         let req = self.client.build_request(
             uri,
@@ -320,7 +344,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsGetTeamResponse>(req)
             .await
     }
 
@@ -341,11 +365,11 @@ impl TeamsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(TeamsListTeamUsersParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/teams/{}/members"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListTeamUsersResponse, ListTeamUsersListResponse>(
+            .process_into_paginated_stream::<InlineResponse20043Members, InlineListResponse20043>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -373,11 +397,11 @@ impl TeamsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(TeamsListTeamsParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/teams"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListTeamsResponse, ListTeamsListResponse>(
+            .process_into_paginated_stream::<Team, InlineListResponse20042>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -407,8 +431,8 @@ impl TeamsClient {
     /// 
     /// 
     /// ---
-    pub async fn list_teams_audit_records(&self, id: &str) -> Result<ListUsersAuditRecordsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn list_teams_audit_records(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}/audit/records", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -417,7 +441,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsListTeamsAuditRecordsResponse>(req)
             .await
     }
 
@@ -433,17 +457,17 @@ impl TeamsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_team(&self, id: &str, body: UpdateTeamBody) -> Result<TeamsIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_team(&self, id: &str, body: UpdateTeam) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateTeamBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsUpdateTeamResponse>(req)
             .await
     }
 
@@ -460,7 +484,7 @@ impl TeamsClient {
     /// 
     /// ---
     pub async fn update_team_escalation_policy(&self, id: &str, escalation_policy_id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&escalation_policy_id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}/escalation_policies/{}", &id, &escalation_policy_id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -469,7 +493,7 @@ impl TeamsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsUpdateTeamEscalationPolicyResponse>(req)
             .await
     }
 
@@ -485,17 +509,17 @@ impl TeamsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_team_user(&self, id: &str, user_id: &str, body: UpdateTeamUserBody) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id&user_id), "")?;
+    pub async fn update_team_user(&self, id: &str, user_id: &str, body: UpdateTeamUser) -> Result<(), Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/teams/{}/users/{}", &id, &user_id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateTeamUserBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, TeamsUpdateTeamUserResponse>(req)
             .await
     }
 

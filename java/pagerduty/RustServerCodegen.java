@@ -158,6 +158,7 @@ public class RustServerCodegen extends DefaultCodegenConfig {
     public void processOpts() {
         super.processOpts();
 
+        LOGGER.info(" *** " + additionalProperties);
         if (additionalProperties.containsKey(CodegenConstants.PACKAGE_NAME)) {
             setPackageName((String) additionalProperties.get(CodegenConstants.PACKAGE_NAME));
         } else {
@@ -451,6 +452,8 @@ public class RustServerCodegen extends DefaultCodegenConfig {
                 ApiResponse response = operation.getResponses().get(key);
                 response.addExtension("x-codegen-operation-name",
                         toSanitizedOperationBodyName(operationId));
+
+                //LOGGER.info(" *** " + toSanitizedOperationBodyName(operationId));
             }
         }
 
@@ -1043,5 +1046,15 @@ public class RustServerCodegen extends DefaultCodegenConfig {
             }
         }
         return codegenParameter;
+    }
+
+    @Override
+    public String getGitRepoBaseURL() {
+        return gitRepoBaseURL;
+    }
+
+    @Override
+    public void setGitRepoBaseURL(String gitRepoBaseURL) {
+        this.gitRepoBaseURL = gitRepoBaseURL;
     }
 }

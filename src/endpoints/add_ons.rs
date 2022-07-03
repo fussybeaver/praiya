@@ -34,12 +34,12 @@ pub struct AddOnsClient {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ListAddonListResponse {
+pub struct InlineListResponse2002 {
     pub offset: usize,
     pub more: bool,
     pub limit: usize,
     pub total: Option<u64>,
-    pub list_addon: Vec<AddonReference>, //pub slack_connections: Vec<SlackConnection>
+    pub inline2002: Vec<AddonReference>,
 }
 
 /// Query parameters for the [List installed Add-ons](AddOns::list_addon()) endpoint.
@@ -81,6 +81,12 @@ impl<'req> AddOnsListAddonParamsBuilder<'req> {
 
         self
     }
+
+    pub fn build(&mut self) -> AddOnsListAddonParams {
+        AddOnsListAddonParams {
+            qs: self.qs.finish(),
+        }
+    }
 }
 
 impl BaseOption for AddOnsListAddonParams {
@@ -107,17 +113,17 @@ impl AddOnsClient {
     /// 
     /// 
     /// ---
-    pub async fn create_addon(&self, body: CreateAddonBody) -> Result<InlineResponse201, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn create_addon(&self, body: CreateAddon) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/addons", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(CreateAddonBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AddOnsCreateAddonResponse>(req)
             .await
     }
 
@@ -134,7 +140,7 @@ impl AddOnsClient {
     /// 
     /// ---
     pub async fn delete_addon(&self, id: &str) -> Result<(), Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/addons/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -143,7 +149,7 @@ impl AddOnsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AddOnsDeleteAddonResponse>(req)
             .await
     }
 
@@ -159,8 +165,8 @@ impl AddOnsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_addon(&self, id: &str) -> Result<AddonsBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_addon(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/addons/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -169,7 +175,7 @@ impl AddOnsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AddOnsGetAddonResponse>(req)
             .await
     }
 
@@ -190,11 +196,11 @@ impl AddOnsClient {
             host: String::clone(&self.api_endpoint),
             method: Method::GET,
             options: Arc::new(AddOnsListAddonParamsBuilder::new().build()),
-            path: self.path(),
+            path: String::from("/addons"),
         };
 
         self.client
-            .process_into_paginated_stream::<ListAddonResponse, ListAddonListResponse>(
+            .process_into_paginated_stream::<AddonReference, InlineListResponse2002>(
                 base_request,
                 PaginationQueryComponent {
                     offset: 0,
@@ -219,17 +225,17 @@ impl AddOnsClient {
     /// 
     /// 
     /// ---
-    pub async fn update_addon(&self, id: &str, body: UpdateAddonBody) -> Result<AddonsIdBody, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn update_addon(&self, id: &str, body: UpdateAddon) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/addons/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::PUT),
-            Some(Praiya::serialize_payload(UpdateAddonBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AddOnsUpdateAddonResponse>(req)
             .await
     }
 

@@ -50,17 +50,17 @@ impl AnalyticsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_analytics_incidents(&self, body: GetAnalyticsIncidentsBody) -> Result<GetAnalyticsIncidentsResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn get_analytics_incidents(&self, body: GetAnalyticsIncidents) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/analytics/raw/incidents", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(GetAnalyticsIncidentsBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AnalyticsGetAnalyticsIncidentsResponse>(req)
             .await
     }
 
@@ -78,8 +78,8 @@ impl AnalyticsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_analytics_incidents_by_id(&self, id: &str) -> Result<AnalyticsRawIncident, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, format!("{}/{}", &self.path(), &id), "")?;
+    pub async fn get_analytics_incidents_by_id(&self, id: &str) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, &format!("/analytics/raw/incidents/{}", &id), "")?;
             
         let req = self.client.build_request(
             uri,
@@ -88,7 +88,7 @@ impl AnalyticsClient {
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AnalyticsGetAnalyticsIncidentsByIdResponse>(req)
             .await
     }
 
@@ -108,17 +108,17 @@ impl AnalyticsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_analytics_metrics_incidents_all(&self, body: GetAnalyticsMetricsIncidentsAllBody) -> Result<GetAnalyticsMetricsIncidentsAllResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn get_analytics_metrics_incidents_all(&self, body: GetAnalyticsMetricsIncidentsAll) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/analytics/metrics/incidents/all", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(GetAnalyticsMetricsIncidentsAllBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AnalyticsGetAnalyticsMetricsIncidentsAllResponse>(req)
             .await
     }
 
@@ -139,17 +139,17 @@ impl AnalyticsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_analytics_metrics_incidents_service(&self, body: GetAnalyticsMetricsIncidentsServiceBody) -> Result<GetAnalyticsMetricsIncidentsServiceResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn get_analytics_metrics_incidents_service(&self, body: GetAnalyticsMetricsIncidentsService) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/analytics/metrics/incidents/services", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(GetAnalyticsMetricsIncidentsServiceBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AnalyticsGetAnalyticsMetricsIncidentsServiceResponse>(req)
             .await
     }
 
@@ -170,17 +170,17 @@ impl AnalyticsClient {
     /// 
     /// 
     /// ---
-    pub async fn get_analytics_metrics_incidents_team(&self, body: GetAnalyticsMetricsIncidentsTeamBody) -> Result<GetAnalyticsMetricsIncidentsTeamResponse, Error> {
-        let uri = Praiya::parse_url(&self.api_endpoint, &self.path(), "")?;
+    pub async fn get_analytics_metrics_incidents_team(&self, body: GetAnalyticsMetricsIncidentsTeam) -> Result<, Error> {
+        let uri = Praiya::parse_url(&self.api_endpoint, "/analytics/metrics/incidents/teams", "")?;
             
         let req = self.client.build_request(
             uri,
             Builder::new().method(Method::POST),
-            Some(Praiya::serialize_payload(GetAnalyticsMetricsIncidentsTeamBody)?));
+            Praiya::serialize_payload(body)?);
 
 
         self.client
-            .process_into_value(req)
+            .process_into_value::<, AnalyticsGetAnalyticsMetricsIncidentsTeamResponse>(req)
             .await
     }
 
