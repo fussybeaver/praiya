@@ -46,8 +46,10 @@ public class PagerDutyCodegen extends RustServerCodegen {
     public PagerDutyCodegen() {
         super();
 
+        // This client does not generate Rust API endpoints from java.
         supportingFiles.remove(new SupportingFile("endpoints.mustache", "src/endpoints", "mod.rs"));
         apiTemplateFiles.remove("api.mustache");
+
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         additionalProperties.put("tags", tagList.values());
         //supportingFiles.add(new SupportingFile("lib.mustache", "src", "lib.rs"));
@@ -58,17 +60,19 @@ public class PagerDutyCodegen extends RustServerCodegen {
     public void processOpts() {
         super.processOpts();
 
+        // This overrides the target path for the models being generated,
+        // which is useful when the upstream vendor has multiple openapi
+        // schemas for different parts of the API.
         if (additionalProperties.get("targetApiPrefix") != null) {
-            LOGGER.info(" *** " + additionalProperties.get("targetApiPrefix"));
             supportingFiles.add(new SupportingFile("models.mustache", "src", String.format("%s_models.rs", additionalProperties.get("targetApiPrefix"))));
         }
 
     }
 
     private static HashMap<String, Object> patchOperationBodyNames = new HashMap();
-    private static HashMap<String, Object> patchOperationResponseNames = new HashMap();
-    private static HashMap<String, List<CodegenProperty>> patchProperties = new HashMap();
-    private static HashMap<String, HashMap<String, Object>> patchOneOfProperties = new HashMap();
+    //private static HashMap<String, Object> patchOperationResponseNames = new HashMap();
+    //private static HashMap<String, List<CodegenProperty>> patchProperties = new HashMap();
+    //private static HashMap<String, HashMap<String, Object>> patchOneOfProperties = new HashMap();
 
     @Override
     public void preprocessOpenAPI(OpenAPI openAPI) {
@@ -102,7 +106,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
     @Override
     public CodegenModel fromModel(String name, Schema schema, Map<String, Schema> allDefinitions) {
         // This model schema crashes the generator - do not remove 
-        // So we generate a dummy model and return before calling the super method
+        // We generate a dummy model and return before calling the super method
         if (name.equals("inline_response_200_11")) {
             final CodegenModel codegenModel = CodegenModelFactory.newInstance(CodegenModelType.MODEL);
             if (reservedWords.contains(name)) {
@@ -134,9 +138,8 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
                     // For types that indicate they inherit the `Reference`
                     // type, we manually add properties from the `Tag` Schema,
-                    // because of limitations in the swagger code generator,
-                    // that isn't able to copy deeply inherited composed
-                    // schemas.
+                    // because of limitations in copying polymorphic models the
+                    // swagger code generator.
 
                     if (type.equals("Tag/allOf/0") || type.equals("Reference")) {
                         Schema refSchema = null;
@@ -161,7 +164,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                         if (allDefinitions != null) {
                             refSchema = allDefinitions.get(ref);
                             // TODO: remove this condition?
-                            if (refSchema instanceof ObjectSchema) {
+                            /* if (refSchema instanceof ObjectSchema) {
                                 Schema interfaceSchema = refSchema;
                                 if (interfaceSchema.getProperties() != null) {
 
@@ -182,7 +185,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                                         }
                                     }
                                 }
-                            } else if (refSchema instanceof ComposedSchema) {
+                            } else */ if (refSchema instanceof ComposedSchema) {
                                 final ComposedSchema refComposed = (ComposedSchema) refSchema;
                                 final List<Schema> allOf = refComposed.getAllOf();
                                 if (allOf != null && !allOf.isEmpty()) {
@@ -202,6 +205,8 @@ public class PagerDutyCodegen extends RustServerCodegen {
                                                         .collect(java.util.stream.Collectors.toList()).isEmpty()) {
                                                     final CodegenProperty codegenProperty = fromProperty(key,
                                                             propertySchema);
+
+                                                    // Copy the Tag model properties into the current model
                                                     mdl.vars.add(0, codegenProperty);
                                                 }
                                             }
@@ -737,14 +742,14 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
     }
 
-    @Override
-    public String toEnumVarName(String value, String datatype) {
-        String name = super.toEnumVarName(value, datatype);
-        if (name.length() == 0) {
-            return "EMPTY";
-        }
-        return name;
-    }
+    //@Override
+    //public String toEnumVarName(String value, String datatype) {
+    //    String name = super.toEnumVarName(value, datatype);
+    //    if (name.length() == 0) {
+    //        return "EMPTY";
+    //    }
+    //    return name;
+    //}
 
     @Override
     public CodegenParameter fromRequestBody(RequestBody body, String name, Schema schema, Map<String, Schema> schemas,
@@ -761,30 +766,30 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         // Needed because of the static call to `::from_json`, which requires an
         // unqualified type
-        if (schema instanceof ObjectSchema && param.getDataType().startsWith("HashMap")) {
-            param.getVendorExtensions().put(CodegenConstants.IS_MAP_CONTAINER_EXT_NAME, Boolean.TRUE);
-            param.getVendorExtensions().put(CodegenConstants.IS_CONTAINER_EXT_NAME, Boolean.TRUE);
-        }
+        //if (schema instanceof ObjectSchema && param.getDataType().startsWith("HashMap")) {
+        //    param.getVendorExtensions().put(CodegenConstants.IS_MAP_CONTAINER_EXT_NAME, Boolean.TRUE);
+        //    param.getVendorExtensions().put(CodegenConstants.IS_CONTAINER_EXT_NAME, Boolean.TRUE);
+        //}
 
         return param;
     }
 
-    @Override
-    public void addParentContainer(CodegenModel codegenModel, String name, Schema schema) {
-        super.addParentContainer(codegenModel, name, schema);
-    }
+    //@Override
+    //public void addParentContainer(CodegenModel codegenModel, String name, Schema schema) {
+    //    super.addParentContainer(codegenModel, name, schema);
+    //}
 
-    @Override
-    public CodegenResponse fromResponse(String responseCode, ApiResponse response) {
+    //@Override
+    //public CodegenResponse fromResponse(String responseCode, ApiResponse response) {
 
-        CodegenResponse res = super.fromResponse(responseCode, response);
+    //    CodegenResponse res = super.fromResponse(responseCode, response);
 
-        if (res.getDataType() != null && res.getDataType().equals("SelectedActions")) {
-            res.dataType = "PutActionsSetAllowedActionsRepository";
-        }
+    //    if (res.getDataType() != null && res.getDataType().equals("SelectedActions")) {
+    //        res.dataType = "PutActionsSetAllowedActionsRepository";
+    //    }
 
-        return res;
-    }
+    //    return res;
+    //}
 
     String removeVerb(String opName) {
         if (opName.startsWith("Update")) {
@@ -800,35 +805,35 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
     }
 
-    @Override
-    public String getSchemaType(Schema property) {
-        String schemaType = super.getSchemaType(property);
-        if (schemaType != null) {
-            return schemaType.replace("UBUNTU", "ubuntu").replace("MACOS", "macos").replace("WINDOWS", "windows");
-        } else {
-            return null;
-        }
-    }
+    //@Override
+    //public String getSchemaType(Schema property) {
+    //    String schemaType = super.getSchemaType(property);
+    //    if (schemaType != null) {
+    //        return schemaType.replace("UBUNTU", "ubuntu").replace("MACOS", "macos").replace("WINDOWS", "windows");
+    //    } else {
+    //        return null;
+    //    }
+    //}
 
-    @Override
-    public String toOperationId(String operationId) {
-        operationId = operationId.replaceFirst("[a-zA-Z0-9]+\\/", "");
+    //@Override
+    //public String toOperationId(String operationId) {
+    //    operationId = operationId.replaceFirst("[a-zA-Z0-9]+\\/", "");
 
-        return super.toOperationId(operationId);
-    }
+    //    return super.toOperationId(operationId);
+    //}
 
-    @Override
-    public void addHandlebarHelpers(Handlebars handlebars) {
-        super.addHandlebarHelpers(handlebars);
-        handlebars.registerHelpers(new IfCondHelper());
-    }
+    //@Override
+    //public void addHandlebarHelpers(Handlebars handlebars) {
+    //    super.addHandlebarHelpers(handlebars);
+    //    handlebars.registerHelpers(new IfCondHelper());
+    //}
 
-    @Override
-    public String toVarName(String name) {
-        if (name.equals("ref")) {
-            return "git_ref";
-        }
+    //@Override
+    //public String toVarName(String name) {
+    //    if (name.equals("ref")) {
+    //        return "git_ref";
+    //    }
 
-        return super.toVarName(name);
-    }
+    //    return super.toVarName(name);
+    //}
 }
