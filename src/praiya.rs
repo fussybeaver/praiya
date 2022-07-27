@@ -87,7 +87,7 @@ impl Praiya {
     ) -> Result<Request<Body>, Error> {
         let request_uri: hyper::Uri = uri.into();
 
-        debug!("build request uri ({:?})", &request_uri);
+        debug!("Build request uri ({:?})", &request_uri);
 
         Ok(builder
             .uri(request_uri)
@@ -112,7 +112,7 @@ impl Praiya {
         let uri = Praiya::parse_paginated_url(host, path, query, pagination)?;
         let request_uri: hyper::Uri = uri.into();
 
-        debug!("build request uri ({:?})", &request_uri);
+        debug!("Build request uri ({:?})", &request_uri);
 
         Ok(builder
             .uri(request_uri)
@@ -125,10 +125,11 @@ impl Praiya {
             .body(body)?)
     }
 
-    pub(crate) fn parse_url<'a>(host: &str, path: &str) -> Result<Uri<'a>, Error> {
-        debug!("parse url path: {}", path);
+    pub(crate) fn parse_url<'a>(host: &str, path: &str, query: Option<&str>) -> Result<Uri<'a>, Error> {
         let mut url = url::Url::parse(host)?;
         url = url.join(path)?;
+
+        url.set_query(query);
 
         Ok(Uri {
             encoded: Cow::Owned(url.as_str().to_owned()),
@@ -338,14 +339,6 @@ impl Praiya {
             .map(|content| content.into())?)
     }
 
-    pub fn incidents(&self) -> incidents_macro::IncidentsClient {
-        incidents_macro::IncidentsClient {
-            api_endpoint: std::env::var("PAGERDUTY_API_ENDPOINT")
-                .unwrap_or_else(|_| String::from(incidents_macro::API_ENDPOINT)),
-            client: self.clone(),
-        }
-    }
-
     pub async fn post_request<
         B: serde::Serialize,
         R: DeserializeOwned,
@@ -391,6 +384,38 @@ impl Praiya {
             url,
             builder.method(http::Method::PUT),
             Praiya::serialize_payload(body)?,
+        );
+
+        self.process_into_value::<R, I>(req).await
+    }
+
+    pub async fn single_request<
+        B: serde::Serialize,
+        R: DeserializeOwned,
+        I: SingleResponse<Inner = R> + DeserializeOwned,
+    >(
+        &self,
+        url: Uri<'_>,
+        body: Option<B>,
+        method: http::Method,
+        headers: PraiyaCustomHeaders,
+    ) -> Result<R, Error> {
+        let mut builder = http::request::Builder::new();
+        builder = builder.header(FROM, "foobar@example.com");
+        if let PraiyaCustomHeaders::EarlyAccess = headers {
+            builder = builder.header("x-early-access", "true");
+        }
+
+        let req_body = if let Some(inner_body) = body {
+            Praiya::serialize_payload(inner_body)?
+        } else {
+            Body::empty()
+        };
+
+        let req = self.build_request(
+            url,
+            builder.method(method),
+            req_body,
         );
 
         self.process_into_value::<R, I>(req).await

@@ -26,7 +26,8 @@ use std::collections::HashMap;
 pub mod adapters;
 pub mod endpoints;
 pub mod errors;
-pub mod models;
+pub mod default_models;
+pub mod slack_models;
 mod praiya;
 
 pub(crate) use crate::praiya::{
@@ -44,3 +45,4 @@ pub mod auth {
 }
 
 pub use endpoints as api;
+pub use default_models as models;

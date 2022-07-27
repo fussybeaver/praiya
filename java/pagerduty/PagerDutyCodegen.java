@@ -101,6 +101,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
     @Override
     public CodegenModel fromModel(String name, Schema schema, Map<String, Schema> allDefinitions) {
         // This model schema crashes the generator - do not remove 
+        // So we generate a dummy model and return before calling the super method
         if (name.equals("inline_response_200_11")) {
             final CodegenModel codegenModel = CodegenModelFactory.newInstance(CodegenModelType.MODEL);
             if (reservedWords.contains(name)) {
@@ -121,7 +122,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         CodegenModel mdl = super.fromModel(name, schema, allDefinitions);
 
-        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf' 
+        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf'. 
         if (schema instanceof ComposedSchema) {
             ComposedSchema composedSchema = (ComposedSchema) schema;
             if (composedSchema.getAllOf() != null) {
@@ -252,24 +253,24 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
 
         // Deal with Map-like Models
-        if (p instanceof MapSchema) {
-            MapSchema mp = (MapSchema) p;
-            Object inner = mp.getAdditionalProperties();
-            if (!(inner instanceof Schema) && (Boolean) inner && mp.getProperties() != null
-                    && !mapLikeModels.containsKey(name)) {
-                Map<String, Schema> props = mp.getProperties();
-                List<CodegenProperty> listProps = new ArrayList<CodegenProperty>();
-                for (Entry<String, Schema> entry : props.entrySet()) {
-                    CodegenProperty prop = fromProperty(entry.getKey(), entry.getValue());
-                    if ((prop.dataFormat == null || !prop.dataFormat.equals("date-time"))
-                            && !languageSpecificPrimitives.contains(prop.datatype)) {
-                        prop.datatype = toModelName(prop.datatype);
-                    }
-                    listProps.add(prop);
-                }
-                mapLikeModels.put(name, listProps);
-            }
-        }
+        //if (p instanceof MapSchema) {
+        //    MapSchema mp = (MapSchema) p;
+        //    Object inner = mp.getAdditionalProperties();
+        //    if (!(inner instanceof Schema) && (Boolean) inner && mp.getProperties() != null
+        //            && !mapLikeModels.containsKey(name)) {
+        //        Map<String, Schema> props = mp.getProperties();
+        //        List<CodegenProperty> listProps = new ArrayList<CodegenProperty>();
+        //        for (Entry<String, Schema> entry : props.entrySet()) {
+        //            CodegenProperty prop = fromProperty(entry.getKey(), entry.getValue());
+        //            if ((prop.dataFormat == null || !prop.dataFormat.equals("date-time"))
+        //                    && !languageSpecificPrimitives.contains(prop.datatype)) {
+        //                prop.datatype = toModelName(prop.datatype);
+        //            }
+        //            listProps.add(prop);
+        //        }
+        //        mapLikeModels.put(name, listProps);
+        //    }
+        //}
 
         // Deal with OneOf and AnyOf schemas in model properties.
         // We store the enum values as parseable untagged enums in a vendorExtension.

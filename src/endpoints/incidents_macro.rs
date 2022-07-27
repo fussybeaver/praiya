@@ -21,6 +21,16 @@ pub struct IncidentsClient {
     pub(crate) client: Praiya,
 }
 
+impl Praiya {
+    pub fn incidents(&self) -> IncidentsClient {
+        IncidentsClient {
+            api_endpoint: std::env::var("PAGERDUTY_API_ENDPOINT")
+                .unwrap_or_else(|_| String::from(API_ENDPOINT)),
+            client: self.clone(),
+        }
+    }
+}
+
 single_response_type!(Incident, incident, CreateIncident);
 
 single_response_type!(IncidentNote, note, CreateIncidentNote);
@@ -112,7 +122,7 @@ impl IncidentsClient {
     ///
     /// ---
     pub async fn create_incident(&self, body: CreateIncident) -> Result<Incident, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, "/incidents")?;
+        let url = Praiya::parse_url(&self.api_endpoint, "/incidents", None)?;
         self.client
             .post_request::<_, _, CreateIncidentResponse>(url, body, PraiyaCustomHeaders::None)
             .await
@@ -135,7 +145,11 @@ impl IncidentsClient {
         id: &str,
         body: CreateIncidentNote,
     ) -> Result<IncidentNote, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/notes", &id))?;
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/incidents/{}/notes", &id),
+            None,
+        )?;
         self.client
             .post_request::<_, _, CreateIncidentNoteResponse>(url, body, PraiyaCustomHeaders::None)
             .await
@@ -157,6 +171,7 @@ impl IncidentsClient {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/incidents/{}/status_updates/subscribers", &id),
+            None,
         )?;
         self.client
             .post_request::<_, _, CreateIncidentNotificationSubscriberResponse>(
@@ -195,7 +210,11 @@ impl IncidentsClient {
         id: &str,
         body: CreateIncidentSnooze,
     ) -> Result<Incident, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/snooze", &id))?;
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/incidents/{}/snooze", &id),
+            None,
+        )?;
         self.client
             .post_request::<_, _, CreateIncidentSnoozeResponse>(
                 url,
@@ -221,6 +240,7 @@ impl IncidentsClient {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/incidents/{}/status_updates", &id),
+            None,
         )?;
         self.client
             .post_request::<_, _, CreateIncidentStatusUpdateResponse>(
@@ -240,7 +260,7 @@ impl IncidentsClient {
     ///
     /// ---
     pub async fn get_incident(&self, id: &str) -> Result<Incident, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id))?;
+        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id), None)?;
         self.client
             .get_request::<_, GetIncidentResponse>(url, PraiyaCustomHeaders::None)
             .await
@@ -260,6 +280,7 @@ impl IncidentsClient {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/incidents/{}/alerts/{}", &id, &alert_id),
+            None,
         )?;
         self.client
             .get_request::<_, GetIncidentAlertResponse>(url, PraiyaCustomHeaders::None)
@@ -386,7 +407,11 @@ impl IncidentsClient {
         id: &str,
         body: MergeIncidents,
     ) -> Result<IncidentReference, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}/merge", &id))?;
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/incidents/{}/merge", &id),
+            None,
+        )?;
         self.client
             .put_request::<_, _, MergeIncidentResponse>(url, body, PraiyaCustomHeaders::None)
             .await
@@ -413,7 +438,7 @@ impl IncidentsClient {
     ///
     /// ---
     pub async fn update_incident(&self, id: &str, body: UpdateIncident) -> Result<Incident, Error> {
-        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id))?;
+        let url = Praiya::parse_url(&self.api_endpoint, &format!("/incidents/{}", &id), None)?;
         self.client
             .put_request::<_, _, UpdateIncidentResponse>(url, body, PraiyaCustomHeaders::None)
             .await
@@ -436,6 +461,7 @@ impl IncidentsClient {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/incidents/{}/alerts/{}", &id, &alert_id),
+            None,
         )?;
         self.client
             .put_request::<_, _, UpdateIncidentAlertResponse>(url, body, PraiyaCustomHeaders::None)
@@ -447,18 +473,23 @@ impl IncidentsClient {
     /// # Manage alerts
     ///
     /// Resolve multiple alerts or associate them with different incidents.
-    /// 
+    ///
     /// A maximum of 500 alerts may be updated at a time. If more than this number of alerts are given, the API will respond with status 413 (Request Entity Too Large).
     ///
     /// Praiya note: this endpoint could return a partial list, because we do not implement streams
-    /// in PUT requests. 
-    /// 
-    /// 
+    /// in PUT requests.
+    ///
+    ///
     /// ---
-    pub async fn update_incident_alerts(&self, id: &str, body: UpdateIncidentAlerts) -> Result<Vec<Alert>, Error> {
+    pub async fn update_incident_alerts(
+        &self,
+        id: &str,
+        body: UpdateIncidentAlerts,
+    ) -> Result<Vec<Alert>, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/incidents/{}/alerts", &id),
+            None,
         )?;
         self.client
             .put_request::<_, _, UpdateIncidentAlertsResponse>(url, body, PraiyaCustomHeaders::None)
@@ -470,18 +501,15 @@ impl IncidentsClient {
     /// # Manage incidents
     ///
     /// Acknowledge, resolve, escalate or reassign one or more incidents.
-    /// 
+    ///
     /// A maximum of 500 incidents may be updated at a time. If more than this number of incidents are given, the API will respond with status 413 (Request Entity Too Large).
-    /// 
+    ///
     /// Praiya note: this endpoint could return a partial list, because we do not implement streams
-    /// in PUT requests. 
-    /// 
+    /// in PUT requests.
+    ///
     /// ---
     pub async fn update_incidents(&self, body: UpdateIncidents) -> Result<Vec<Incident>, Error> {
-        let url = Praiya::parse_url(
-            &self.api_endpoint,
-            "/incidents",
-        )?;
+        let url = Praiya::parse_url(&self.api_endpoint, "/incidents", None)?;
         self.client
             .put_request::<_, _, UpdateIncidentsResponse>(url, body, PraiyaCustomHeaders::None)
             .await
@@ -746,7 +774,6 @@ mod tests {
             id: Some(String::from("PPVZH9X")),
             ..Default::default()
         });
-        log::debug!("{:?}", source_incidents);
         let merge_incidents = MergeIncidents { source_incidents };
 
         let incident: IncidentReference = pagerduty
@@ -780,18 +807,21 @@ mod tests {
     async fn test_update_incident_alerts() {
         let pagerduty = crate::Praiya::connect("test").unwrap();
         let update_incident_alerts = UpdateIncidentAlerts {
-            alerts: vec![Alert {
-                id: Some(String::from("PPVZH9X")),
-                status: Some(AlertStatusEnum::RESOLVED),
-                ..Default::default()
-            }, Alert {
-                id: Some(String::from("P8JOGX7")),
-                incident: Some(IncidentReference {
+            alerts: vec![
+                Alert {
                     id: Some(String::from("PPVZH9X")),
+                    status: Some(AlertStatusEnum::RESOLVED),
                     ..Default::default()
-                }),
-                ..Default::default()
-            }],
+                },
+                Alert {
+                    id: Some(String::from("P8JOGX7")),
+                    incident: Some(IncidentReference {
+                        id: Some(String::from("PPVZH9X")),
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                },
+            ],
         };
         let alerts = pagerduty
             .incidents()
@@ -806,18 +836,21 @@ mod tests {
     async fn test_update_incidents() {
         let pagerduty = crate::Praiya::connect("test").unwrap();
         let update_incidents = UpdateIncidents {
-            incidents: vec![IncidentsIncidents {
-                id: String::from("PT4KHLK"),
-                status: Some(IncidentsIncidentsStatusEnum::ACKNOWLEDGED),
-                ..Default::default()
-            }, IncidentsIncidents {
-                id: String::from("PQMF62U"),
-                priority: Some(PriorityReference {
-                    id: Some(String::from("P53ZZH5")),
+            incidents: vec![
+                IncidentsIncidents {
+                    id: String::from("PT4KHLK"),
+                    status: Some(IncidentsIncidentsStatusEnum::ACKNOWLEDGED),
                     ..Default::default()
-                }),
-                ..Default::default()
-            }],
+                },
+                IncidentsIncidents {
+                    id: String::from("PQMF62U"),
+                    priority: Some(PriorityReference {
+                        id: Some(String::from("P53ZZH5")),
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                },
+            ],
         };
         let incidents = pagerduty
             .incidents()
