@@ -37,13 +37,13 @@ pub struct ErrorError {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pagination {     
     /// Echoes offset pagination property.
-    pub offset: i64,
+    pub offset: isize,
     /// Echoes limit pagination property.
     pub limit: u8,
     /// Indicates if there are additional records to return.
     pub more: bool,
     /// The total number of records matching the given query.
-    pub total: i64,
+    pub total: isize,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]

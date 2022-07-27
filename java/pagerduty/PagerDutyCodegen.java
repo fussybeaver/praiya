@@ -47,6 +47,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         super();
 
         supportingFiles.remove(new SupportingFile("endpoints.mustache", "src/endpoints", "mod.rs"));
+        apiTemplateFiles.remove("api.mustache");
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         additionalProperties.put("tags", tagList.values());
         //supportingFiles.add(new SupportingFile("lib.mustache", "src", "lib.rs"));
@@ -248,9 +249,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
         CodegenProperty property = super.fromProperty(name, p);
 
         // Remove extraneous references
-        if (property.datatype.startsWith("models::")) {
-            property.datatype = property.datatype.replace("models::", "");
-        }
+        //if (property.datatype.startsWith("models::")) {
+        //    property.datatype = property.datatype.replace("models::", "");
+        //}
 
         // Deal with Map-like Models
         //if (p instanceof MapSchema) {
@@ -275,68 +276,68 @@ public class PagerDutyCodegen extends RustServerCodegen {
         // Deal with OneOf and AnyOf schemas in model properties.
         // We store the enum values as parseable untagged enums in a vendorExtension.
         // This currently only supports plain OneOf, AnyOf and Vectors of both.
-        ComposedSchema composedSchema = null;
-        if (p instanceof ArraySchema) {
-            final ArraySchema arraySchema = (ArraySchema) p;
-            Schema inner = arraySchema.getItems();
-            if (inner instanceof ComposedSchema) {
-                composedSchema = (ComposedSchema) inner;
-            }
-        }
+        //ComposedSchema composedSchema = null;
+        //if (p instanceof ArraySchema) {
+        //    final ArraySchema arraySchema = (ArraySchema) p;
+        //    Schema inner = arraySchema.getItems();
+        //    if (inner instanceof ComposedSchema) {
+        //        composedSchema = (ComposedSchema) inner;
+        //    }
+        //}
 
-        if (p instanceof ComposedSchema) {
-            composedSchema = (ComposedSchema) p;
-        }
+        //if (p instanceof ComposedSchema) {
+        //    composedSchema = (ComposedSchema) p;
+        //}
 
-        if (composedSchema != null && (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null)) {
+        //if (composedSchema != null && (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null)) {
 
-            List<Schema> schemas;
-            if (composedSchema.getOneOf() != null) {
-                schemas = composedSchema.getOneOf();
-            } else {
-                schemas = composedSchema.getAnyOf();
-            }
+        //    List<Schema> schemas;
+        //    if (composedSchema.getOneOf() != null) {
+        //        schemas = composedSchema.getOneOf();
+        //    } else {
+        //        schemas = composedSchema.getAnyOf();
+        //    }
 
-            int i = 0;
+        //    int i = 0;
 
-            Map<String, Object> allowableValues = new HashMap<String, Object>();
-            List<CodegenProperty> subModels = (List<CodegenProperty>) new ArrayList();
-            allowableValues.put("count", schemas.size());
+        //    Map<String, Object> allowableValues = new HashMap<String, Object>();
+        //    List<CodegenProperty> subModels = (List<CodegenProperty>) new ArrayList();
+        //    allowableValues.put("count", schemas.size());
 
-            for (Schema subSchema : schemas) {
-                String subName = name + "_sub_" + i;
-                CodegenProperty subMdl = fromProperty(subName, subSchema);
-                String type = getTypeDeclaration(subSchema);
+        //    for (Schema subSchema : schemas) {
+        //        String subName = name + "_sub_" + i;
+        //        CodegenProperty subMdl = fromProperty(subName, subSchema);
+        //        String type = getTypeDeclaration(subSchema);
 
-                if (!(subSchema instanceof BooleanSchema) && !(subSchema instanceof ArraySchema)
-                        && !(subSchema instanceof ComposedSchema) && !(subSchema instanceof MapSchema)
-                        && !(subSchema instanceof NumberSchema) && !(subSchema instanceof IntegerSchema)
-                        && !(subSchema instanceof StringSchema) && type != null) {
-                    if (isObjectSchema(subSchema) && !type.startsWith("HashMap")) {
-                        subMdl.datatype = toModelName(type);
-                    }
-                }
+        //        if (!(subSchema instanceof BooleanSchema) && !(subSchema instanceof ArraySchema)
+        //                && !(subSchema instanceof ComposedSchema) && !(subSchema instanceof MapSchema)
+        //                && !(subSchema instanceof NumberSchema) && !(subSchema instanceof IntegerSchema)
+        //                && !(subSchema instanceof StringSchema) && type != null) {
+        //            if (isObjectSchema(subSchema) && !type.startsWith("HashMap")) {
+        //                subMdl.datatype = toModelName(type);
+        //            }
+        //        }
 
-                // Don't re-add a type that's a duplicate (the use of Value can mean we get
-                // dups)
-                Boolean containsDatatype = false;
-                for (CodegenProperty prop : subModels) {
-                    if (prop.datatype.equals(subMdl.datatype)) {
-                        containsDatatype = true;
-                    }
-                }
+        //        // Don't re-add a type that's a duplicate (the use of Value can mean we get
+        //        // dups)
+        //        Boolean containsDatatype = false;
+        //        for (CodegenProperty prop : subModels) {
+        //            if (prop.datatype.equals(subMdl.datatype)) {
+        //                containsDatatype = true;
+        //            }
+        //        }
 
-                if (!containsDatatype) {
-                    subModels.add(subMdl);
-                    i++;
-                }
+        //        if (!containsDatatype) {
+        //            subModels.add(subMdl);
+        //            i++;
+        //        }
 
-            }
+        //    }
 
-            allowableValues.put("values", subModels);
-            property.vendorExtensions.put("x-codegen-one-of-schema", allowableValues);
+        //    allowableValues.put("values", subModels);
+        //    property.vendorExtensions.put("x-codegen-one-of-schema", allowableValues);
 
-        }
+        //}
 
         return property;
     }
@@ -358,17 +359,17 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
                 // Parse out OneOf and AnyOf enum values from a property. We need to do this
                 // here, because the affected models need to know their enum values.
-                for (CodegenProperty prop : cm.vars) {
-                    if (prop.vendorExtensions.get("x-codegen-one-of-schema") != null) {
-                        if (prop.getItems() != null) {
-                            patchOneOfProperties.put(prop.getItems().datatype,
-                                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
-                        } else {
-                            patchOneOfProperties.put(prop.datatype,
-                                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
-                        }
-                    }
-                }
+                //for (CodegenProperty prop : cm.vars) {
+                //    if (prop.vendorExtensions.get("x-codegen-one-of-schema") != null) {
+                //        if (prop.getItems() != null) {
+                //            patchOneOfProperties.put(prop.getItems().datatype,
+                //                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
+                //        } else {
+                //            patchOneOfProperties.put(prop.datatype,
+                //                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -552,6 +553,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
             Map<String, Object> map = (Map<String, Object>) obj;
 
             CodegenModel cm = (CodegenModel) map.get("model");
+
+            // Replace names of PUT/POST operation body parameter model names,
+            // with nicer generated ones.
             String opName = (String) patchOperationBodyNames.get(camelize(cm.getName()));
             if (opName != null) {
                 cm.setClassname(toModelName(opName));
@@ -566,6 +570,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
             cm.classname = camelize(cm.classname.replaceFirst("AnyOf", ""));
             Matcher matchBody = reBody.matcher(cm.classname);
 
+            // Replace the OneOf/AnyOf prefix to a model
             for (CodegenProperty property : cm.vars) {
                 if (property.datatype.startsWith("OneOf")) {
                     property.datatype = camelize(property.datatype.replaceFirst("OneOf", ""));
@@ -573,6 +578,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     property.datatype = camelize(property.datatype.replaceFirst("AnyOf", ""));
                 }
 
+                // Replace the child type if this is type is a map/array
                 if (property.getItems() != null && property.getItems().datatype.startsWith("OneOf")) {
                     property.getItems().datatype = camelize(property.getItems().datatype.replace("OneOf", ""));
                 } else if (property.getItems() != null && property.getItems().datatype.startsWith("AnyOf")) {
@@ -580,153 +586,153 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 }
             }
 
-            if (matchBody.find()) {
-                String body = matchBody.group(0);
+            // if (matchBody.find()) {
+            //     String body = matchBody.group(0);
 
-                if (patchOperationBodyNames.containsKey(body)) {
-                    cm.classname = cm.classname.replace(body, camelize((String) patchOperationBodyNames.get(body)))
-                            + "Enum";
-                }
-            }
+            //     if (patchOperationBodyNames.containsKey(body)) {
+            //         cm.classname = cm.classname.replace(body, camelize((String) patchOperationBodyNames.get(body)))
+            //                 + "Enum";
+            //     }
+            // }
 
-            for (CodegenProperty property : cm.vars) {
+            //for (CodegenProperty property : cm.vars) {
 
-                Matcher matchProp = reBody.matcher(property.datatype);
-                if (matchProp.find()) {
-                    property.datatype = property.datatype.replace(matchProp.group(0),
-                            camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
-                }
+            //    Matcher matchProp = reBody.matcher(property.datatype);
+            //    if (matchProp.find()) {
+            //        property.datatype = property.datatype.replace(matchProp.group(0),
+            //                camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
+            //    }
 
-                if (property.getItems() != null) {
-                    matchProp = reBody.matcher(property.getItems().datatype);
+            //    if (property.getItems() != null) {
+            //        matchProp = reBody.matcher(property.getItems().datatype);
 
-                    if (matchProp.find()) {
-                        property.getItems().datatype = property.getItems().datatype.replace(matchProp.group(0),
-                                camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
-                    }
-                }
-            }
+            //        if (matchProp.find()) {
+            //            property.getItems().datatype = property.getItems().datatype.replace(matchProp.group(0),
+            //                    camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
+            //        }
+            //    }
+            //}
 
             if (!allTheModels.containsKey(cm.classname)) {
                 allTheModels.put(cm.classname, cm);
             }
         }
 
-        for (Object obj : objs.values()) {
-            if (obj instanceof Map) {
-                Map<String, Object> map = (Map<String, Object>) obj;
+        //for (Object obj : objs.values()) {
+        //    if (obj instanceof Map) {
+        //        Map<String, Object> map = (Map<String, Object>) obj;
 
-                List<CodegenOperation> ops = (List<CodegenOperation>) map.get("operation");
+        //        List<CodegenOperation> ops = (List<CodegenOperation>) map.get("operation");
 
-                for (CodegenOperation operation : ops) {
-                    //if (operation.operationId.startsWith("list_")) {
-                        List<CodegenResponse> responses = operation.getResponses();
-                        for (final CodegenResponse res : responses) {
-                            if (res.getDataType() != null) {
-                                if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
-                                    CodegenModel mdl = allTheModels.get(res.dataType);
-            
-                                    if (mdl != null) {
-                                        if (mdl.getVendorExtensions().get("x-codegen-pagination-response-inner") != null) {
-                                            res.getVendorExtensions().put("x-codegen-pagination-response-inner", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
-                                            operation.getVendorExtensions().put("x-codegen-is-list-fn", "true");
-                                            operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
-                                            operation.getVendorExtensions().put("x-codegen-response-plural-snake-case", underscore(res.dataType.replace("Response", "")));
-                                            operation.getVendorExtensions().put("x-codegen-response-single", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
-                                        } else if (mdl.getVendorExtensions().get("x-codegen-single-response-datatype") != null) {
-                                            
-                                            operation.getVendorExtensions().put("x-codegen-single-response-datatype", mdl.getVendorExtensions().get("x-codegen-single-response-datatype"));
-                                            operation.getVendorExtensions().put("x-codegen-single-response-key", mdl.getVendorExtensions().get("x-codegen-single-response-key"));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    //} else {
+        //        for (CodegenOperation operation : ops) {
+        //            //if (operation.operationId.startsWith("list_")) {
+        //                List<CodegenResponse> responses = operation.getResponses();
+        //                for (final CodegenResponse res : responses) {
+        //                    if (res.getDataType() != null) {
+        //                        if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
+        //                            CodegenModel mdl = allTheModels.get(res.dataType);
+        //    
+        //                            if (mdl != null) {
+        //                                if (mdl.getVendorExtensions().get("x-codegen-pagination-response-inner") != null) {
+        //                                    res.getVendorExtensions().put("x-codegen-pagination-response-inner", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
+        //                                    operation.getVendorExtensions().put("x-codegen-is-list-fn", "true");
+        //                                    operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
+        //                                    operation.getVendorExtensions().put("x-codegen-response-plural-snake-case", underscore(res.dataType.replace("Response", "")));
+        //                                    operation.getVendorExtensions().put("x-codegen-response-single", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
+        //                                } else if (mdl.getVendorExtensions().get("x-codegen-single-response-datatype") != null) {
+        //                                    
+        //                                    operation.getVendorExtensions().put("x-codegen-single-response-datatype", mdl.getVendorExtensions().get("x-codegen-single-response-datatype"));
+        //                                    operation.getVendorExtensions().put("x-codegen-single-response-key", mdl.getVendorExtensions().get("x-codegen-single-response-key"));
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            //} else {
 
-                    //}
-                }
-            }
-        }
+        //            //}
+        //        }
+        //    }
+        //}
 
         return objs;
     }
 
-    @Override
-    public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
-        objs = super.postProcessOperations(objs);
-        Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
-        if (operations != null) {
+    // @Override
+    // public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
+    //     objs = super.postProcessOperations(objs);
+    //     Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
+    //     if (operations != null) {
 
-            List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
-            for (final CodegenOperation operation : ops) {
-                if (operation.notes != null) {
-                    operation.unescapedNotes = operation.unescapedNotes.replaceAll("```(.+)\\n(.+)\\n",
-                            "```$1,nocompile\n$2\n");
-                    operation.unescapedNotes = operation.unescapedNotes.replaceAll("```\\n(.+)\\n",
-                            "```nocompile\n$1\n");
-                    operation.unescapedNotes = operation.unescapedNotes.replaceAll("\\n", "\n    /// ");
+    //         List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
+    //         for (final CodegenOperation operation : ops) {
+    //             if (operation.notes != null) {
+    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("```(.+)\\n(.+)\\n",
+    //                         "```$1,nocompile\n$2\n");
+    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("```\\n(.+)\\n",
+    //                         "```nocompile\n$1\n");
+    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("\\n", "\n    /// ");
 
-                }
+    //             }
 
-                CodegenParameter body = operation.bodyParam;
-                if (body != null) {
-                    String opName = (String) patchOperationBodyNames.get(camelize(body.getDataType()));
-                    if (opName != null) {
-                       body.dataType = toModelName(opName);
-                    }
-                }
-                List<CodegenResponse> responses = operation.getResponses();
-                Boolean hasDefaultResponse = false;
-                for (final CodegenResponse res : responses) {
-                    if (res.getDataType() != null) {
-                        if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
-                            hasDefaultResponse = true;
-                        }
-                    }
-                }
-                if (!hasDefaultResponse) {
-                    operation.getVendorExtensions().put("x-codegen-response-empty-default", "true");
-                }
-                List<CodegenParameter> queryParams = operation.queryParams;
-                Boolean hasOptionalQueryParams = true;
-                Boolean hasStringParams = false;
-                for (final CodegenParameter param : queryParams) {
-                    if (getBooleanValue(param, CodegenConstants.IS_LIST_CONTAINER_EXT_NAME)
-                            && getBooleanValue(param.items, CodegenConstants.IS_STRING_EXT_NAME)) {
-                        param.getVendorExtensions().put("x-codegen-list-container-string", "true");
-                    }
-                    if (param.paramName.equals("total")) {
-                        param.getVendorExtensions().put("x-codegen-ignore", "true");
-                    }
-                    if (param.getRequired()) {
-                        hasOptionalQueryParams = false;
-                    }
-                    if (getBooleanValue(param, CodegenConstants.IS_STRING_EXT_NAME)
-                            || getBooleanValue(param, CodegenConstants.IS_UUID_EXT_NAME)) {
-                        hasStringParams = true;
-                    }
-                }
-                if (hasOptionalQueryParams) {
-                    operation.getVendorExtensions().put("x-codegen-has-optional-query-params", "true");
-                }
-                if (hasStringParams) {
-                    operation.getVendorExtensions().put("x-codegen-has-string-params", "true");
-                }
+    //             CodegenParameter body = operation.bodyParam;
+    //             if (body != null) {
+    //                 String opName = (String) patchOperationBodyNames.get(camelize(body.getDataType()));
+    //                 if (opName != null) {
+    //                    body.dataType = toModelName(opName);
+    //                 }
+    //             }
+    //             List<CodegenResponse> responses = operation.getResponses();
+    //             Boolean hasDefaultResponse = false;
+    //             for (final CodegenResponse res : responses) {
+    //                 if (res.getDataType() != null) {
+    //                     if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
+    //                         hasDefaultResponse = true;
+    //                     }
+    //                 }
+    //             }
+    //             if (!hasDefaultResponse) {
+    //                 operation.getVendorExtensions().put("x-codegen-response-empty-default", "true");
+    //             }
+    //             List<CodegenParameter> queryParams = operation.queryParams;
+    //             Boolean hasOptionalQueryParams = true;
+    //             Boolean hasStringParams = false;
+    //             for (final CodegenParameter param : queryParams) {
+    //                 if (getBooleanValue(param, CodegenConstants.IS_LIST_CONTAINER_EXT_NAME)
+    //                         && getBooleanValue(param.items, CodegenConstants.IS_STRING_EXT_NAME)) {
+    //                     param.getVendorExtensions().put("x-codegen-list-container-string", "true");
+    //                 }
+    //                 if (param.paramName.equals("total")) {
+    //                     param.getVendorExtensions().put("x-codegen-ignore", "true");
+    //                 }
+    //                 if (param.getRequired()) {
+    //                     hasOptionalQueryParams = false;
+    //                 }
+    //                 if (getBooleanValue(param, CodegenConstants.IS_STRING_EXT_NAME)
+    //                         || getBooleanValue(param, CodegenConstants.IS_UUID_EXT_NAME)) {
+    //                     hasStringParams = true;
+    //                 }
+    //             }
+    //             if (hasOptionalQueryParams) {
+    //                 operation.getVendorExtensions().put("x-codegen-has-optional-query-params", "true");
+    //             }
+    //             if (hasStringParams) {
+    //                 operation.getVendorExtensions().put("x-codegen-has-string-params", "true");
+    //             }
 
-            }
-        }
-        return objs;
-    }
+    //         }
+    //     }
+    //     return objs;
+    // }
 
     @Override
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
 
-        if (property.datatype.equals("isize")) {
+        /* if (property.datatype.equals("isize")) {
             // needed for windows
-            property.datatype = "i64";
-        } else if (property.datatype.equals("Override")) {
+            //property.datatype = "i64";
+        } else */ if (property.datatype.equals("Override")) {
             property.datatype = "ModelOverride";
         }
     }

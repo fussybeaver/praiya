@@ -672,13 +672,13 @@ impl std::default::Default for AlertSeverityEnum {
 pub struct AlertCount {     
     /// The count of triggered alerts
     #[serde(skip_serializing_if="Option::is_none")]
-    pub triggered: Option<i64>,
+    pub triggered: Option<isize>,
     /// The count of resolved alerts
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resolved: Option<i64>,
+    pub resolved: Option<isize>,
     /// The total count of alerts
     #[serde(skip_serializing_if="Option::is_none")]
-    pub all: Option<i64>,
+    pub all: Option<isize>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -851,40 +851,40 @@ pub struct AnalyticsIncidentMetrics {
     pub team_name: Option<String>,
     /// Mean time from when an incident was triggered until it was resolved.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_resolve: Option<i64>,
+    pub mean_seconds_to_resolve: Option<isize>,
     /// Mean time between the start of an incident, and the first responder to acknowledge.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_first_ack: Option<i64>,
+    pub mean_seconds_to_first_ack: Option<isize>,
     /// Mean time between the start of an incident, and the first responder to acknowledge, or to accept responder request.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_engage: Option<i64>,
+    pub mean_seconds_to_engage: Option<isize>,
     /// Mean time between the start of an incident, and the last additional responder to acknowledge.  For incidents with one or less engaged users, this value is null.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_mobilize: Option<i64>,
+    pub mean_seconds_to_mobilize: Option<isize>,
     /// Mean number of users who engaged (acknowledged, accepted responder request) with an incident.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_engaged_user_count: Option<i64>,
+    pub mean_engaged_user_count: Option<isize>,
     /// Total count of instances where an incident is escalated between responders assigned to an escalation policy.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_escalation_count: Option<i64>,
+    pub total_escalation_count: Option<isize>,
     /// Total count of instances where an additional responder, who was not on-call for an incident, is added.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_assignment_count: Option<i64>,
+    pub total_assignment_count: Option<isize>,
     /// Total number of unique interruptions during business hours. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_business_hour_interruptions: Option<i64>,
+    pub total_business_hour_interruptions: Option<isize>,
     /// Total number of unique interruptions during sleep hours. Sleep hour: 10pm-8am every day, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_sleep_hour_interruptions: Option<i64>,
+    pub total_sleep_hour_interruptions: Option<isize>,
     /// Total number of unique interruptions during off hours. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_off_hour_interruptions: Option<i64>,
+    pub total_off_hour_interruptions: Option<isize>,
     /// Total number of seconds incidents were snoozed.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_snoozed_seconds: Option<i64>,
+    pub total_snoozed_seconds: Option<isize>,
     /// Total engaged time across all responders for incidents.  Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved.  This may include periods in which the incidents was snoozed.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_engaged_seconds: Option<i64>,
+    pub total_engaged_seconds: Option<isize>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -918,43 +918,43 @@ pub struct AnalyticsRawIncident {
     pub priority_name: Option<String>,
     /// The integer representation of the incident's priority level.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_order: Option<i64>,
+    pub priority_order: Option<isize>,
     /// Time from when incident triggered until it was resolved.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_resolve: Option<i64>,
+    pub seconds_to_resolve: Option<isize>,
     /// Time between start of an incident, and the first responder to acknowledge.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_first_ack: Option<i64>,
+    pub seconds_to_first_ack: Option<isize>,
     /// Time between start of an incident, and the first responder to acknowledge, or to accept responder request.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_engage: Option<i64>,
+    pub seconds_to_engage: Option<isize>,
     /// Time between start of an incident, and the last additional responder to acknowledge.  If an incident has one or less responders, the value will be null.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_mobilize: Option<i64>,
+    pub seconds_to_mobilize: Option<isize>,
     /// Total engaged time across all responders for this incident.  Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved.  This may include periods in which the incident was snoozed.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub engaged_seconds: Option<i64>,
+    pub engaged_seconds: Option<isize>,
     /// Total number of users who engaged (acknowledged, accepted responder request) in the incident.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub engaged_user_count: Option<i64>,
+    pub engaged_user_count: Option<isize>,
     /// Total count of instances where an incident is escalated between responders assigned to an escalation policy.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub escalation_count: Option<i64>,
+    pub escalation_count: Option<isize>,
     /// Total count of instances where an additional responder, who was not on-call for the incident, is added.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_count: Option<i64>,
+    pub assignment_count: Option<isize>,
     /// Total number of unique interruptions during business hour. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub business_hour_interruptions: Option<i64>,
+    pub business_hour_interruptions: Option<isize>,
     /// Total number of unique interruptions during sleep hour. Sleep hour: 10pm-8am every day, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sleep_hour_interruptions: Option<i64>,
+    pub sleep_hour_interruptions: Option<isize>,
     /// Total number of unique interruptions during off hour. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub off_hour_interruptions: Option<i64>,
+    pub off_hour_interruptions: Option<isize>,
     /// Total seconds the incident has been snoozed for.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snoozed_seconds: Option<i64>,
+    pub snoozed_seconds: Option<isize>,
 }
 
 /// Accepts a set of filters to apply to the Incidents before aggregating.  Any incidents that do not match the included filters will be omitted from the results
@@ -2398,7 +2398,7 @@ pub struct EscalationRule {
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     /// The number of minutes before an unacknowledged incident escalates away from this rule.
-    pub escalation_delay_in_minutes: i64,
+    pub escalation_delay_in_minutes: isize,
     /// The targets an incident should be assigned to upon reaching this rule.
     pub targets: Vec<EscalationTargetReference>,
 }
@@ -3005,7 +3005,7 @@ pub struct CreateRulesetEventRule {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateIncidentSnooze {     
     /// The number of seconds to snooze the incident for. After this number of seconds has elapsed, the incident will return to the \"triggered\" state.
-    pub duration: i64,
+    pub duration: isize,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -3043,7 +3043,7 @@ pub struct Incident {
     pub id: Option<String>,
     /// The number of the incident. This is unique across your account.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub incident_number: Option<i64>,
+    pub incident_number: Option<isize>,
     /// The date/time the incident was first triggered.
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
@@ -4053,7 +4053,7 @@ pub struct IncidentsIncidents {
     pub priority: Option<PriorityReference>,
     /// Escalate the incident to this level in the escalation policy.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub escalation_level: Option<i64>,
+    pub escalation_level: Option<isize>,
     /// Assign the incident to these assignees.
     #[serde(skip_serializing_if="Option::is_none")]
     pub assignments: Option<Vec<IncidentsAssignments>>,
@@ -4281,7 +4281,7 @@ pub struct IncidentsidIncident {
     pub title: Option<String>,
     /// Escalate the incident to this level in the escalation policy.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub escalation_level: Option<i64>,
+    pub escalation_level: Option<isize>,
     /// Assign the incident to these assignees.
     #[serde(skip_serializing_if="Option::is_none")]
     pub assignments: Option<Vec<IncidentsAssignments>>,
@@ -5131,7 +5131,7 @@ pub struct MaintenanceWindow {
     pub _type: MaintenanceWindowTypeEnum,
     /// The order in which the maintenance window was created.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sequence_number: Option<i64>,
+    pub sequence_number: Option<isize>,
     /// This maintenance window's start time. This is when the services will stop creating incidents. If this date is in the past, it will be updated to be the current time.
     #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<chrono::DateTime<chrono::Utc>>,
@@ -6009,7 +6009,7 @@ pub struct Oncall {
     pub schedule: Option<ScheduleReference>,
     /// The escalation level for the on-call.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub escalation_level: Option<i64>,
+    pub escalation_level: Option<isize>,
     /// The start of the on-call. If `null`, the on-call is a permanent user on-call.
     #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<chrono::DateTime<chrono::Utc>>,
@@ -6126,16 +6126,16 @@ impl std::default::Default for OutboundIntegrationReferenceTypeEnum {
 pub struct Pagination {     
     /// Echoes offset pagination property.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub offset: Option<i64>,
+    pub offset: Option<isize>,
     /// Echoes limit pagination property.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<i64>,
+    pub limit: Option<isize>,
     /// Indicates if there are additional records to return
     #[serde(skip_serializing_if="Option::is_none")]
     pub more: Option<bool>,
     /// The total number of records matching the given query.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total: Option<i64>,
+    pub total: Option<isize>,
 }
 
 /// The Phone Contact Method of the User, used for Voice or SMS.
@@ -6938,7 +6938,7 @@ pub struct Restriction {
     #[serde(rename = "type")]
     pub _type: RestrictionTypeEnum,
     /// The duration of the restriction in seconds.
-    pub duration_seconds: i64,
+    pub duration_seconds: isize,
     /// The start time in HH:mm:ss format.
     #[serde(skip_serializing_if="String::is_empty")]
     pub start_time_of_day: String,
@@ -7202,7 +7202,7 @@ pub struct RulesetsidrulesRule {
     pub _self: Option<String>,
     /// Position/index of the rule within the ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub position: Option<i64>,
+    pub position: Option<isize>,
     /// Indicates whether the rule is disabled and would therefore not be evaluated.
     #[serde(skip_serializing_if="Option::is_none")]
     pub disabled: Option<bool>,
@@ -7452,13 +7452,13 @@ pub struct RulesetsidrulesRuleActionsSuppress {
     pub value: bool,
     /// The number of occurences needed during the window of time to trigger the theshold.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold_value: Option<i64>,
+    pub threshold_value: Option<isize>,
     /// The time unit for the window of time.
     #[serde(skip_serializing_if="Option::is_none")]
     pub threshold_time_unit: Option<RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum>,
     /// The amount of time units for the window of time.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold_time_amount: Option<i64>,
+    pub threshold_time_amount: Option<isize>,
 }
 
 
@@ -7520,7 +7520,7 @@ impl std::default::Default for RulesetsidrulesRuleActionsSuppressThresholdTimeUn
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RulesetsidrulesRuleActionsSuspend {     
     /// The amount of time to suspend the alert in seconds.
-    pub value: i64,
+    pub value: isize,
 }
 
 /// Conditions evaluated to check if an event matches this event rule. Is always empty for the catch all rule, though.
@@ -7695,18 +7695,18 @@ pub struct RulesetsidrulesRuleTimeFrame {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RulesetsidrulesRuleTimeFrameActiveBetween {     
     /// The start time in milliseconds.
-    pub start_time: i64,
+    pub start_time: isize,
     /// End time in milliseconds.
-    pub end_time: i64,
+    pub end_time: isize,
 }
 
 /// A reccuring window of time based on the day of the week, during which the rule is active.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RulesetsidrulesRuleTimeFrameScheduledWeekly {     
     /// The amount of milliseconds into the day at which the window starts.
-    pub start_time: i64,
+    pub start_time: isize,
     /// The duration of the window in milliseconds.
-    pub duration: i64,
+    pub duration: isize,
     /// The timezone.
     #[serde(skip_serializing_if="String::is_empty")]
     pub timezone: String,
@@ -7855,7 +7855,7 @@ pub struct ScheduleLayer {
     #[serde(skip_serializing_if="Option::is_none")]
     pub rotation_virtual_start: Option<chrono::DateTime<chrono::Utc>>,
     /// The duration of each on-call shift in seconds.
-    pub rotation_turn_length_seconds: i64,
+    pub rotation_turn_length_seconds: isize,
     /// The name of the schedule layer.
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
@@ -8220,10 +8220,10 @@ pub struct Service {
     pub description: Option<String>,
     /// Time in seconds that an incident is automatically resolved if left open for that long. Value is `null` if the feature is disabled. Value must not be negative. Setting this field to `0`, `null` (or unset in POST request) will disable the feature.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_resolve_timeout: Option<i64>,
+    pub auto_resolve_timeout: Option<isize>,
     /// Time in seconds that an incident changes to the Triggered State after being Acknowledged. Value is `null` if the feature is disabled. Value must not be negative. Setting this field to `0`, `null` (or unset in POST request) will disable the feature.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub acknowledgement_timeout: Option<i64>,
+    pub acknowledgement_timeout: Option<isize>,
     /// The date/time when this service was created
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
@@ -8258,7 +8258,7 @@ pub struct Service {
     pub alert_grouping: Option<ServiceAlertGroupingEnum>,
     /// The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `\"time\"`. To continue grouping alerts until the incident is resolved, set this value to `0`. 
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alert_grouping_timeout: Option<i64>,
+    pub alert_grouping_timeout: Option<isize>,
 }
 
 impl Default for Service {
@@ -10432,7 +10432,7 @@ pub struct WebhooksV1IncidentData {
     pub id: Option<String>,
     /// The number of the incident. This is unique across the account.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub incident_number: Option<i64>,
+    pub incident_number: Option<isize>,
     /// The date/time the incident was first triggered.
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_on: Option<chrono::DateTime<chrono::Utc>>,
@@ -10698,7 +10698,7 @@ pub struct WeeklyRestriction {
     #[serde(rename = "type")]
     pub _type: WeeklyRestrictionTypeEnum,
     /// The duration of the restriction in seconds.
-    pub duration_seconds: i64,
+    pub duration_seconds: isize,
     /// The start time in HH:mm:ss format.
     #[serde(skip_serializing_if="String::is_empty")]
     pub start_time_of_day: String,
