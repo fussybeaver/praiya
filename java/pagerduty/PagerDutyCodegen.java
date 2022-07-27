@@ -5,16 +5,12 @@ import static io.swagger.codegen.v3.generators.handlebars.ExtensionHelper.getBoo
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
-
-import com.github.jknack.handlebars.Handlebars;
 
 import io.swagger.codegen.v3.*;
 import org.apache.commons.lang3.StringUtils;
@@ -24,17 +20,9 @@ import org.slf4j.LoggerFactory;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.media.ArraySchema;
-import io.swagger.v3.oas.models.media.BooleanSchema;
 import io.swagger.v3.oas.models.media.ComposedSchema;
-import io.swagger.v3.oas.models.media.IntegerSchema;
-import io.swagger.v3.oas.models.media.MapSchema;
-import io.swagger.v3.oas.models.media.NumberSchema;
-import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.RequestBody;
-import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.core.util.Json;
 
 public class PagerDutyCodegen extends RustServerCodegen {
@@ -52,7 +40,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         additionalProperties.put("tags", tagList.values());
-        //supportingFiles.add(new SupportingFile("lib.mustache", "src", "lib.rs"));
         supportingFiles.remove(new SupportingFile("models.mustache", "src", "models.rs"));
     }
 
@@ -70,9 +57,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
     }
 
     private static HashMap<String, Object> patchOperationBodyNames = new HashMap();
-    //private static HashMap<String, Object> patchOperationResponseNames = new HashMap();
-    //private static HashMap<String, List<CodegenProperty>> patchProperties = new HashMap();
-    //private static HashMap<String, HashMap<String, Object>> patchOneOfProperties = new HashMap();
 
     @Override
     public void preprocessOpenAPI(OpenAPI openAPI) {
@@ -163,29 +147,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
                         if (allDefinitions != null) {
                             refSchema = allDefinitions.get(ref);
-                            // TODO: remove this condition?
-                            /* if (refSchema instanceof ObjectSchema) {
-                                Schema interfaceSchema = refSchema;
-                                if (interfaceSchema.getProperties() != null) {
-
-                                    List<Map.Entry<String, Schema>> propertyList = new ArrayList<Map.Entry<String, Schema>>(
-                                            interfaceSchema.getProperties().entrySet());
-                                    final int totalCount = propertyList.size();
-                                    for (int i = 0; i < totalCount; i++) {
-                                        Map.Entry<String, Schema> entry = propertyList.get(i);
-
-                                        final String key = entry.getKey();
-                                        final Schema propertySchema = entry.getValue();
-
-                                        if (mdl.vars.stream().filter(p -> p.baseName.equals(key))
-                                                .collect(java.util.stream.Collectors.toList()).isEmpty()) {
-                                            final CodegenProperty codegenProperty = fromProperty(key,
-                                                    propertySchema);
-                                            mdl.vars.add(0, codegenProperty);
-                                        }
-                                    }
-                                }
-                            } else */ if (refSchema instanceof ComposedSchema) {
+                             if (refSchema instanceof ComposedSchema) {
                                 final ComposedSchema refComposed = (ComposedSchema) refSchema;
                                 final List<Schema> allOf = refComposed.getAllOf();
                                 if (allOf != null && !allOf.isEmpty()) {
@@ -250,104 +212,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
     }
 
     @Override
-    public CodegenProperty fromProperty(String name, Schema p) {
-        CodegenProperty property = super.fromProperty(name, p);
-
-        // Remove extraneous references
-        //if (property.datatype.startsWith("models::")) {
-        //    property.datatype = property.datatype.replace("models::", "");
-        //}
-
-        // Deal with Map-like Models
-        //if (p instanceof MapSchema) {
-        //    MapSchema mp = (MapSchema) p;
-        //    Object inner = mp.getAdditionalProperties();
-        //    if (!(inner instanceof Schema) && (Boolean) inner && mp.getProperties() != null
-        //            && !mapLikeModels.containsKey(name)) {
-        //        Map<String, Schema> props = mp.getProperties();
-        //        List<CodegenProperty> listProps = new ArrayList<CodegenProperty>();
-        //        for (Entry<String, Schema> entry : props.entrySet()) {
-        //            CodegenProperty prop = fromProperty(entry.getKey(), entry.getValue());
-        //            if ((prop.dataFormat == null || !prop.dataFormat.equals("date-time"))
-        //                    && !languageSpecificPrimitives.contains(prop.datatype)) {
-        //                prop.datatype = toModelName(prop.datatype);
-        //            }
-        //            listProps.add(prop);
-        //        }
-        //        mapLikeModels.put(name, listProps);
-        //    }
-        //}
-
-        // Deal with OneOf and AnyOf schemas in model properties.
-        // We store the enum values as parseable untagged enums in a vendorExtension.
-        // This currently only supports plain OneOf, AnyOf and Vectors of both.
-        //ComposedSchema composedSchema = null;
-        //if (p instanceof ArraySchema) {
-        //    final ArraySchema arraySchema = (ArraySchema) p;
-        //    Schema inner = arraySchema.getItems();
-        //    if (inner instanceof ComposedSchema) {
-        //        composedSchema = (ComposedSchema) inner;
-        //    }
-        //}
-
-        //if (p instanceof ComposedSchema) {
-        //    composedSchema = (ComposedSchema) p;
-        //}
-
-        //if (composedSchema != null && (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null)) {
-
-        //    List<Schema> schemas;
-        //    if (composedSchema.getOneOf() != null) {
-        //        schemas = composedSchema.getOneOf();
-        //    } else {
-        //        schemas = composedSchema.getAnyOf();
-        //    }
-
-        //    int i = 0;
-
-        //    Map<String, Object> allowableValues = new HashMap<String, Object>();
-        //    List<CodegenProperty> subModels = (List<CodegenProperty>) new ArrayList();
-        //    allowableValues.put("count", schemas.size());
-
-        //    for (Schema subSchema : schemas) {
-        //        String subName = name + "_sub_" + i;
-        //        CodegenProperty subMdl = fromProperty(subName, subSchema);
-        //        String type = getTypeDeclaration(subSchema);
-
-        //        if (!(subSchema instanceof BooleanSchema) && !(subSchema instanceof ArraySchema)
-        //                && !(subSchema instanceof ComposedSchema) && !(subSchema instanceof MapSchema)
-        //                && !(subSchema instanceof NumberSchema) && !(subSchema instanceof IntegerSchema)
-        //                && !(subSchema instanceof StringSchema) && type != null) {
-        //            if (isObjectSchema(subSchema) && !type.startsWith("HashMap")) {
-        //                subMdl.datatype = toModelName(type);
-        //            }
-        //        }
-
-        //        // Don't re-add a type that's a duplicate (the use of Value can mean we get
-        //        // dups)
-        //        Boolean containsDatatype = false;
-        //        for (CodegenProperty prop : subModels) {
-        //            if (prop.datatype.equals(subMdl.datatype)) {
-        //                containsDatatype = true;
-        //            }
-        //        }
-
-        //        if (!containsDatatype) {
-        //            subModels.add(subMdl);
-        //            i++;
-        //        }
-
-        //    }
-
-        //    allowableValues.put("values", subModels);
-        //    property.vendorExtensions.put("x-codegen-one-of-schema", allowableValues);
-
-        //}
-
-        return property;
-    }
-
-    @Override
     public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
         Map<String, Object> newObjs = super.postProcessAllModels(objs);
 
@@ -361,20 +225,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
             for (Map<String, Object> mo : models) {
                 CodegenModel cm = (CodegenModel) mo.get("model");
                 allModels.put(modelName, cm);
-
-                // Parse out OneOf and AnyOf enum values from a property. We need to do this
-                // here, because the affected models need to know their enum values.
-                //for (CodegenProperty prop : cm.vars) {
-                //    if (prop.vendorExtensions.get("x-codegen-one-of-schema") != null) {
-                //        if (prop.getItems() != null) {
-                //            patchOneOfProperties.put(prop.getItems().datatype,
-                //                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
-                //        } else {
-                //            patchOneOfProperties.put(prop.datatype,
-                //                    (HashMap<String, Object>) prop.vendorExtensions.get("x-codegen-one-of-schema"));
-                //        }
-                //    }
-                //}
             }
         }
 
@@ -591,165 +441,20 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 }
             }
 
-            // if (matchBody.find()) {
-            //     String body = matchBody.group(0);
-
-            //     if (patchOperationBodyNames.containsKey(body)) {
-            //         cm.classname = cm.classname.replace(body, camelize((String) patchOperationBodyNames.get(body)))
-            //                 + "Enum";
-            //     }
-            // }
-
-            //for (CodegenProperty property : cm.vars) {
-
-            //    Matcher matchProp = reBody.matcher(property.datatype);
-            //    if (matchProp.find()) {
-            //        property.datatype = property.datatype.replace(matchProp.group(0),
-            //                camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
-            //    }
-
-            //    if (property.getItems() != null) {
-            //        matchProp = reBody.matcher(property.getItems().datatype);
-
-            //        if (matchProp.find()) {
-            //            property.getItems().datatype = property.getItems().datatype.replace(matchProp.group(0),
-            //                    camelize((String) patchOperationBodyNames.get(matchProp.group(0)))) + "Enum";
-            //        }
-            //    }
-            //}
-
             if (!allTheModels.containsKey(cm.classname)) {
                 allTheModels.put(cm.classname, cm);
             }
         }
-
-        //for (Object obj : objs.values()) {
-        //    if (obj instanceof Map) {
-        //        Map<String, Object> map = (Map<String, Object>) obj;
-
-        //        List<CodegenOperation> ops = (List<CodegenOperation>) map.get("operation");
-
-        //        for (CodegenOperation operation : ops) {
-        //            //if (operation.operationId.startsWith("list_")) {
-        //                List<CodegenResponse> responses = operation.getResponses();
-        //                for (final CodegenResponse res : responses) {
-        //                    if (res.getDataType() != null) {
-        //                        if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
-        //                            CodegenModel mdl = allTheModels.get(res.dataType);
-        //    
-        //                            if (mdl != null) {
-        //                                if (mdl.getVendorExtensions().get("x-codegen-pagination-response-inner") != null) {
-        //                                    res.getVendorExtensions().put("x-codegen-pagination-response-inner", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
-        //                                    operation.getVendorExtensions().put("x-codegen-is-list-fn", "true");
-        //                                    operation.getVendorExtensions().put("x-codegen-response-plural", res.dataType.replace("Response", "ListResponse"));
-        //                                    operation.getVendorExtensions().put("x-codegen-response-plural-snake-case", underscore(res.dataType.replace("Response", "")));
-        //                                    operation.getVendorExtensions().put("x-codegen-response-single", mdl.getVendorExtensions().get("x-codegen-pagination-response-inner"));
-        //                                } else if (mdl.getVendorExtensions().get("x-codegen-single-response-datatype") != null) {
-        //                                    
-        //                                    operation.getVendorExtensions().put("x-codegen-single-response-datatype", mdl.getVendorExtensions().get("x-codegen-single-response-datatype"));
-        //                                    operation.getVendorExtensions().put("x-codegen-single-response-key", mdl.getVendorExtensions().get("x-codegen-single-response-key"));
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            //} else {
-
-        //            //}
-        //        }
-        //    }
-        //}
-
         return objs;
     }
-
-    // @Override
-    // public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
-    //     objs = super.postProcessOperations(objs);
-    //     Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
-    //     if (operations != null) {
-
-    //         List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
-    //         for (final CodegenOperation operation : ops) {
-    //             if (operation.notes != null) {
-    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("```(.+)\\n(.+)\\n",
-    //                         "```$1,nocompile\n$2\n");
-    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("```\\n(.+)\\n",
-    //                         "```nocompile\n$1\n");
-    //                 operation.unescapedNotes = operation.unescapedNotes.replaceAll("\\n", "\n    /// ");
-
-    //             }
-
-    //             CodegenParameter body = operation.bodyParam;
-    //             if (body != null) {
-    //                 String opName = (String) patchOperationBodyNames.get(camelize(body.getDataType()));
-    //                 if (opName != null) {
-    //                    body.dataType = toModelName(opName);
-    //                 }
-    //             }
-    //             List<CodegenResponse> responses = operation.getResponses();
-    //             Boolean hasDefaultResponse = false;
-    //             for (final CodegenResponse res : responses) {
-    //                 if (res.getDataType() != null) {
-    //                     if (getBooleanValue(res, CodegenConstants.IS_DEFAULT_EXT_NAME)) {
-    //                         hasDefaultResponse = true;
-    //                     }
-    //                 }
-    //             }
-    //             if (!hasDefaultResponse) {
-    //                 operation.getVendorExtensions().put("x-codegen-response-empty-default", "true");
-    //             }
-    //             List<CodegenParameter> queryParams = operation.queryParams;
-    //             Boolean hasOptionalQueryParams = true;
-    //             Boolean hasStringParams = false;
-    //             for (final CodegenParameter param : queryParams) {
-    //                 if (getBooleanValue(param, CodegenConstants.IS_LIST_CONTAINER_EXT_NAME)
-    //                         && getBooleanValue(param.items, CodegenConstants.IS_STRING_EXT_NAME)) {
-    //                     param.getVendorExtensions().put("x-codegen-list-container-string", "true");
-    //                 }
-    //                 if (param.paramName.equals("total")) {
-    //                     param.getVendorExtensions().put("x-codegen-ignore", "true");
-    //                 }
-    //                 if (param.getRequired()) {
-    //                     hasOptionalQueryParams = false;
-    //                 }
-    //                 if (getBooleanValue(param, CodegenConstants.IS_STRING_EXT_NAME)
-    //                         || getBooleanValue(param, CodegenConstants.IS_UUID_EXT_NAME)) {
-    //                     hasStringParams = true;
-    //                 }
-    //             }
-    //             if (hasOptionalQueryParams) {
-    //                 operation.getVendorExtensions().put("x-codegen-has-optional-query-params", "true");
-    //             }
-    //             if (hasStringParams) {
-    //                 operation.getVendorExtensions().put("x-codegen-has-string-params", "true");
-    //             }
-
-    //         }
-    //     }
-    //     return objs;
-    // }
-
     @Override
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
 
-        /* if (property.datatype.equals("isize")) {
-            // needed for windows
-            //property.datatype = "i64";
-        } else */ if (property.datatype.equals("Override")) {
+        if (property.datatype.equals("Override")) {
             property.datatype = "ModelOverride";
         }
     }
-
-    //@Override
-    //public String toEnumVarName(String value, String datatype) {
-    //    String name = super.toEnumVarName(value, datatype);
-    //    if (name.length() == 0) {
-    //        return "EMPTY";
-    //    }
-    //    return name;
-    //}
 
     @Override
     public CodegenParameter fromRequestBody(RequestBody body, String name, Schema schema, Map<String, Schema> schemas,
@@ -764,32 +469,8 @@ public class PagerDutyCodegen extends RustServerCodegen {
             }
         }
 
-        // Needed because of the static call to `::from_json`, which requires an
-        // unqualified type
-        //if (schema instanceof ObjectSchema && param.getDataType().startsWith("HashMap")) {
-        //    param.getVendorExtensions().put(CodegenConstants.IS_MAP_CONTAINER_EXT_NAME, Boolean.TRUE);
-        //    param.getVendorExtensions().put(CodegenConstants.IS_CONTAINER_EXT_NAME, Boolean.TRUE);
-        //}
-
         return param;
     }
-
-    //@Override
-    //public void addParentContainer(CodegenModel codegenModel, String name, Schema schema) {
-    //    super.addParentContainer(codegenModel, name, schema);
-    //}
-
-    //@Override
-    //public CodegenResponse fromResponse(String responseCode, ApiResponse response) {
-
-    //    CodegenResponse res = super.fromResponse(responseCode, response);
-
-    //    if (res.getDataType() != null && res.getDataType().equals("SelectedActions")) {
-    //        res.dataType = "PutActionsSetAllowedActionsRepository";
-    //    }
-
-    //    return res;
-    //}
 
     String removeVerb(String opName) {
         if (opName.startsWith("Update")) {
@@ -804,36 +485,4 @@ public class PagerDutyCodegen extends RustServerCodegen {
             return opName;
         }
     }
-
-    //@Override
-    //public String getSchemaType(Schema property) {
-    //    String schemaType = super.getSchemaType(property);
-    //    if (schemaType != null) {
-    //        return schemaType.replace("UBUNTU", "ubuntu").replace("MACOS", "macos").replace("WINDOWS", "windows");
-    //    } else {
-    //        return null;
-    //    }
-    //}
-
-    //@Override
-    //public String toOperationId(String operationId) {
-    //    operationId = operationId.replaceFirst("[a-zA-Z0-9]+\\/", "");
-
-    //    return super.toOperationId(operationId);
-    //}
-
-    //@Override
-    //public void addHandlebarHelpers(Handlebars handlebars) {
-    //    super.addHandlebarHelpers(handlebars);
-    //    handlebars.registerHelpers(new IfCondHelper());
-    //}
-
-    //@Override
-    //public String toVarName(String name) {
-    //    if (name.equals("ref")) {
-    //        return "git_ref";
-    //    }
-
-    //    return super.toVarName(name);
-    //}
 }
