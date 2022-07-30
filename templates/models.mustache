@@ -95,7 +95,7 @@ pub type {{classname}} = Vec<{{arrayModelType}}>;
 {{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
 pub struct {{classname}} {     
-{{#vars}}{{#description}}    /// {{{.}}}
+{{#vars}}{{^vendorExtensions.x-rustgen-skip-prop}}{{#description}}    /// {{{.}}}
 {{/description}}{{^vendorExtensions.x-rustgen-serde-no-rename}}    #[serde(rename = "{{baseName}}")]
 {{/vendorExtensions.x-rustgen-serde-no-rename}}
     {{#vendorExtensions.x-rustgen-is-required ~}}
@@ -110,7 +110,7 @@ pub struct {{classname}} {
     #[serde(skip_serializing_if="Option::is_none")]
     pub {{name}}: Option<{{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}}>,
     {{/vendorExtensions.x-rustgen-is-required}}
-{{/vars}}
+{{/vendorExtensions.x-rustgen-skip-prop}}{{/vars}}
 }
 {{#vendorExtensions.x-rustgen-has-default-impl}}
 

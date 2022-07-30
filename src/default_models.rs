@@ -250,6 +250,12 @@ pub struct AddonReference {
     pub summary: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    /// The URL source of the Addon
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub src: Option<String>,
+    /// The user entered name of the Addon.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
     #[serde(rename = "type")]
     pub _type: AddonReferenceTypeEnum,
 }
@@ -262,6 +268,8 @@ impl Default for AddonReference {
             _self: Default::default(),
             summary: Default::default(),
             id: Default::default(),
+            src: Default::default(),
+            name: Default::default(),
             _type: Default::default(),
         }
     }
@@ -476,7 +484,7 @@ pub struct Alert {
     #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<AlertSeverityEnum>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integration: Option<Integration>,
+    pub integration: Option<IntegrationReference>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub body: Option<Body>,
 }
@@ -681,6 +689,71 @@ pub struct AlertCount {
     pub all: Option<isize>,
 }
 
+/// Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AlertGroupingParameters {     
+    /// The type of Alert Grouping. When `type` is `intelligent`, `config` can be omitted.
+    #[serde(rename = "type")]
+    pub _type: AlertGroupingParametersTypeEnum,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub config: Option<AlertGroupingParametersConfig>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum AlertGroupingParametersTypeEnum { 
+    #[serde(rename = "time")]
+    TIME,
+    #[serde(rename = "intelligent")]
+    INTELLIGENT,
+    #[serde(rename = "content_based")]
+    CONTENT_BASED,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for AlertGroupingParametersTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            AlertGroupingParametersTypeEnum::TIME => write!(f, "{}", "time"),
+            AlertGroupingParametersTypeEnum::INTELLIGENT => write!(f, "{}", "intelligent"),
+            AlertGroupingParametersTypeEnum::CONTENT_BASED => write!(f, "{}", "content_based"),
+            AlertGroupingParametersTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlertGroupingParametersTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "time" => Ok(AlertGroupingParametersTypeEnum::TIME),
+            "intelligent" => Ok(AlertGroupingParametersTypeEnum::INTELLIGENT),
+            "content_based" => Ok(AlertGroupingParametersTypeEnum::CONTENT_BASED),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for AlertGroupingParametersTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            AlertGroupingParametersTypeEnum::TIME => "time",
+            AlertGroupingParametersTypeEnum::INTELLIGENT => "intelligent",
+            AlertGroupingParametersTypeEnum::CONTENT_BASED => "content_based",
+            AlertGroupingParametersTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for AlertGroupingParametersTypeEnum {
+    fn default() -> Self {
+        AlertGroupingParametersTypeEnum::TIME
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AlertReference {     
     /// The label of the tag.
@@ -774,6 +847,111 @@ pub struct UpdateIncidentAlert {
     pub alert: Alert,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AllOfIncidentNoteUser {     
+    /// The label of the tag.
+    #[serde(default="AllOfIncidentNoteUser::label_default")]
+    pub label: String,
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "type")]
+    pub _type: AllOfIncidentNoteUserTypeEnum,
+}
+
+impl Default for AllOfIncidentNoteUser {
+    fn default() -> Self {
+        Self {
+            label: String::from("AllOfIncidentNoteUser"),
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
+            _type: Default::default(),
+        }
+    }
+}
+
+impl AllOfIncidentNoteUser {
+    fn label_default() -> String {
+        String::from("AllOfIncidentNoteUser")
+    }
+    fn _type_default() -> String {
+        String::from("all_of_incident_note_user")
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum AllOfIncidentNoteUserTypeEnum { 
+    #[serde(rename = "user_reference")]
+    USER_REFERENCE,
+    #[serde(rename = "bot_user_reference")]
+    BOT_USER_REFERENCE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for AllOfIncidentNoteUserTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            AllOfIncidentNoteUserTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
+            AllOfIncidentNoteUserTypeEnum::BOT_USER_REFERENCE => write!(f, "{}", "bot_user_reference"),
+            AllOfIncidentNoteUserTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllOfIncidentNoteUserTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "user_reference" => Ok(AllOfIncidentNoteUserTypeEnum::USER_REFERENCE),
+            "bot_user_reference" => Ok(AllOfIncidentNoteUserTypeEnum::BOT_USER_REFERENCE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for AllOfIncidentNoteUserTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            AllOfIncidentNoteUserTypeEnum::USER_REFERENCE => "user_reference",
+            AllOfIncidentNoteUserTypeEnum::BOT_USER_REFERENCE => "bot_user_reference",
+            AllOfIncidentNoteUserTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for AllOfIncidentNoteUserTypeEnum {
+    fn default() -> Self {
+        AllOfIncidentNoteUserTypeEnum::USER_REFERENCE
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AllOfOrchestrationUnroutedOrchestrationPathRulesActions {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AllOfServiceOrchestrationOrchestrationPathCatchAllActions {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AllOfServiceOrchestrationOrchestrationPathRulesActions {     
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AllOfWebhooksV1AssignedToObject {     
     #[serde(skip_serializing_if="Option::is_none")]
@@ -836,130 +1014,296 @@ impl std::default::Default for AllOfWebhooksV1AssignedToObjectTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AnalyticsIncidentMetrics {     
-    /// ID of the service.  Only included when aggregating by service.
+pub struct AllOfinlineResponse20036ChangeEventsItems {     
+    /// The time at which the emitting tool detected or generated the event.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_id: Option<String>,
-    /// Name of the service.  Only included when aggregating by service.
+    pub timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    /// The type of object being created.
+    #[serde(rename = "type")]
+    pub _type: AllOfinlineResponse20036ChangeEventsItemsTypeEnum,
+    /// An array containing Service objects that this change event is associated with.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_name: Option<String>,
-    /// ID of the team.  Only included when aggregating by team.
+    pub services: Option<Vec<ServiceReference>>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team_id: Option<String>,
-    /// Name of the team.  Only included when aggregating by team.
+    pub integration: Option<Value>,
+    /// This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team_name: Option<String>,
-    /// Mean time from when an incident was triggered until it was resolved.
+    pub routing_key: Option<String>,
+    /// A brief text summary of the event. Displayed in PagerDuty to provide information about the change. The maximum permitted length of this property is 1024 characters.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_resolve: Option<isize>,
-    /// Mean time between the start of an incident, and the first responder to acknowledge.
+    pub summary: Option<String>,
+    /// The unique name of the location where the Change Event occurred.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_first_ack: Option<isize>,
-    /// Mean time between the start of an incident, and the first responder to acknowledge, or to accept responder request.
+    pub source: Option<String>,
+    /// List of links to include.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_engage: Option<isize>,
-    /// Mean time between the start of an incident, and the last additional responder to acknowledge.  For incidents with one or less engaged users, this value is null.
+    pub links: Option<Vec<ChangeEventLinks>>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_seconds_to_mobilize: Option<isize>,
-    /// Mean number of users who engaged (acknowledged, accepted responder request) with an incident.
+    pub images: Option<Vec<ChangeEventImages>>,
+    /// Additional details about the change event.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mean_engaged_user_count: Option<isize>,
-    /// Total count of instances where an incident is escalated between responders assigned to an escalation policy.
+    pub custom_details: Option<HashMap<String, Value>>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_escalation_count: Option<isize>,
-    /// Total count of instances where an additional responder, who was not on-call for an incident, is added.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_assignment_count: Option<isize>,
-    /// Total number of unique interruptions during business hours. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_business_hour_interruptions: Option<isize>,
-    /// Total number of unique interruptions during sleep hours. Sleep hour: 10pm-8am every day, based on the user’s time zone.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_sleep_hour_interruptions: Option<isize>,
-    /// Total number of unique interruptions during off hours. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_off_hour_interruptions: Option<isize>,
-    /// Total number of seconds incidents were snoozed.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_snoozed_seconds: Option<isize>,
-    /// Total engaged time across all responders for incidents.  Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved.  This may include periods in which the incidents was snoozed.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub total_engaged_seconds: Option<isize>,
+    pub correlation_reason: Option<HashMap<String, Value>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum AllOfinlineResponse20036ChangeEventsItemsTypeEnum { 
+    #[serde(rename = "change_event")]
+    CHANGE_EVENT,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT => write!(f, "{}", "change_event"),
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "change_event" => Ok(AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT => "change_event",
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
+    fn default() -> Self {
+        AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT
+    }
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AnalyticsRawIncident {     
-    /// Incident Id
+pub struct AllOfrulesetsBodyRuleset {     
+    /// ID of the Ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    #[serde(rename = "type")]
+    pub _type: AllOfrulesetsBodyRulesetTypeEnum,
+    /// Name of the Ruleset.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub name: String,
+    /// Routing keys routed to this Ruleset.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub routing_keys: Option<Vec<String>>,
+    /// The date the Ruleset was created at.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub creator: Option<RulesetCreator>,
+    /// The date the Ruleset was last updated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updater: Option<RulesetUpdater>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub team: Option<RulesetTeam>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum AllOfrulesetsBodyRulesetTypeEnum { 
+    #[serde(rename = "global")]
+    GLOBAL,
+    #[serde(rename = "default_global")]
+    DEFAULT_GLOBAL,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for AllOfrulesetsBodyRulesetTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            AllOfrulesetsBodyRulesetTypeEnum::GLOBAL => write!(f, "{}", "global"),
+            AllOfrulesetsBodyRulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "{}", "default_global"),
+            AllOfrulesetsBodyRulesetTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllOfrulesetsBodyRulesetTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "global" => Ok(AllOfrulesetsBodyRulesetTypeEnum::GLOBAL),
+            "default_global" => Ok(AllOfrulesetsBodyRulesetTypeEnum::DEFAULT_GLOBAL),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for AllOfrulesetsBodyRulesetTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            AllOfrulesetsBodyRulesetTypeEnum::GLOBAL => "global",
+            AllOfrulesetsBodyRulesetTypeEnum::DEFAULT_GLOBAL => "default_global",
+            AllOfrulesetsBodyRulesetTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for AllOfrulesetsBodyRulesetTypeEnum {
+    fn default() -> Self {
+        AllOfrulesetsBodyRulesetTypeEnum::GLOBAL
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AnalyticsIncidentMetrics {     
+    /// Mean count of instances where responders were assigned an incident (including through reassignment or escalation) or accepted a responder request.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_assignment_count: Option<isize>,
+    /// Mean engaged time across all responders for incidents that match the given filters. Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved. This may include periods in which the incidents was snoozed.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_engaged_seconds: Option<isize>,
+    /// Mean number of users who engaged with an incident. *Engaged* is defined as acknowledging an incident or accepting a responder request in it.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_engaged_user_count: Option<isize>,
+    /// A measure of *people response time*. This metric measures the time from the first user engagement (acknowledge or responder accept) to the last. This metric is only used for incidents with **multiple responders**; for incidents with one or no engaged users, this value is null.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_seconds_to_engage: Option<isize>,
+    /// Mean time between the start of an incident, and the first responder to acknowledge.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_seconds_to_first_ack: Option<isize>,
+    /// Mean time between the start of an incident, and the last additional responder to acknowledge. For incidents with one or no engaged users, this value is null.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_seconds_to_mobilize: Option<isize>,
+    /// Mean time from when an incident was triggered until it was resolved.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub mean_seconds_to_resolve: Option<isize>,
+    /// ID of the service. Only included when aggregating by service.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_id: Option<String>,
+    /// Name of the service. Only included when aggregating by service.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub service_name: Option<String>,
     /// ID of the team the incident was assigned to.
     #[serde(skip_serializing_if="Option::is_none")]
     pub team_id: Option<String>,
-    /// ID of the service that the incident triggered on.
+    /// Name of the team the incident was assigned to.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_id: Option<String>,
-    /// Timestamp of when the incident was created.
+    pub team_name: Option<String>,
+    /// Total number of unique interruptions during business hours. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone. 
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<String>,
-    /// Timestamp of when the incident was resolved.
+    pub total_business_hour_interruptions: Option<isize>,
+    /// Total engaged time across all responders for incidents. Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved. This may include periods in which the incidents was snoozed.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resolved_at: Option<String>,
-    /// Notification level
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub urgency: Option<String>,
-    /// A major incident is defined as any incident that requires a coordinated response, often across multiple teams.  https://support.pagerduty.com/docs/operational-reviews#major-incidents
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub major: Option<bool>,
-    /// ID of the incident's priority level.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_id: Option<String>,
-    /// The user-provided short name of the priority.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_name: Option<String>,
-    /// The integer representation of the incident's priority level.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_order: Option<isize>,
-    /// Time from when incident triggered until it was resolved.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_resolve: Option<isize>,
-    /// Time between start of an incident, and the first responder to acknowledge.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_first_ack: Option<isize>,
-    /// Time between start of an incident, and the first responder to acknowledge, or to accept responder request.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_engage: Option<isize>,
-    /// Time between start of an incident, and the last additional responder to acknowledge.  If an incident has one or less responders, the value will be null.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub seconds_to_mobilize: Option<isize>,
-    /// Total engaged time across all responders for this incident.  Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved.  This may include periods in which the incident was snoozed.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub engaged_seconds: Option<isize>,
-    /// Total number of users who engaged (acknowledged, accepted responder request) in the incident.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub engaged_user_count: Option<isize>,
+    pub total_engaged_seconds: Option<isize>,
     /// Total count of instances where an incident is escalated between responders assigned to an escalation policy.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub escalation_count: Option<isize>,
-    /// Total count of instances where an additional responder, who was not on-call for the incident, is added.
+    pub total_escalation_count: Option<isize>,
+    /// The total number of incidents that were created.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_count: Option<isize>,
-    /// Total number of unique interruptions during business hour. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone.
+    pub total_incident_count: Option<isize>,
+    /// Total number of unique interruptions during off hours. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub business_hour_interruptions: Option<isize>,
-    /// Total number of unique interruptions during sleep hour. Sleep hour: 10pm-8am every day, based on the user’s time zone.
+    pub total_off_hour_interruptions: Option<isize>,
+    /// Total number of unique interruptions during sleep hours. Sleep hour: 10pm-8am every day, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sleep_hour_interruptions: Option<isize>,
-    /// Total number of unique interruptions during off hour. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.
+    pub total_sleep_hour_interruptions: Option<isize>,
+    /// Total number of seconds incidents were snoozed.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub off_hour_interruptions: Option<isize>,
-    /// Total seconds the incident has been snoozed for.
+    pub total_snoozed_seconds: Option<isize>,
+    /// The percentage of time in the defined date range that the service was not interrupted by a [major incident](https://support.pagerduty.com/docs/operational-reviews#major-incidents).
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snoozed_seconds: Option<isize>,
+    pub up_time_pct: Option<f64>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GetAnalyticsMetricsIncidentsTeam {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filters: Option<AnalyticsModelFilters>,
+    /// The time zone to use for the results and grouping.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub time_zone: Option<String>,
+    /// The time unit to aggregate metrics by.  If no value is provided, the metrics will be aggregated for the entire period.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub aggregate_unit: Option<GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum { 
+    #[serde(rename = "day")]
+    DAY,
+    #[serde(rename = "week")]
+    WEEK,
+    #[serde(rename = "month")]
+    MONTH,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => write!(f, "{}", "day"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => write!(f, "{}", "week"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => write!(f, "{}", "month"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "day" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY),
+            "week" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK),
+            "month" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => "day",
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => "week",
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => "month",
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
+    fn default() -> Self {
+        GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY
+    }
 }
 
 /// Accepts a set of filters to apply to the Incidents before aggregating.  Any incidents that do not match the included filters will be omitted from the results
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AnalyticsmetricsincidentsallFilters {     
+pub struct AnalyticsModelFilters {     
     /// Accepts an ISO8601 DateTime string.  Any incidents with a created_at less than this value will be omitted from the results.  The maximum supported time range in conjunction with created_at_end is one year.
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at_start: Option<String>,
@@ -968,19 +1312,16 @@ pub struct AnalyticsmetricsincidentsallFilters {
     pub created_at_end: Option<String>,
     /// Any incidents whose urgency does not match the provided string will be omitted from the results.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub urgency: Option<AnalyticsmetricsincidentsallFiltersUrgencyEnum>,
-    /// A boolean flag including whether results should contain only major incidents, or exclude major incidents. If no value is provided all incidents will be included. You can find more information on the major incident classification here: https://support.pagerduty.com/docs/operational-reviews#major-incidents
+    pub urgency: Option<AnalyticsModelFiltersUrgencyEnum>,
+    /// A boolean flag including whether results should contain *only* [major incidents](https://support.pagerduty.com/docs/operational-reviews#major-incidents), or exclude major incidents. If no value is provided all incidents will be included.
     #[serde(skip_serializing_if="Option::is_none")]
     pub major: Option<bool>,
-    /// An array of team IDs. Only incidents related to these teams will be included in the results. Account must have the teams ability to use this parameter.  Any teams that the requestor does not have access to will be omitted from the results.  If omitted, all teams the requestor has access to will be included in the results.
+    /// An array of team IDs. Only incidents related to these teams will be included in the results. If omitted, all teams the requestor has access to will be included in the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub team_ids: Option<Vec<String>>,
     /// An array of service IDs. Only incidents related to these services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub service_ids: Option<Vec<String>>,
-    /// An array of business service IDs. Only incidents related to these business services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub business_service_ids: Option<Vec<String>>,
     /// An array of priority IDs. Only incidents with these priorities will be included in the results. If omitted, all services the requestor has access to will be included in the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub priority_ids: Option<Vec<String>>,
@@ -992,7 +1333,7 @@ pub struct AnalyticsmetricsincidentsallFilters {
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum AnalyticsmetricsincidentsallFiltersUrgencyEnum { 
+pub enum AnalyticsModelFiltersUrgencyEnum { 
     #[serde(rename = "high")]
     HIGH,
     #[serde(rename = "low")]
@@ -1001,206 +1342,124 @@ pub enum AnalyticsmetricsincidentsallFiltersUrgencyEnum {
     UNKNOWN,
 }
 
-impl ::std::fmt::Display for AnalyticsmetricsincidentsallFiltersUrgencyEnum {
+impl ::std::fmt::Display for AnalyticsModelFiltersUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::LOW => write!(f, "{}", "low"),
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AnalyticsModelFiltersUrgencyEnum::HIGH => write!(f, "{}", "high"),
+            AnalyticsModelFiltersUrgencyEnum::LOW => write!(f, "{}", "low"),
+            AnalyticsModelFiltersUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
 }
 
-impl ::std::str::FromStr for AnalyticsmetricsincidentsallFiltersUrgencyEnum {
+impl ::std::str::FromStr for AnalyticsModelFiltersUrgencyEnum {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s { 
-            "high" => Ok(AnalyticsmetricsincidentsallFiltersUrgencyEnum::HIGH),
-            "low" => Ok(AnalyticsmetricsincidentsallFiltersUrgencyEnum::LOW),
+            "high" => Ok(AnalyticsModelFiltersUrgencyEnum::HIGH),
+            "low" => Ok(AnalyticsModelFiltersUrgencyEnum::LOW),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
 }
 
-impl ::std::convert::AsRef<str> for AnalyticsmetricsincidentsallFiltersUrgencyEnum {
+impl ::std::convert::AsRef<str> for AnalyticsModelFiltersUrgencyEnum {
     fn as_ref(&self) -> &str {
         match self { 
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::HIGH => "high",
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::LOW => "low",
-            AnalyticsmetricsincidentsallFiltersUrgencyEnum::UNKNOWN => "unknown"
+            AnalyticsModelFiltersUrgencyEnum::HIGH => "high",
+            AnalyticsModelFiltersUrgencyEnum::LOW => "low",
+            AnalyticsModelFiltersUrgencyEnum::UNKNOWN => "unknown"
         }
     }
 }
 
 // Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for AnalyticsmetricsincidentsallFiltersUrgencyEnum {
+impl std::default::Default for AnalyticsModelFiltersUrgencyEnum {
     fn default() -> Self {
-        AnalyticsmetricsincidentsallFiltersUrgencyEnum::HIGH
+        AnalyticsModelFiltersUrgencyEnum::HIGH
     }
 }
 
-/// Filters the result, only show incidents that match the conditions passed in the filter.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AnalyticsmetricsincidentsservicesFilters {     
-    /// Filters the result, showing only the incidents where the creation timestamp is greater than the filter value.
+pub struct AnalyticsRawIncident {     
+    /// Total count of instances where responders were assigned an incident (including through reassignment or escalation) or accepted a responder request.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at_start: Option<String>,
-    /// Filters the result, showing only the incidents where the creation timestamp is less than the filter value.
+    pub assignment_count: Option<isize>,
+    /// Total number of unique interruptions during business hour. Business hour: 8am-6pm Mon-Fri, based on the user’s time zone.  
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at_end: Option<String>,
-    /// Filters the result, showing only the incidents where urgency matches the filter value.
+    pub business_hour_interruptions: Option<isize>,
+    /// Timestamp of when the incident was created.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub urgency: Option<AnalyticsmetricsincidentsservicesFiltersUrgencyEnum>,
-    /// A major incident is defined as any incident that requires a coordinated response, often across multiple teams. https://support.pagerduty.com/docs/operational-reviews#major-incidents
+    pub created_at: Option<String>,
+    /// The incident description
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// Total engaged time across all responders for this incident.  Engaged time is measured from the time a user engages with an incident (by acknowledging or accepting a responder request) until the incident is resolved.  This may include periods in which the incident was snoozed.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub engaged_seconds: Option<isize>,
+    /// Total number of users who engaged (acknowledged, accepted responder request) in the incident.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub engaged_user_count: Option<isize>,
+    /// Total count of instances where an incident is escalated between responders assigned to an escalation policy.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub escalation_count: Option<isize>,
+    /// Incident ID
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The PagerDuty incident number
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub incident_number: Option<isize>,
+    /// An incident is classified as a [major incident](https://support.pagerduty.com/docs/operational-reviews#major-incidents) if it has one of the two highest priorities, or if multiple responders are added and acknowledge the incident.
     #[serde(skip_serializing_if="Option::is_none")]
     pub major: Option<bool>,
-    /// An array of team IDs. Only results related to these teams will be returned. Account must have the teams ability to use this parameter.
+    /// Total number of unique interruptions during off hour. Off hour: 6pm-10pm Mon-Fri and all day Sat-Sun, based on the user’s time zone.      
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team_ids: Option<Vec<String>>,
-    /// An array of service IDs. Only results related to these services will be returned.
+    pub off_hour_interruptions: Option<isize>,
+    /// ID of the incident's priority level.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_ids: Option<Vec<String>>,
-    /// An array of business service IDs. Only incidents related to these business services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
+    pub priority_id: Option<String>,
+    /// The user-provided short name of the priority.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub business_service_ids: Option<Vec<String>>,
-    /// The priority_ids filter applied to the results.
+    pub priority_name: Option<String>,
+    /// Timestamp of when the incident was resolved.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_ids: Option<Vec<String>>,
-    /// The user-defined priority names filter applied to the results.
+    pub resolved_at: Option<String>,
+    /// Time between start of an incident, and the first responder to acknowledge, or to accept responder request.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_names: Option<Vec<String>>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum AnalyticsmetricsincidentsservicesFiltersUrgencyEnum { 
-    #[serde(rename = "high")]
-    HIGH,
-    #[serde(rename = "low")]
-    LOW,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for AnalyticsmetricsincidentsservicesFiltersUrgencyEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::LOW => write!(f, "{}", "low"),
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for AnalyticsmetricsincidentsservicesFiltersUrgencyEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "high" => Ok(AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::HIGH),
-            "low" => Ok(AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::LOW),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for AnalyticsmetricsincidentsservicesFiltersUrgencyEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::HIGH => "high",
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::LOW => "low",
-            AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for AnalyticsmetricsincidentsservicesFiltersUrgencyEnum {
-    fn default() -> Self {
-        AnalyticsmetricsincidentsservicesFiltersUrgencyEnum::HIGH
-    }
-}
-
-/// Accepts a set of filters to apply to the Incidents before aggregating.  Any incidents that do not match the included filters will be omitted from the results
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AnalyticsmetricsincidentsteamsFilters {     
-    /// Accepts an ISO8601 DateTime string.  Any incidents with a created_at less than this value will be omitted from the results.  The maximum supported time range in conjunction with created_at_end is one year.
+    pub seconds_to_engage: Option<isize>,
+    /// Time between start of an incident, and the first responder to acknowledge.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at_start: Option<String>,
-    /// Accepts an ISO8601 DateTime string.  Any incidents with a created_at greater than or equal to this value will be omitted from the results.  The maximum supported time range in conjunction with created_at_start is one year.
+    pub seconds_to_first_ack: Option<isize>,
+    /// Time between start of an incident, and the last additional responder to acknowledge.  If an incident has one or less responders, the value will be null.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at_end: Option<String>,
-    /// Any incidents whose urgency does not match the provided string will be omitted from the results.
+    pub seconds_to_mobilize: Option<isize>,
+    /// Time from when incident triggered until it was resolved.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub urgency: Option<AnalyticsmetricsincidentsteamsFiltersUrgencyEnum>,
-    /// A boolean flag including whether results should contain only major incidents, or exclude major incidents. If no value is provided all incidents will be included. You can find more information on the major incident classification here: https://support.pagerduty.com/docs/operational-reviews#major-incidents
+    pub seconds_to_resolve: Option<isize>,
+    /// ID of the service that the incident triggered on.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub major: Option<bool>,
-    /// An array of team IDs. Only incidents related to these teams will be included in the results. Account must have the teams ability to use this parameter.  Any teams that the requestor does not have access to will be omitted from the results.  If omitted, all teams the requestor has access to will be included in the results.
+    pub service_id: Option<String>,
+    /// Name of the service that the incident triggered on.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team_ids: Option<Vec<String>>,
-    /// An array of service IDs. Only incidents related to these services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
+    pub service_name: Option<String>,
+    /// Total number of unique interruptions during sleep hour. Sleep hour: 10pm-8am every day, based on the user’s time zone.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_ids: Option<Vec<String>>,
-    /// An array of business service IDs. Only incidents related to these business services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
+    pub sleep_hour_interruptions: Option<isize>,
+    /// Total seconds the incident has been snoozed for.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub business_service_ids: Option<Vec<String>>,
-    /// An array of priority IDs. Only incidents with these priorities will be included in the results. If omitted, all teams the requestor has access to will be included in the results.
+    pub snoozed_seconds: Option<isize>,
+    /// ID of the team the incident was assigned to.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_ids: Option<Vec<String>>,
-    /// An array of user-defined priority names. Only incidents with these priorities will be included in the results. If omitted, all teams the requestor has access to will be included in the results.
+    pub team_id: Option<String>,
+    /// Name of the team the incident was assigned to.
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority_names: Option<Vec<String>>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum AnalyticsmetricsincidentsteamsFiltersUrgencyEnum { 
-    #[serde(rename = "high")]
-    HIGH,
-    #[serde(rename = "low")]
-    LOW,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for AnalyticsmetricsincidentsteamsFiltersUrgencyEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::LOW => write!(f, "{}", "low"),
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for AnalyticsmetricsincidentsteamsFiltersUrgencyEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "high" => Ok(AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::HIGH),
-            "low" => Ok(AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::LOW),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for AnalyticsmetricsincidentsteamsFiltersUrgencyEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::HIGH => "high",
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::LOW => "low",
-            AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for AnalyticsmetricsincidentsteamsFiltersUrgencyEnum {
-    fn default() -> Self {
-        AnalyticsmetricsincidentsteamsFiltersUrgencyEnum::HIGH
-    }
+    pub team_name: Option<String>,
+    /// Notification level
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub urgency: Option<String>,
+    /// The total response effort in seconds, [as defined by the user](https://support.pagerduty.com/docs/editing-incidents#edit-incident-duration).
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub user_defined_effort_seconds: Option<isize>,
 }
 
 /// Filters the result, only show incidents that match the conditions passed in the filter.
@@ -1215,7 +1474,7 @@ pub struct AnalyticsrawincidentsFilters {
     /// Filters the result, showing only the incidents where urgency matches the filter value.
     #[serde(skip_serializing_if="Option::is_none")]
     pub urgency: Option<String>,
-    /// A major incident is defined as any incident that requires a coordinated response, often across multiple teams. https://support.pagerduty.com/docs/operational-reviews#major-incidents
+    /// An incident is classified as a [major incident](https://support.pagerduty.com/docs/operational-reviews#major-incidents) if it has one of the two highest priorities, or if multiple responders are added and acknowledge the incident.
     #[serde(skip_serializing_if="Option::is_none")]
     pub major: Option<bool>,
     /// An array of team IDs. Only results related to these teams will be returned. Account must have the teams ability to use this parameter.
@@ -1224,15 +1483,24 @@ pub struct AnalyticsrawincidentsFilters {
     /// An array of service IDs. Only results related to these services will be returned.
     #[serde(skip_serializing_if="Option::is_none")]
     pub service_ids: Option<Vec<String>>,
-    /// An array of business service IDs. Only incidents related to these business services will be included in the results. If omitted, all services the requestor has access to will be included in the results.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub business_service_ids: Option<Vec<String>>,
     /// The priority_ids filter applied to the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub priority_ids: Option<Vec<String>>,
     /// The priority_names filter applied to the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub priority_names: Option<Vec<String>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AlertGroupingParametersConfig {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InlineResponse20037RelationshipsMetadata {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -1255,14 +1523,17 @@ pub struct AssignLogEntry {
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
     #[serde(skip_serializing_if="Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if="Option::is_none")]
     pub teams: Option<Vec<TeamReference>>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
+    /// An array of assigned Users for this log entry
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assigned_user: Option<UserReference>,
+    pub assignees: Option<Vec<UserReference>>,
 }
 
 
@@ -1318,6 +1589,139 @@ pub struct Assignment {
     pub assignee: UserReference,
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditMetadata {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub messages: Option<Vec<String>>,
+}
+
+/// An Audit Trail record
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecord {     
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub id: String,
+    /// Record URL.
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    /// The date/time the action executed, in ISO8601 format and millisecond precision.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_time: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub execution_context: Option<AuditRecordExecutionContext>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actors: Option<Vec<Reference>>,
+    pub method: AuditRecordMethod,
+    pub root_resource: Reference,
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub action: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub details: Option<AuditRecordDetails>,
+}
+
+/// Additional details to provide further information about the action or the resource that has been audited. 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordDetails {     
+    pub resource: Reference,
+    /// A set of fields that have been affected. The fields that have not been affected MAY be returned. 
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub fields: Option<Vec<AuditRecordDetailsFields>>,
+    /// A set of references that have been affected.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub references: Option<Vec<AuditRecordDetailsReferences>>,
+}
+
+/// Information about the affected field. When available, field's before and after values are returned:    #### Resource creation - `value` MAY be returned  #### Resource update - `value` MAY be returned - `before_value` MAY be returned  #### Resource deletion - `before_value` MAY be returned 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordDetailsFields {     
+    /// Name of the resource field
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub name: String,
+    /// Human readable description of the resource field
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// new or updated value of the field
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value: Option<String>,
+    /// previous or deleted value of the field
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub before_value: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordDetailsReferences {     
+    /// Name of the reference field
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub name: String,
+    /// Human readable description of the references field
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub added: Option<Vec<Reference>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub removed: Option<Vec<Reference>>,
+}
+
+/// Action execution context
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordExecutionContext {     
+    /// Request Id
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub request_id: Option<String>,
+    /// remote address
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub remote_address: Option<String>,
+}
+
+/// The method information
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordMethod {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// Truncated token containing the last 4 chars of the token's actual value.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub truncated_token: Option<String>,
+    #[serde(rename = "type")]
+    #[serde(default="AuditRecordMethod::_type_default")]
+    pub _type: String,
+}
+
+impl Default for AuditRecordMethod {
+    fn default() -> Self {
+        Self {
+            description: Default::default(),
+            truncated_token: Default::default(),
+            _type: String::from("audit_record_method"),
+        }
+    }
+}
+
+impl AuditRecordMethod {
+    fn _type_default() -> String {
+        String::from("audit_record_method")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuditRecordResponseSchema {     
+    /// The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+    pub limit: isize,
+    /// An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results. 
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub next_cursor: String,
+}
+
+/// Defines how alerts on this service are automatically suspended for a period of time before triggering, when identified as likely being transient. Note that automatically pausing notifications is only available on certain plans.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoPauseNotificationsParameters {     
+    /// Indicates whether alerts should be automatically suspended when identified as transient
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Indicates in seconds how long alerts should be suspended before triggering
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub timeout: Option<isize>,
+}
+
 /// A JSON object containing data describing the alert.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Body {     
@@ -1327,7 +1731,7 @@ pub struct Body {
     /// Contexts to be included with the body such as links to graphs or images.
     #[serde(skip_serializing_if="Option::is_none")]
     pub contexts: Option<Vec<Context>>,
-    /// An arbitrary JSON object containing any data explaining the nature of the alert.
+    /// An arbitrary JSON object or string containing any data explaining the nature of the alert.
     #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<HashMap<String, Value>>,
 }
@@ -1408,7 +1812,7 @@ pub struct BusinessService {
     #[serde(skip_serializing_if="Option::is_none")]
     pub point_of_contact: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team: Option<Team2>,
+    pub team: Option<Team3>,
 }
 
 impl Default for BusinessService {
@@ -1434,6 +1838,61 @@ impl BusinessService {
     }
     fn _type_default() -> String {
         String::from("business_service")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PutIncidentManualBusinessServiceAssociation {     
+    pub relation: PutIncidentManualBusinessServiceAssociationRelationEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum PutIncidentManualBusinessServiceAssociationRelationEnum { 
+    #[serde(rename = "impacted")]
+    IMPACTED,
+    #[serde(rename = "not_impacted")]
+    NOT_IMPACTED,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for PutIncidentManualBusinessServiceAssociationRelationEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED => write!(f, "{}", "impacted"),
+            PutIncidentManualBusinessServiceAssociationRelationEnum::NOT_IMPACTED => write!(f, "{}", "not_impacted"),
+            PutIncidentManualBusinessServiceAssociationRelationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PutIncidentManualBusinessServiceAssociationRelationEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "impacted" => Ok(PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED),
+            "not_impacted" => Ok(PutIncidentManualBusinessServiceAssociationRelationEnum::NOT_IMPACTED),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for PutIncidentManualBusinessServiceAssociationRelationEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED => "impacted",
+            PutIncidentManualBusinessServiceAssociationRelationEnum::NOT_IMPACTED => "not_impacted",
+            PutIncidentManualBusinessServiceAssociationRelationEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for PutIncidentManualBusinessServiceAssociationRelationEnum {
+    fn default() -> Self {
+        PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED
     }
 }
 
@@ -1531,16 +1990,16 @@ pub struct CreateBusinessService {
     pub business_service: Option<BusinessServicesBusinessService>,
 }
 
-/// The business service to be created
+/// The Business Service to be created
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BusinessServicesBusinessService {     
-    /// The name of the business service.
+    /// The name of the Business Service.
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
-    /// The description of the business service.
+    /// The description of the Business Service.
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
-    /// The owner of the business service.
+    /// The owner of the Business Service.
     #[serde(skip_serializing_if="Option::is_none")]
     pub point_of_contact: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1550,7 +2009,177 @@ pub struct BusinessServicesBusinessService {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateBusinessService {     
     #[serde(skip_serializing_if="Option::is_none")]
-    pub business_service: Option<BusinessServicesBusinessService>,
+    pub business_service: Option<BusinessServicesidBusinessService>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PutBusinessServicePriorityThresholds {     
+    pub global_threshold: BusinessServicespriorityThresholdsGlobalThreshold,
+}
+
+/// The Business Service to be created
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BusinessServicesidBusinessService {     
+    /// The name of the Business Service.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    /// The description of the Business Service.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// The owner of the Business Service.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub point_of_contact: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub team: Option<Team2>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BusinessServicespriorityThresholdsGlobalThreshold {     
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub id: String,
+    pub order: f64,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ChangeEvent {     
+    /// The label of the tag.
+    #[serde(default="ChangeEvent::label_default")]
+    pub label: String,
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The time at which the emitting tool detected or generated the event.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    /// The type of object being created.
+    #[serde(rename = "type")]
+    pub _type: ChangeEventTypeEnum,
+    /// An array containing Service objects that this change event is associated with.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub services: Option<Vec<ServiceReference>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub integration: Option<Value>,
+    /// This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub routing_key: Option<String>,
+    /// A brief text summary of the event. Displayed in PagerDuty to provide information about the change. The maximum permitted length of this property is 1024 characters.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub summary: Option<String>,
+    /// The unique name of the location where the Change Event occurred.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub source: Option<String>,
+    /// List of links to include.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub links: Option<Vec<ChangeEventLinks>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub images: Option<Vec<ChangeEventImages>>,
+    /// Additional details about the change event.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub custom_details: Option<HashMap<String, Value>>,
+}
+
+impl Default for ChangeEvent {
+    fn default() -> Self {
+        Self {
+            label: String::from("ChangeEvent"),
+            html_url: Default::default(),
+            _self: Default::default(),
+            id: Default::default(),
+            timestamp: Default::default(),
+            _type: Default::default(),
+            services: Default::default(),
+            integration: Default::default(),
+            routing_key: Default::default(),
+            summary: Default::default(),
+            source: Default::default(),
+            links: Default::default(),
+            images: Default::default(),
+            custom_details: Default::default(),
+        }
+    }
+}
+
+impl ChangeEvent {
+    fn label_default() -> String {
+        String::from("ChangeEvent")
+    }
+    fn _type_default() -> String {
+        String::from("change_event")
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ChangeEventTypeEnum { 
+    #[serde(rename = "change_event")]
+    CHANGE_EVENT,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ChangeEventTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ChangeEventTypeEnum::CHANGE_EVENT => write!(f, "{}", "change_event"),
+            ChangeEventTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeEventTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "change_event" => Ok(ChangeEventTypeEnum::CHANGE_EVENT),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ChangeEventTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ChangeEventTypeEnum::CHANGE_EVENT => "change_event",
+            ChangeEventTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ChangeEventTypeEnum {
+    fn default() -> Self {
+        ChangeEventTypeEnum::CHANGE_EVENT
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ChangeEventImages {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub src: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub href: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub alt: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ChangeEventLinks {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub href: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub text: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateChangeEvent {     
+    pub change_event: ChangeEvent,
 }
 
 /// Polymorphic object representation of the means by which the action was channeled. Has different formats depending on type, indicated by channel[type]. Will be one of `auto`, `email`, `api`, `nagios`, or `timeout` if `agent[type]` is `service`. Will be one of `email`, `sms`, `website`, `web_trigger`, or `note` if `agent[type]` is `user`. See [below](https://developer.pagerduty.com/documentation/rest/log_entries/show#channel_types) for detailed information about channel formats.
@@ -1560,12 +2189,12 @@ pub struct Channel {
     #[serde(rename = "type")]
     #[serde(default="Channel::_type_default")]
     pub _type: String,
-    /// user
     #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<HashMap<String, Value>>,
-    /// team
     #[serde(skip_serializing_if="Option::is_none")]
     pub team: Option<HashMap<String, Value>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub notification: Option<Notification>,
     /// channel
     #[serde(skip_serializing_if="Option::is_none")]
     pub channel: Option<HashMap<String, Value>>,
@@ -1577,6 +2206,7 @@ impl Default for Channel {
             _type: String::from("channel"),
             user: Default::default(),
             team: Default::default(),
+            notification: Default::default(),
             channel: Default::default(),
         }
     }
@@ -1814,6 +2444,62 @@ pub struct UpdateUserContactMethod {
     pub contact_method: ContactMethodsContactMethodIdBodyContactMethod,
 }
 
+/// The configuration for Content Based Alert Grouping
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ContentBasedAlertGroupingConfiguration {     
+    /// Whether Alerts should be grouped if `all` or `any` specified fields match. If `all` is selected, an exact match on every specified field name must occur for Alerts to be grouped. If `any` is selected, Alerts will be grouped when there is an exact match on at least one of the specified fields.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub aggregate: Option<ContentBasedAlertGroupingConfigurationAggregateEnum>,
+    /// The fields with which to group against. Depending on the aggregate, Alerts will group if some or all the fields match
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub fields: Option<Vec<Value>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ContentBasedAlertGroupingConfigurationAggregateEnum { 
+    #[serde(rename = "all, any")]
+    ALL_ANY,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ContentBasedAlertGroupingConfigurationAggregateEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY => write!(f, "{}", "all, any"),
+            ContentBasedAlertGroupingConfigurationAggregateEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentBasedAlertGroupingConfigurationAggregateEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "all, any" => Ok(ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ContentBasedAlertGroupingConfigurationAggregateEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY => "all, any",
+            ContentBasedAlertGroupingConfigurationAggregateEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ContentBasedAlertGroupingConfigurationAggregateEnum {
+    fn default() -> Self {
+        ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY
+    }
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Context {     
     /// The type of context being attached to the incident.
@@ -1878,6 +2564,15 @@ impl std::default::Default for ContextTypeEnum {
     fn default() -> Self {
         ContextTypeEnum::LINK
     }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CursorPagination {     
+    /// The minimum of the `limit` parameter used in the request or the maximum request size of the API.
+    pub limit: isize,
+    /// An opaque string than will deliver the next set of results when provided as the `cursor` parameter in a subsequent request.  A `null` value for this field indicates that there are no additional results. 
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub next_cursor: String,
 }
 
 /// The Email Contact Method of the User.
@@ -1955,6 +2650,191 @@ impl ::std::convert::AsRef<str> for EmailContactMethodTypeEnum {
 impl std::default::Default for EmailContactMethodTypeEnum {
     fn default() -> Self {
         EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EmailParser {     
+    pub action: EmailParserActionEnum,
+    pub match_predicate: MatchPredicate,
+    /// Additional values that will be pulled in to the Incident object. Exactly one value extractor must have a `value_name` of `incident_key`.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value_extractors: Option<Vec<EmailParserValueExtractors>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EmailParserActionEnum { 
+    #[serde(rename = "trigger")]
+    TRIGGER,
+    #[serde(rename = "resolve")]
+    RESOLVE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EmailParserActionEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EmailParserActionEnum::TRIGGER => write!(f, "{}", "trigger"),
+            EmailParserActionEnum::RESOLVE => write!(f, "{}", "resolve"),
+            EmailParserActionEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmailParserActionEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "trigger" => Ok(EmailParserActionEnum::TRIGGER),
+            "resolve" => Ok(EmailParserActionEnum::RESOLVE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EmailParserActionEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EmailParserActionEnum::TRIGGER => "trigger",
+            EmailParserActionEnum::RESOLVE => "resolve",
+            EmailParserActionEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EmailParserActionEnum {
+    fn default() -> Self {
+        EmailParserActionEnum::TRIGGER
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EmailParserValueExtractors {     
+    #[serde(rename = "type")]
+    pub _type: EmailParserValueExtractorsTypeEnum,
+    pub part: EmailParserValueExtractorsPartEnum,
+    /// The field name to set in the Incident object. Exactly one must use the `value_name` of `incident_key`
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub value_name: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub regex: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub starts_after: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub ends_with: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EmailParserValueExtractorsTypeEnum { 
+    #[serde(rename = "entire")]
+    ENTIRE,
+    #[serde(rename = "regex")]
+    REGEX,
+    #[serde(rename = "between")]
+    BETWEEN,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EmailParserValueExtractorsTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EmailParserValueExtractorsTypeEnum::ENTIRE => write!(f, "{}", "entire"),
+            EmailParserValueExtractorsTypeEnum::REGEX => write!(f, "{}", "regex"),
+            EmailParserValueExtractorsTypeEnum::BETWEEN => write!(f, "{}", "between"),
+            EmailParserValueExtractorsTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmailParserValueExtractorsTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "entire" => Ok(EmailParserValueExtractorsTypeEnum::ENTIRE),
+            "regex" => Ok(EmailParserValueExtractorsTypeEnum::REGEX),
+            "between" => Ok(EmailParserValueExtractorsTypeEnum::BETWEEN),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EmailParserValueExtractorsTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EmailParserValueExtractorsTypeEnum::ENTIRE => "entire",
+            EmailParserValueExtractorsTypeEnum::REGEX => "regex",
+            EmailParserValueExtractorsTypeEnum::BETWEEN => "between",
+            EmailParserValueExtractorsTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EmailParserValueExtractorsTypeEnum {
+    fn default() -> Self {
+        EmailParserValueExtractorsTypeEnum::ENTIRE
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EmailParserValueExtractorsPartEnum { 
+    #[serde(rename = "body")]
+    BODY,
+    #[serde(rename = "subject")]
+    SUBJECT,
+    #[serde(rename = "from_addresses")]
+    FROM_ADDRESSES,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EmailParserValueExtractorsPartEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EmailParserValueExtractorsPartEnum::BODY => write!(f, "{}", "body"),
+            EmailParserValueExtractorsPartEnum::SUBJECT => write!(f, "{}", "subject"),
+            EmailParserValueExtractorsPartEnum::FROM_ADDRESSES => write!(f, "{}", "from_addresses"),
+            EmailParserValueExtractorsPartEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmailParserValueExtractorsPartEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "body" => Ok(EmailParserValueExtractorsPartEnum::BODY),
+            "subject" => Ok(EmailParserValueExtractorsPartEnum::SUBJECT),
+            "from_addresses" => Ok(EmailParserValueExtractorsPartEnum::FROM_ADDRESSES),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EmailParserValueExtractorsPartEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EmailParserValueExtractorsPartEnum::BODY => "body",
+            EmailParserValueExtractorsPartEnum::SUBJECT => "subject",
+            EmailParserValueExtractorsPartEnum::FROM_ADDRESSES => "from_addresses",
+            EmailParserValueExtractorsPartEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EmailParserValueExtractorsPartEnum {
+    fn default() -> Self {
+        EmailParserValueExtractorsPartEnum::BODY
     }
 }
 
@@ -2076,14 +2956,17 @@ pub struct EscalateLogEntry {
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
     #[serde(skip_serializing_if="Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if="Option::is_none")]
     pub teams: Option<Vec<TeamReference>>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
+    /// An array of assigned Users for this log entry
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assigned_user: Option<UserReference>,
+    pub assignees: Option<Vec<UserReference>>,
 }
 
 
@@ -2506,6 +3389,522 @@ impl std::default::Default for EscalationTargetReferenceTypeEnum {
     }
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateOrchestration {     
+    pub orchestration: Orchestration,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PostOrchestration {     
+    pub orchestration: Orchestration,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRule {     
+    /// Position/index of the Event Rule in the Ruleset.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching rule is found.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub position: Option<isize>,
+    /// Indicates whether the Event Rule is the last Event Rule of the Ruleset that serves as a catch-all. It has limited functionality compared to other rules and always matches.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub catch_all: Option<bool>,
+    /// When an event matches this rule, the actions that will be taken to change the resulting alert and incident.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<Value>,
+}
+
+/// When an event matches this Event Rule, the actions that will be taken to change the resulting Alert and Incident.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommon {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub annotate: Option<EventRuleActionsCommonAnnotate>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub event_action: Option<EventRuleActionsCommonEventAction>,
+    /// Dynamically extract values to set and modify new and existing PD-CEF fields.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub extractions: Option<Vec<EventRuleActionsCommonExtractionsItems>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub priority: Option<EventRuleActionsCommonPriority>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub severity: Option<EventRuleActionsCommonSeverity>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub suppress: Option<EventRuleActionsCommonSuppress>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub suspend: Option<EventRuleActionsCommonSuspend>,
+}
+
+/// Set a note on the resulting incident.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonAnnotate {     
+    /// The content of the note.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub value: String,
+}
+
+/// Set whether the resulting alert status is trigger or resolve.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonEventAction {     
+    pub value: EventRuleActionsCommonEventActionValueEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleActionsCommonEventActionValueEnum { 
+    #[serde(rename = "trigger")]
+    TRIGGER,
+    #[serde(rename = "resolve")]
+    RESOLVE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleActionsCommonEventActionValueEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleActionsCommonEventActionValueEnum::TRIGGER => write!(f, "{}", "trigger"),
+            EventRuleActionsCommonEventActionValueEnum::RESOLVE => write!(f, "{}", "resolve"),
+            EventRuleActionsCommonEventActionValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleActionsCommonEventActionValueEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "trigger" => Ok(EventRuleActionsCommonEventActionValueEnum::TRIGGER),
+            "resolve" => Ok(EventRuleActionsCommonEventActionValueEnum::RESOLVE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleActionsCommonEventActionValueEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleActionsCommonEventActionValueEnum::TRIGGER => "trigger",
+            EventRuleActionsCommonEventActionValueEnum::RESOLVE => "resolve",
+            EventRuleActionsCommonEventActionValueEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleActionsCommonEventActionValueEnum {
+    fn default() -> Self {
+        EventRuleActionsCommonEventActionValueEnum::TRIGGER
+    }
+}
+
+/// Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonPriority {     
+    /// The priority ID.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub value: String,
+}
+
+/// Set the severity of the resulting alert.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonSeverity {     
+    pub value: EventRuleActionsCommonSeverityValueEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleActionsCommonSeverityValueEnum { 
+    #[serde(rename = "info")]
+    INFO,
+    #[serde(rename = "warning")]
+    WARNING,
+    #[serde(rename = "error")]
+    ERROR,
+    #[serde(rename = "critical")]
+    CRITICAL,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleActionsCommonSeverityValueEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleActionsCommonSeverityValueEnum::INFO => write!(f, "{}", "info"),
+            EventRuleActionsCommonSeverityValueEnum::WARNING => write!(f, "{}", "warning"),
+            EventRuleActionsCommonSeverityValueEnum::ERROR => write!(f, "{}", "error"),
+            EventRuleActionsCommonSeverityValueEnum::CRITICAL => write!(f, "{}", "critical"),
+            EventRuleActionsCommonSeverityValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleActionsCommonSeverityValueEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "info" => Ok(EventRuleActionsCommonSeverityValueEnum::INFO),
+            "warning" => Ok(EventRuleActionsCommonSeverityValueEnum::WARNING),
+            "error" => Ok(EventRuleActionsCommonSeverityValueEnum::ERROR),
+            "critical" => Ok(EventRuleActionsCommonSeverityValueEnum::CRITICAL),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleActionsCommonSeverityValueEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleActionsCommonSeverityValueEnum::INFO => "info",
+            EventRuleActionsCommonSeverityValueEnum::WARNING => "warning",
+            EventRuleActionsCommonSeverityValueEnum::ERROR => "error",
+            EventRuleActionsCommonSeverityValueEnum::CRITICAL => "critical",
+            EventRuleActionsCommonSeverityValueEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleActionsCommonSeverityValueEnum {
+    fn default() -> Self {
+        EventRuleActionsCommonSeverityValueEnum::INFO
+    }
+}
+
+/// Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonSuppress {     
+    pub value: bool,
+    /// The number of occurences needed during the window of time to trigger the theshold.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub threshold_value: Option<isize>,
+    /// The time unit for the window of time.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub threshold_time_unit: Option<EventRuleActionsCommonSuppressThresholdTimeUnitEnum>,
+    /// The amount of time units for the window of time.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub threshold_time_amount: Option<isize>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleActionsCommonSuppressThresholdTimeUnitEnum { 
+    #[serde(rename = "seconds")]
+    SECONDS,
+    #[serde(rename = "minutes")]
+    MINUTES,
+    #[serde(rename = "hours")]
+    HOURS,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS => write!(f, "{}", "seconds"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::MINUTES => write!(f, "{}", "minutes"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::HOURS => write!(f, "{}", "hours"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "seconds" => Ok(EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS),
+            "minutes" => Ok(EventRuleActionsCommonSuppressThresholdTimeUnitEnum::MINUTES),
+            "hours" => Ok(EventRuleActionsCommonSuppressThresholdTimeUnitEnum::HOURS),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS => "seconds",
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::MINUTES => "minutes",
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::HOURS => "hours",
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
+    fn default() -> Self {
+        EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS
+    }
+}
+
+/// Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonSuspend {     
+    /// The amount of time to suspend the alert in seconds.
+    pub value: isize,
+}
+
+/// Conditions evaluated to check if an event matches this Event Rule. Is always empty for the catch_all rule, though.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleConditions {     
+    /// Operator to combine sub-conditions.
+    pub operator: EventRuleConditionsOperatorEnum,
+    /// Array of sub-conditions.
+    pub subconditions: Vec<EventRuleConditionsSubconditions>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleConditionsOperatorEnum { 
+    #[serde(rename = "and")]
+    AND,
+    #[serde(rename = "or")]
+    OR,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleConditionsOperatorEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleConditionsOperatorEnum::AND => write!(f, "{}", "and"),
+            EventRuleConditionsOperatorEnum::OR => write!(f, "{}", "or"),
+            EventRuleConditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleConditionsOperatorEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "and" => Ok(EventRuleConditionsOperatorEnum::AND),
+            "or" => Ok(EventRuleConditionsOperatorEnum::OR),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleConditionsOperatorEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleConditionsOperatorEnum::AND => "and",
+            EventRuleConditionsOperatorEnum::OR => "or",
+            EventRuleConditionsOperatorEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleConditionsOperatorEnum {
+    fn default() -> Self {
+        EventRuleConditionsOperatorEnum::AND
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleConditionsParameters {     
+    /// Path to a field in an event, in dot-notation.  For Event Rules on a serivce, this will have to be a PD-CEF field.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub path: String,
+    /// Value to apply to the operator.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub value: String,
+    /// Options to configure the operator.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub options: Option<HashMap<String, Value>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleConditionsSubconditions {     
+    /// The type of operator to apply.
+    pub operator: EventRuleConditionsSubconditionsOperatorEnum,
+    pub parameters: EventRuleConditionsParameters,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleConditionsSubconditionsOperatorEnum { 
+    #[serde(rename = "exists")]
+    EXISTS,
+    #[serde(rename = "nexists")]
+    NEXISTS,
+    #[serde(rename = "equals")]
+    EQUALS,
+    #[serde(rename = "nequals")]
+    NEQUALS,
+    #[serde(rename = "contains")]
+    CONTAINS,
+    #[serde(rename = "ncontains")]
+    NCONTAINS,
+    #[serde(rename = "matches")]
+    MATCHES,
+    #[serde(rename = "nmatches")]
+    NMATCHES,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleConditionsSubconditionsOperatorEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleConditionsSubconditionsOperatorEnum::EXISTS => write!(f, "{}", "exists"),
+            EventRuleConditionsSubconditionsOperatorEnum::NEXISTS => write!(f, "{}", "nexists"),
+            EventRuleConditionsSubconditionsOperatorEnum::EQUALS => write!(f, "{}", "equals"),
+            EventRuleConditionsSubconditionsOperatorEnum::NEQUALS => write!(f, "{}", "nequals"),
+            EventRuleConditionsSubconditionsOperatorEnum::CONTAINS => write!(f, "{}", "contains"),
+            EventRuleConditionsSubconditionsOperatorEnum::NCONTAINS => write!(f, "{}", "ncontains"),
+            EventRuleConditionsSubconditionsOperatorEnum::MATCHES => write!(f, "{}", "matches"),
+            EventRuleConditionsSubconditionsOperatorEnum::NMATCHES => write!(f, "{}", "nmatches"),
+            EventRuleConditionsSubconditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleConditionsSubconditionsOperatorEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "exists" => Ok(EventRuleConditionsSubconditionsOperatorEnum::EXISTS),
+            "nexists" => Ok(EventRuleConditionsSubconditionsOperatorEnum::NEXISTS),
+            "equals" => Ok(EventRuleConditionsSubconditionsOperatorEnum::EQUALS),
+            "nequals" => Ok(EventRuleConditionsSubconditionsOperatorEnum::NEQUALS),
+            "contains" => Ok(EventRuleConditionsSubconditionsOperatorEnum::CONTAINS),
+            "ncontains" => Ok(EventRuleConditionsSubconditionsOperatorEnum::NCONTAINS),
+            "matches" => Ok(EventRuleConditionsSubconditionsOperatorEnum::MATCHES),
+            "nmatches" => Ok(EventRuleConditionsSubconditionsOperatorEnum::NMATCHES),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleConditionsSubconditionsOperatorEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleConditionsSubconditionsOperatorEnum::EXISTS => "exists",
+            EventRuleConditionsSubconditionsOperatorEnum::NEXISTS => "nexists",
+            EventRuleConditionsSubconditionsOperatorEnum::EQUALS => "equals",
+            EventRuleConditionsSubconditionsOperatorEnum::NEQUALS => "nequals",
+            EventRuleConditionsSubconditionsOperatorEnum::CONTAINS => "contains",
+            EventRuleConditionsSubconditionsOperatorEnum::NCONTAINS => "ncontains",
+            EventRuleConditionsSubconditionsOperatorEnum::MATCHES => "matches",
+            EventRuleConditionsSubconditionsOperatorEnum::NMATCHES => "nmatches",
+            EventRuleConditionsSubconditionsOperatorEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleConditionsSubconditionsOperatorEnum {
+    fn default() -> Self {
+        EventRuleConditionsSubconditionsOperatorEnum::EXISTS
+    }
+}
+
+/// The parameters for performing the operation to populate the
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleParameters {     
+    /// The value for the operation. For example, an RE2 regular expression for regex-type variables.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub value: String,
+    /// Path to a field in an event, in dot-notation. For Event Rules on a Service, this will have to be a PD-CEF field.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub path: String,
+}
+
+/// Time-based conditions for limiting when the rule is active.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleTimeFrame {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active_between: Option<EventRuleTimeFrameActiveBetween>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub scheduled_weekly: Option<EventRuleTimeFrameScheduledWeekly>,
+}
+
+/// A fixed window of time during which the rule is active.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleTimeFrameActiveBetween {     
+    /// The start time in milliseconds.
+    pub start_time: isize,
+    /// End time in milliseconds.
+    pub end_time: isize,
+}
+
+/// A reccuring window of time based on the day of the week, during which the rule is active.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleTimeFrameScheduledWeekly {     
+    /// The amount of milliseconds into the day at which the window starts.
+    pub start_time: isize,
+    /// The duration of the window in milliseconds.
+    pub duration: isize,
+    /// The timezone.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub timezone: String,
+    /// An array of day values. Ex [1, 3, 5] is Monday, Wednesday, Friday.
+    pub weekdays: Vec<i32>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleVariables {     
+    /// The type of operation to populate the variable.
+    #[serde(rename = "type")]
+    pub _type: EventRuleVariablesTypeEnum,
+    /// The name of the variable.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub name: String,
+    pub parameters: EventRuleParameters,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum EventRuleVariablesTypeEnum { 
+    #[serde(rename = "regex")]
+    REGEX,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for EventRuleVariablesTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            EventRuleVariablesTypeEnum::REGEX => write!(f, "{}", "regex"),
+            EventRuleVariablesTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventRuleVariablesTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "regex" => Ok(EventRuleVariablesTypeEnum::REGEX),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for EventRuleVariablesTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            EventRuleVariablesTypeEnum::REGEX => "regex",
+            EventRuleVariablesTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for EventRuleVariablesTypeEnum {
+    fn default() -> Self {
+        EventRuleVariablesTypeEnum::REGEX
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Extension {     
     /// The label of the tag.
@@ -2726,7 +4125,7 @@ pub struct ExtensionSchema {
     pub guide_url: Option<String>,
     /// The types of PagerDuty incident events that will activate this Extension
     #[serde(skip_serializing_if="Option::is_none")]
-    pub send_types: Option<ExtensionSchemaSendTypesEnum>,
+    pub send_types: Option<Vec<String>>,
     /// The url that the webhook payload will be sent to for this Extension.
     #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
@@ -2750,86 +4149,6 @@ impl Default for ExtensionSchema {
 impl ExtensionSchema {
     fn label_default() -> String {
         String::from("ExtensionSchema")
-    }
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum ExtensionSchemaSendTypesEnum { 
-    #[serde(rename = "trigger")]
-    TRIGGER,
-    #[serde(rename = "acknowledge")]
-    ACKNOWLEDGE,
-    #[serde(rename = "resolve")]
-    RESOLVE,
-    #[serde(rename = "delegate")]
-    DELEGATE,
-    #[serde(rename = "escalate")]
-    ESCALATE,
-    #[serde(rename = "unacknowledge")]
-    UNACKNOWLEDGE,
-    #[serde(rename = "assign")]
-    ASSIGN,
-    #[serde(rename = "custom")]
-    CUSTOM,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for ExtensionSchemaSendTypesEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            ExtensionSchemaSendTypesEnum::TRIGGER => write!(f, "{}", "trigger"),
-            ExtensionSchemaSendTypesEnum::ACKNOWLEDGE => write!(f, "{}", "acknowledge"),
-            ExtensionSchemaSendTypesEnum::RESOLVE => write!(f, "{}", "resolve"),
-            ExtensionSchemaSendTypesEnum::DELEGATE => write!(f, "{}", "delegate"),
-            ExtensionSchemaSendTypesEnum::ESCALATE => write!(f, "{}", "escalate"),
-            ExtensionSchemaSendTypesEnum::UNACKNOWLEDGE => write!(f, "{}", "unacknowledge"),
-            ExtensionSchemaSendTypesEnum::ASSIGN => write!(f, "{}", "assign"),
-            ExtensionSchemaSendTypesEnum::CUSTOM => write!(f, "{}", "custom"),
-            ExtensionSchemaSendTypesEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for ExtensionSchemaSendTypesEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "trigger" => Ok(ExtensionSchemaSendTypesEnum::TRIGGER),
-            "acknowledge" => Ok(ExtensionSchemaSendTypesEnum::ACKNOWLEDGE),
-            "resolve" => Ok(ExtensionSchemaSendTypesEnum::RESOLVE),
-            "delegate" => Ok(ExtensionSchemaSendTypesEnum::DELEGATE),
-            "escalate" => Ok(ExtensionSchemaSendTypesEnum::ESCALATE),
-            "unacknowledge" => Ok(ExtensionSchemaSendTypesEnum::UNACKNOWLEDGE),
-            "assign" => Ok(ExtensionSchemaSendTypesEnum::ASSIGN),
-            "custom" => Ok(ExtensionSchemaSendTypesEnum::CUSTOM),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for ExtensionSchemaSendTypesEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            ExtensionSchemaSendTypesEnum::TRIGGER => "trigger",
-            ExtensionSchemaSendTypesEnum::ACKNOWLEDGE => "acknowledge",
-            ExtensionSchemaSendTypesEnum::RESOLVE => "resolve",
-            ExtensionSchemaSendTypesEnum::DELEGATE => "delegate",
-            ExtensionSchemaSendTypesEnum::ESCALATE => "escalate",
-            ExtensionSchemaSendTypesEnum::UNACKNOWLEDGE => "unacknowledge",
-            ExtensionSchemaSendTypesEnum::ASSIGN => "assign",
-            ExtensionSchemaSendTypesEnum::CUSTOM => "custom",
-            ExtensionSchemaSendTypesEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for ExtensionSchemaSendTypesEnum {
-    fn default() -> Self {
-        ExtensionSchemaSendTypesEnum::TRIGGER
     }
 }
 
@@ -2931,6 +4250,74 @@ pub struct UpdateExtension {
     pub extension: Extension,
 }
 
+/// A rule for contacting the user for Handoff Notifications.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HandoffNotificationRule {     
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub id: String,
+    /// The delay before firing the rule, in minutes.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub notify_advance_in_minutes: Option<usize>,
+    /// The type of handoff being created.
+    pub handoff_type: HandoffNotificationRuleHandoffTypeEnum,
+    pub contact_method: ContactMethodReference,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum HandoffNotificationRuleHandoffTypeEnum { 
+    #[serde(rename = "both")]
+    BOTH,
+    #[serde(rename = "oncall")]
+    ONCALL,
+    #[serde(rename = "offcall")]
+    OFFCALL,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for HandoffNotificationRuleHandoffTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            HandoffNotificationRuleHandoffTypeEnum::BOTH => write!(f, "{}", "both"),
+            HandoffNotificationRuleHandoffTypeEnum::ONCALL => write!(f, "{}", "oncall"),
+            HandoffNotificationRuleHandoffTypeEnum::OFFCALL => write!(f, "{}", "offcall"),
+            HandoffNotificationRuleHandoffTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandoffNotificationRuleHandoffTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "both" => Ok(HandoffNotificationRuleHandoffTypeEnum::BOTH),
+            "oncall" => Ok(HandoffNotificationRuleHandoffTypeEnum::ONCALL),
+            "offcall" => Ok(HandoffNotificationRuleHandoffTypeEnum::OFFCALL),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for HandoffNotificationRuleHandoffTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            HandoffNotificationRuleHandoffTypeEnum::BOTH => "both",
+            HandoffNotificationRuleHandoffTypeEnum::ONCALL => "oncall",
+            HandoffNotificationRuleHandoffTypeEnum::OFFCALL => "offcall",
+            HandoffNotificationRuleHandoffTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for HandoffNotificationRuleHandoffTypeEnum {
+    fn default() -> Self {
+        HandoffNotificationRuleHandoffTypeEnum::BOTH
+    }
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateIncidentAlerts {     
     /// An array of alerts, including the parameters to update for each alert.
@@ -2971,7 +4358,7 @@ pub struct MergeIncidents {
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateIncidentNote {     
-    pub note: IncidentNote,
+    pub note: IncidentsidnotesNote,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -2980,9 +4367,24 @@ pub struct CreateUserNotificationRule {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateTeamNotificationSubscriptions {     
+    pub subscribables: Vec<NotificationSubscribable>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateUserNotificationSubscriptions {     
+    pub subscribables: Vec<NotificationSubscribable>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateUserHandoffNotificationRule {     
+    pub oncall_handoff_notification_rule: HandoffNotificationRule,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateScheduleOverride {     
-    #[serde(rename = "override")]
-    pub _override: ModelOverride,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub overrides: Option<Vec<ModelOverride>>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -2999,7 +4401,12 @@ pub struct CreateIncidentResponderRequest {
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateRulesetEventRule {     
-    pub rule: RulesetsidrulesRule,
+    pub rule: EventRule,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateServiceEventRule {     
+    pub rule: ServiceEventRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -3010,7 +4417,7 @@ pub struct CreateIncidentSnooze {
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateUserStatusUpdateNotificationRule {     
-    pub status_update_notification_rule: UsersidstatusUpdateNotificationRulesStatusUpdateNotificationRule,
+    pub status_update_notification_rule: StatusUpdateNotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -3018,6 +4425,202 @@ pub struct CreateIncidentStatusUpdate {
     /// The message to be posted as a status update.
     #[serde(skip_serializing_if="String::is_empty")]
     pub message: String,
+    /// The subject to be sent for the custom html email status update. Required if sending custom html email.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subject: Option<String>,
+    /// The html content to be sent for the custom html email status update. Required if sending custom html email.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub html_message: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateBusinessServiceNotificationSubscribers {     
+    pub subscribers: Vec<NotificationSubscriber>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RemoveBusinessServiceNotificationSubscriber {     
+    pub subscribers: Vec<NotificationSubscriber>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Impact {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    /// The kind of object that has been impacted
+    #[serde(rename = "type")]
+    pub _type: ImpactTypeEnum,
+    /// The current impact status of the object
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<ImpactStatusEnum>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub additional_fields: Option<ImpactAdditionalFields>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ImpactTypeEnum { 
+    #[serde(rename = "business_service")]
+    BUSINESS_SERVICE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ImpactTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ImpactTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
+            ImpactTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImpactTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "business_service" => Ok(ImpactTypeEnum::BUSINESS_SERVICE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ImpactTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ImpactTypeEnum::BUSINESS_SERVICE => "business_service",
+            ImpactTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ImpactTypeEnum {
+    fn default() -> Self {
+        ImpactTypeEnum::BUSINESS_SERVICE
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ImpactStatusEnum { 
+    #[serde(rename = "impacted")]
+    IMPACTED,
+    #[serde(rename = "not_impacted")]
+    NOT_IMPACTED,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ImpactStatusEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ImpactStatusEnum::IMPACTED => write!(f, "{}", "impacted"),
+            ImpactStatusEnum::NOT_IMPACTED => write!(f, "{}", "not_impacted"),
+            ImpactStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImpactStatusEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "impacted" => Ok(ImpactStatusEnum::IMPACTED),
+            "not_impacted" => Ok(ImpactStatusEnum::NOT_IMPACTED),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ImpactStatusEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ImpactStatusEnum::IMPACTED => "impacted",
+            ImpactStatusEnum::NOT_IMPACTED => "not_impacted",
+            ImpactStatusEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ImpactStatusEnum {
+    fn default() -> Self {
+        ImpactStatusEnum::IMPACTED
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImpactAdditionalFields {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub highest_impacting_priority: Option<ImpactAdditionalFieldsHighestImpactingPriority>,
+}
+
+/// Priority information for the highest priority level that is affecting the impacted object.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ImpactAdditionalFieldsHighestImpactingPriority {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub order: Option<isize>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Impactor {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The kind of object that is impacting
+    #[serde(rename = "type")]
+    pub _type: ImpactorTypeEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ImpactorTypeEnum { 
+    #[serde(rename = "incident")]
+    INCIDENT,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ImpactorTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ImpactorTypeEnum::INCIDENT => write!(f, "{}", "incident"),
+            ImpactorTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImpactorTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "incident" => Ok(ImpactorTypeEnum::INCIDENT),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ImpactorTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ImpactorTypeEnum::INCIDENT => "incident",
+            ImpactorTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ImpactorTypeEnum {
+    fn default() -> Self {
+        ImpactorTypeEnum::INCIDENT
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3061,13 +4664,13 @@ pub struct Incident {
     pub incident_key: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
-    /// List of all assignments for this incident.
+    /// List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`.
     #[serde(skip_serializing_if="Option::is_none")]
     pub assignments: Option<Vec<Assignment>>,
     /// How the current incident assignments were decided.  Note that `direct_assignment` incidents will not escalate up the attached `escalation_policy`
     #[serde(skip_serializing_if="Option::is_none")]
     pub assigned_via: Option<IncidentAssignedViaEnum>,
-    /// List of all acknowledgements for this incident.
+    /// List of all acknowledgements for this incident. This list will be empty if the `Incident.status` is `resolved` or `triggered`.
     #[serde(skip_serializing_if="Option::is_none")]
     pub acknowledgements: Option<Vec<Acknowledgement>>,
     /// The time at which the status of the incident last changed.
@@ -3095,6 +4698,12 @@ pub struct Incident {
     pub conference_bridge: Option<ConferenceBridge>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub body: Option<IncidentBody>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub occurrence: Option<IncidentOccurrence>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub incidents_responders: Option<Vec<IncidentsRespondersReference>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub responder_requests: Option<Vec<ResponderRequest>>,
 }
 
 impl Default for Incident {
@@ -3127,6 +4736,9 @@ impl Default for Incident {
             alert_counts: Default::default(),
             conference_bridge: Default::default(),
             body: Default::default(),
+            occurrence: Default::default(),
+            incidents_responders: Default::default(),
+            responder_requests: Default::default(),
         }
     }
 }
@@ -3489,13 +5101,133 @@ pub struct IncidentNote {
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub user: Option<UserReference>,
-    /// The note content
+    pub user: Option<AllOfIncidentNoteUser>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub content: Option<String>,
+    pub channel: Option<IncidentNoteChannel>,
+    /// The note content
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub content: String,
     /// The time at which the note was submitted
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+/// The means by which this Note was created. Has different formats depending on type.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IncidentNoteChannel {     
+    /// A string describing the source of the Note.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub summary: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object
+    #[serde(rename = "type")]
+    #[serde(default="IncidentNoteChannel::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub html_url: Option<String>,
+}
+
+impl Default for IncidentNoteChannel {
+    fn default() -> Self {
+        Self {
+            summary: Default::default(),
+            id: Default::default(),
+            _type: String::from("incident_note_channel"),
+            _self: Default::default(),
+            html_url: Default::default(),
+        }
+    }
+}
+
+impl IncidentNoteChannel {
+    fn _type_default() -> String {
+        String::from("incident_note_channel")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IncidentOccurrence {     
+    /// The ID of the Service referenced.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub count: Option<isize>,
+    /// The percentage that this kind of Incident has occurred on this Service over the given period of time.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub frequency: Option<f64>,
+    /// The classifcation of the Outlier Incident. The values can be one of [\"novel\", \"rare\",  \"frequent\", \"other\"]. \"novel\": It means this Incident hasn't occured. \"rare\": It means this Incident occurs with a low frequency. \"frequent\": It means this Incident occurs with a high frequency. \"other\": It means this Incident occurs with a medium frequency. 
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub category: Option<IncidentOccurrenceCategoryEnum>,
+    /// The start of the date/time range over which Outlier Incident was calculated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub since: Option<chrono::DateTime<chrono::Utc>>,
+    /// The end of the date/time range over which Outlier Incident was calculated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub until: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IncidentOccurrenceCategoryEnum { 
+    #[serde(rename = "novel")]
+    NOVEL,
+    #[serde(rename = "rare")]
+    RARE,
+    #[serde(rename = "frequent")]
+    FREQUENT,
+    #[serde(rename = "other")]
+    OTHER,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IncidentOccurrenceCategoryEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IncidentOccurrenceCategoryEnum::NOVEL => write!(f, "{}", "novel"),
+            IncidentOccurrenceCategoryEnum::RARE => write!(f, "{}", "rare"),
+            IncidentOccurrenceCategoryEnum::FREQUENT => write!(f, "{}", "frequent"),
+            IncidentOccurrenceCategoryEnum::OTHER => write!(f, "{}", "other"),
+            IncidentOccurrenceCategoryEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IncidentOccurrenceCategoryEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "novel" => Ok(IncidentOccurrenceCategoryEnum::NOVEL),
+            "rare" => Ok(IncidentOccurrenceCategoryEnum::RARE),
+            "frequent" => Ok(IncidentOccurrenceCategoryEnum::FREQUENT),
+            "other" => Ok(IncidentOccurrenceCategoryEnum::OTHER),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IncidentOccurrenceCategoryEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IncidentOccurrenceCategoryEnum::NOVEL => "novel",
+            IncidentOccurrenceCategoryEnum::RARE => "rare",
+            IncidentOccurrenceCategoryEnum::FREQUENT => "frequent",
+            IncidentOccurrenceCategoryEnum::OTHER => "other",
+            IncidentOccurrenceCategoryEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IncidentOccurrenceCategoryEnum {
+    fn default() -> Self {
+        IncidentOccurrenceCategoryEnum::NOVEL
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3821,73 +5553,6 @@ impl std::default::Default for IncidentUrgencyTypeUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetAnalyticsMetricsIncidentsAll {     
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<AnalyticsmetricsincidentsallFilters>,
-    /// The time zone to use for the results and grouping.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub time_zone: Option<String>,
-    /// The time unit to aggregate metrics by.  If no value is provided, the metrics will be aggregated for the entire period.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub aggregate_unit: Option<GetAnalyticsMetricsIncidentsAllAggregateUnitEnum>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum GetAnalyticsMetricsIncidentsAllAggregateUnitEnum { 
-    #[serde(rename = "day")]
-    DAY,
-    #[serde(rename = "week")]
-    WEEK,
-    #[serde(rename = "month")]
-    MONTH,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for GetAnalyticsMetricsIncidentsAllAggregateUnitEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::DAY => write!(f, "{}", "day"),
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::WEEK => write!(f, "{}", "week"),
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::MONTH => write!(f, "{}", "month"),
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for GetAnalyticsMetricsIncidentsAllAggregateUnitEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "day" => Ok(GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::DAY),
-            "week" => Ok(GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::WEEK),
-            "month" => Ok(GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::MONTH),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for GetAnalyticsMetricsIncidentsAllAggregateUnitEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::DAY => "day",
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::WEEK => "week",
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::MONTH => "month",
-            GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for GetAnalyticsMetricsIncidentsAllAggregateUnitEnum {
-    fn default() -> Self {
-        GetAnalyticsMetricsIncidentsAllAggregateUnitEnum::DAY
-    }
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IncidentsAssignments {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub assignee: Option<UserReference>,
@@ -4183,85 +5848,6 @@ pub struct IncidentsRespondersReference {
     pub requested_at: Option<String>,
 }
 
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetAnalyticsMetricsIncidentsService {     
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<AnalyticsmetricsincidentsservicesFilters>,
-    /// The time zone to use for the results and grouping.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub time_zone: Option<String>,
-    /// The time unit to aggregate metrics by (day/week/month).  Used in conjunction with the service_id.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub aggregate_unit: Option<String>,
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetAnalyticsMetricsIncidentsTeam {     
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<AnalyticsmetricsincidentsteamsFilters>,
-    /// The time zone to use for the results and grouping.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub time_zone: Option<String>,
-    /// The time unit to aggregate metrics by.  If no value is provided, the metrics will be aggregated for the entire period.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub aggregate_unit: Option<GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum { 
-    #[serde(rename = "day")]
-    DAY,
-    #[serde(rename = "week")]
-    WEEK,
-    #[serde(rename = "month")]
-    MONTH,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => write!(f, "{}", "day"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => write!(f, "{}", "week"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => write!(f, "{}", "month"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "day" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY),
-            "week" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK),
-            "month" => Ok(GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => "day",
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => "week",
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => "month",
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
-    fn default() -> Self {
-        GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY
-    }
-}
-
 /// The parameters of the incident to update.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IncidentsidIncident {     
@@ -4444,6 +6030,13 @@ impl std::default::Default for IncidentsidIncidentUrgencyEnum {
     }
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IncidentsidnotesNote {     
+    /// The note content
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub content: String,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Integration {     
     /// The label of the tag.
@@ -4473,6 +6066,24 @@ pub struct Integration {
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub vendor: Option<VendorReference>,
+    /// Specify for generic_email_inbound_integration. Must be set to an email address @your-subdomain.pagerduty.com
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub integration_email: Option<String>,
+    /// Specify for generic_email_inbound_integration
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_incident_creation: Option<IntegrationEmailIncidentCreationEnum>,
+    /// Specify for generic_email_inbound_integration. May override email_incident_creation
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_filter_mode: Option<IntegrationEmailFilterModeEnum>,
+    /// Specify for generic_email_inbound_integration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_parsers: Option<Vec<EmailParser>>,
+    /// Specify for generic_email_inbound_integration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_parsing_fallback: Option<IntegrationEmailParsingFallbackEnum>,
+    /// Specify for generic_email_inbound_integration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub email_filters: Option<Vec<IntegrationEmailFilters>>,
 }
 
 impl Default for Integration {
@@ -4488,6 +6099,12 @@ impl Default for Integration {
             service: Default::default(),
             created_at: Default::default(),
             vendor: Default::default(),
+            integration_email: Default::default(),
+            email_incident_creation: Default::default(),
+            email_filter_mode: Default::default(),
+            email_parsers: Default::default(),
+            email_parsing_fallback: Default::default(),
+            email_filters: Default::default(),
         }
     }
 }
@@ -4591,6 +6208,352 @@ impl std::default::Default for IntegrationTypeEnum {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailIncidentCreationEnum { 
+    #[serde(rename = "on_new_email")]
+    ON_NEW_EMAIL,
+    #[serde(rename = "on_new_email_subject")]
+    ON_NEW_EMAIL_SUBJECT,
+    #[serde(rename = "only_if_no_open_incidents")]
+    ONLY_IF_NO_OPEN_INCIDENTS,
+    #[serde(rename = "use_rules")]
+    USE_RULES,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailIncidentCreationEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL => write!(f, "{}", "on_new_email"),
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL_SUBJECT => write!(f, "{}", "on_new_email_subject"),
+            IntegrationEmailIncidentCreationEnum::ONLY_IF_NO_OPEN_INCIDENTS => write!(f, "{}", "only_if_no_open_incidents"),
+            IntegrationEmailIncidentCreationEnum::USE_RULES => write!(f, "{}", "use_rules"),
+            IntegrationEmailIncidentCreationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailIncidentCreationEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "on_new_email" => Ok(IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL),
+            "on_new_email_subject" => Ok(IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL_SUBJECT),
+            "only_if_no_open_incidents" => Ok(IntegrationEmailIncidentCreationEnum::ONLY_IF_NO_OPEN_INCIDENTS),
+            "use_rules" => Ok(IntegrationEmailIncidentCreationEnum::USE_RULES),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailIncidentCreationEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL => "on_new_email",
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL_SUBJECT => "on_new_email_subject",
+            IntegrationEmailIncidentCreationEnum::ONLY_IF_NO_OPEN_INCIDENTS => "only_if_no_open_incidents",
+            IntegrationEmailIncidentCreationEnum::USE_RULES => "use_rules",
+            IntegrationEmailIncidentCreationEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailIncidentCreationEnum {
+    fn default() -> Self {
+        IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailFilterModeEnum { 
+    #[serde(rename = "all-email")]
+    ALL_EMAIL,
+    #[serde(rename = "or-rules-email")]
+    OR_RULES_EMAIL,
+    #[serde(rename = "and-rules-email")]
+    AND_RULES_EMAIL,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailFilterModeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailFilterModeEnum::ALL_EMAIL => write!(f, "{}", "all-email"),
+            IntegrationEmailFilterModeEnum::OR_RULES_EMAIL => write!(f, "{}", "or-rules-email"),
+            IntegrationEmailFilterModeEnum::AND_RULES_EMAIL => write!(f, "{}", "and-rules-email"),
+            IntegrationEmailFilterModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailFilterModeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "all-email" => Ok(IntegrationEmailFilterModeEnum::ALL_EMAIL),
+            "or-rules-email" => Ok(IntegrationEmailFilterModeEnum::OR_RULES_EMAIL),
+            "and-rules-email" => Ok(IntegrationEmailFilterModeEnum::AND_RULES_EMAIL),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailFilterModeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailFilterModeEnum::ALL_EMAIL => "all-email",
+            IntegrationEmailFilterModeEnum::OR_RULES_EMAIL => "or-rules-email",
+            IntegrationEmailFilterModeEnum::AND_RULES_EMAIL => "and-rules-email",
+            IntegrationEmailFilterModeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailFilterModeEnum {
+    fn default() -> Self {
+        IntegrationEmailFilterModeEnum::ALL_EMAIL
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailParsingFallbackEnum { 
+    #[serde(rename = "open_new_incident")]
+    OPEN_NEW_INCIDENT,
+    #[serde(rename = "discard")]
+    DISCARD,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailParsingFallbackEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT => write!(f, "{}", "open_new_incident"),
+            IntegrationEmailParsingFallbackEnum::DISCARD => write!(f, "{}", "discard"),
+            IntegrationEmailParsingFallbackEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailParsingFallbackEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "open_new_incident" => Ok(IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT),
+            "discard" => Ok(IntegrationEmailParsingFallbackEnum::DISCARD),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailParsingFallbackEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT => "open_new_incident",
+            IntegrationEmailParsingFallbackEnum::DISCARD => "discard",
+            IntegrationEmailParsingFallbackEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailParsingFallbackEnum {
+    fn default() -> Self {
+        IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IntegrationEmailFilters {     
+    pub subject_mode: IntegrationEmailFiltersSubjectModeEnum,
+    /// Specify if subject_mode is set to match or no-match
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subject_regex: Option<String>,
+    pub body_mode: IntegrationEmailFiltersBodyModeEnum,
+    /// Specify if body_mode is set to match or no-match
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub body_regex: Option<String>,
+    pub from_email_mode: IntegrationEmailFiltersFromEmailModeEnum,
+    /// Specify if from_email_mode is set to match or no-match
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub from_email_regex: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailFiltersSubjectModeEnum { 
+    #[serde(rename = "match")]
+    MATCH,
+    #[serde(rename = "no-match")]
+    NO_MATCH,
+    #[serde(rename = "always")]
+    ALWAYS,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailFiltersSubjectModeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailFiltersSubjectModeEnum::MATCH => write!(f, "{}", "match"),
+            IntegrationEmailFiltersSubjectModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
+            IntegrationEmailFiltersSubjectModeEnum::ALWAYS => write!(f, "{}", "always"),
+            IntegrationEmailFiltersSubjectModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailFiltersSubjectModeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "match" => Ok(IntegrationEmailFiltersSubjectModeEnum::MATCH),
+            "no-match" => Ok(IntegrationEmailFiltersSubjectModeEnum::NO_MATCH),
+            "always" => Ok(IntegrationEmailFiltersSubjectModeEnum::ALWAYS),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailFiltersSubjectModeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailFiltersSubjectModeEnum::MATCH => "match",
+            IntegrationEmailFiltersSubjectModeEnum::NO_MATCH => "no-match",
+            IntegrationEmailFiltersSubjectModeEnum::ALWAYS => "always",
+            IntegrationEmailFiltersSubjectModeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailFiltersSubjectModeEnum {
+    fn default() -> Self {
+        IntegrationEmailFiltersSubjectModeEnum::MATCH
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailFiltersBodyModeEnum { 
+    #[serde(rename = "match")]
+    MATCH,
+    #[serde(rename = "no-match")]
+    NO_MATCH,
+    #[serde(rename = "always")]
+    ALWAYS,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailFiltersBodyModeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailFiltersBodyModeEnum::MATCH => write!(f, "{}", "match"),
+            IntegrationEmailFiltersBodyModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
+            IntegrationEmailFiltersBodyModeEnum::ALWAYS => write!(f, "{}", "always"),
+            IntegrationEmailFiltersBodyModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailFiltersBodyModeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "match" => Ok(IntegrationEmailFiltersBodyModeEnum::MATCH),
+            "no-match" => Ok(IntegrationEmailFiltersBodyModeEnum::NO_MATCH),
+            "always" => Ok(IntegrationEmailFiltersBodyModeEnum::ALWAYS),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailFiltersBodyModeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailFiltersBodyModeEnum::MATCH => "match",
+            IntegrationEmailFiltersBodyModeEnum::NO_MATCH => "no-match",
+            IntegrationEmailFiltersBodyModeEnum::ALWAYS => "always",
+            IntegrationEmailFiltersBodyModeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailFiltersBodyModeEnum {
+    fn default() -> Self {
+        IntegrationEmailFiltersBodyModeEnum::MATCH
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum IntegrationEmailFiltersFromEmailModeEnum { 
+    #[serde(rename = "match")]
+    MATCH,
+    #[serde(rename = "no-match")]
+    NO_MATCH,
+    #[serde(rename = "always")]
+    ALWAYS,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for IntegrationEmailFiltersFromEmailModeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            IntegrationEmailFiltersFromEmailModeEnum::MATCH => write!(f, "{}", "match"),
+            IntegrationEmailFiltersFromEmailModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
+            IntegrationEmailFiltersFromEmailModeEnum::ALWAYS => write!(f, "{}", "always"),
+            IntegrationEmailFiltersFromEmailModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationEmailFiltersFromEmailModeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "match" => Ok(IntegrationEmailFiltersFromEmailModeEnum::MATCH),
+            "no-match" => Ok(IntegrationEmailFiltersFromEmailModeEnum::NO_MATCH),
+            "always" => Ok(IntegrationEmailFiltersFromEmailModeEnum::ALWAYS),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for IntegrationEmailFiltersFromEmailModeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            IntegrationEmailFiltersFromEmailModeEnum::MATCH => "match",
+            IntegrationEmailFiltersFromEmailModeEnum::NO_MATCH => "no-match",
+            IntegrationEmailFiltersFromEmailModeEnum::ALWAYS => "always",
+            IntegrationEmailFiltersFromEmailModeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for IntegrationEmailFiltersFromEmailModeEnum {
+    fn default() -> Self {
+        IntegrationEmailFiltersFromEmailModeEnum::MATCH
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IntegrationReference {     
     /// The label of the tag.
@@ -4656,6 +6619,10 @@ pub enum IntegrationReferenceTypeEnum {
     PINGDOM_INBOUND_INTEGRATION_REFERENCE,
     #[serde(rename = "sql_monitor_inbound_integration_reference")]
     SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE,
+    #[serde(rename = "events_api_v2_inbound_integration_reference")]
+    EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE,
+    #[serde(rename = "inbound_integration_reference")]
+    INBOUND_INTEGRATION_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -4672,6 +6639,8 @@ impl ::std::fmt::Display for IntegrationReferenceTypeEnum {
             IntegrationReferenceTypeEnum::NAGIOS_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "nagios_inbound_integration_reference"),
             IntegrationReferenceTypeEnum::PINGDOM_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "pingdom_inbound_integration_reference"),
             IntegrationReferenceTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "sql_monitor_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "events_api_v2_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "inbound_integration_reference"),
             IntegrationReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
@@ -4690,6 +6659,8 @@ impl ::std::str::FromStr for IntegrationReferenceTypeEnum {
             "nagios_inbound_integration_reference" => Ok(IntegrationReferenceTypeEnum::NAGIOS_INBOUND_INTEGRATION_REFERENCE),
             "pingdom_inbound_integration_reference" => Ok(IntegrationReferenceTypeEnum::PINGDOM_INBOUND_INTEGRATION_REFERENCE),
             "sql_monitor_inbound_integration_reference" => Ok(IntegrationReferenceTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE),
+            "events_api_v2_inbound_integration_reference" => Ok(IntegrationReferenceTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE),
+            "inbound_integration_reference" => Ok(IntegrationReferenceTypeEnum::INBOUND_INTEGRATION_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -4707,6 +6678,8 @@ impl ::std::convert::AsRef<str> for IntegrationReferenceTypeEnum {
             IntegrationReferenceTypeEnum::NAGIOS_INBOUND_INTEGRATION_REFERENCE => "nagios_inbound_integration_reference",
             IntegrationReferenceTypeEnum::PINGDOM_INBOUND_INTEGRATION_REFERENCE => "pingdom_inbound_integration_reference",
             IntegrationReferenceTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE => "sql_monitor_inbound_integration_reference",
+            IntegrationReferenceTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE => "events_api_v2_inbound_integration_reference",
+            IntegrationReferenceTypeEnum::INBOUND_INTEGRATION_REFERENCE => "inbound_integration_reference",
             IntegrationReferenceTypeEnum::UNKNOWN => "unknown"
         }
     }
@@ -4722,6 +6695,16 @@ impl std::default::Default for IntegrationReferenceTypeEnum {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateServiceIntegration {     
     pub integration: Integration,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LiveListResponse {     
+    /// Echoes limit pagination property.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub limit: Option<isize>,
+    /// Indicates if there are additional records to return
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub more: Option<bool>,
 }
 
 /// The parameters to update.
@@ -4820,6 +6803,8 @@ pub struct LogEntry {
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
     #[serde(skip_serializing_if="Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4843,6 +6828,7 @@ impl Default for LogEntry {
             note: Default::default(),
             contexts: Default::default(),
             service: Default::default(),
+            user: Default::default(),
             incident: Default::default(),
             teams: Default::default(),
             event_details: Default::default(),
@@ -5320,6 +7306,144 @@ pub struct UpdateMaintenanceWindow {
     pub maintenance_window: MaintenanceWindow,
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MatchPredicate {     
+    #[serde(rename = "type")]
+    pub _type: MatchPredicateTypeEnum,
+    /// Required if the type is `contains`, `exactly` or `regex`.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub matcher: Option<String>,
+    /// The email field that will attempt to use the matcher expression. Required if the type is `contains`, `exactly` or `regex`.
+    pub part: MatchPredicatePartEnum,
+    /// Additional matchers to be run. Must be not empty if the type is `all`, `any`, or `not`.
+    pub children: Vec<MatchPredicate>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum MatchPredicateTypeEnum { 
+    #[serde(rename = "all")]
+    ALL,
+    #[serde(rename = "any")]
+    ANY,
+    #[serde(rename = "not")]
+    NOT,
+    #[serde(rename = "contains")]
+    CONTAINS,
+    #[serde(rename = "exactly")]
+    EXACTLY,
+    #[serde(rename = "regex")]
+    REGEX,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for MatchPredicateTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            MatchPredicateTypeEnum::ALL => write!(f, "{}", "all"),
+            MatchPredicateTypeEnum::ANY => write!(f, "{}", "any"),
+            MatchPredicateTypeEnum::NOT => write!(f, "{}", "not"),
+            MatchPredicateTypeEnum::CONTAINS => write!(f, "{}", "contains"),
+            MatchPredicateTypeEnum::EXACTLY => write!(f, "{}", "exactly"),
+            MatchPredicateTypeEnum::REGEX => write!(f, "{}", "regex"),
+            MatchPredicateTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchPredicateTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "all" => Ok(MatchPredicateTypeEnum::ALL),
+            "any" => Ok(MatchPredicateTypeEnum::ANY),
+            "not" => Ok(MatchPredicateTypeEnum::NOT),
+            "contains" => Ok(MatchPredicateTypeEnum::CONTAINS),
+            "exactly" => Ok(MatchPredicateTypeEnum::EXACTLY),
+            "regex" => Ok(MatchPredicateTypeEnum::REGEX),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for MatchPredicateTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            MatchPredicateTypeEnum::ALL => "all",
+            MatchPredicateTypeEnum::ANY => "any",
+            MatchPredicateTypeEnum::NOT => "not",
+            MatchPredicateTypeEnum::CONTAINS => "contains",
+            MatchPredicateTypeEnum::EXACTLY => "exactly",
+            MatchPredicateTypeEnum::REGEX => "regex",
+            MatchPredicateTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for MatchPredicateTypeEnum {
+    fn default() -> Self {
+        MatchPredicateTypeEnum::ALL
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum MatchPredicatePartEnum { 
+    #[serde(rename = "body")]
+    BODY,
+    #[serde(rename = "subject")]
+    SUBJECT,
+    #[serde(rename = "from_addresses")]
+    FROM_ADDRESSES,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for MatchPredicatePartEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            MatchPredicatePartEnum::BODY => write!(f, "{}", "body"),
+            MatchPredicatePartEnum::SUBJECT => write!(f, "{}", "subject"),
+            MatchPredicatePartEnum::FROM_ADDRESSES => write!(f, "{}", "from_addresses"),
+            MatchPredicatePartEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchPredicatePartEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "body" => Ok(MatchPredicatePartEnum::BODY),
+            "subject" => Ok(MatchPredicatePartEnum::SUBJECT),
+            "from_addresses" => Ok(MatchPredicatePartEnum::FROM_ADDRESSES),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for MatchPredicatePartEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            MatchPredicatePartEnum::BODY => "body",
+            MatchPredicatePartEnum::SUBJECT => "subject",
+            MatchPredicatePartEnum::FROM_ADDRESSES => "from_addresses",
+            MatchPredicatePartEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for MatchPredicatePartEnum {
+    fn default() -> Self {
+        MatchPredicatePartEnum::BODY
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ModelOverride {     
     /// The label of the tag.
@@ -5390,6 +7514,12 @@ pub struct Notification {
     pub address: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<UserReference>,
+    /// The address of the conference bridge
+    #[serde(rename = "conferenceAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub conference_address: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub status: Option<String>,
 }
 
 
@@ -5694,75 +7824,80 @@ pub struct UpdateUserNotificationRule {
 
 /// A reference of a subscribable entity.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CreateUserNotificationSubscription {     
+pub struct NotificationSubscribable {     
     /// The ID of the entity to subscribe to
     #[serde(skip_serializing_if="Option::is_none")]
     pub subscribable_id: Option<String>,
     /// The type of the entity being subscribed to
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subscribable_type: Option<CreateUserNotificationSubscriptionSubscribableTypeEnum>,
+    pub subscribable_type: Option<NotificationSubscribableSubscribableTypeEnum>,
 }
 
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum CreateUserNotificationSubscriptionSubscribableTypeEnum { 
+pub enum NotificationSubscribableSubscribableTypeEnum { 
     #[serde(rename = "incident")]
     INCIDENT,
+    #[serde(rename = "business_service")]
+    BUSINESS_SERVICE,
     #[serde(other)]
     UNKNOWN,
 }
 
-impl ::std::fmt::Display for CreateUserNotificationSubscriptionSubscribableTypeEnum {
+impl ::std::fmt::Display for NotificationSubscribableSubscribableTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            CreateUserNotificationSubscriptionSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            CreateUserNotificationSubscriptionSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscribableSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
+            NotificationSubscribableSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
+            NotificationSubscribableSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
 }
 
-impl ::std::str::FromStr for CreateUserNotificationSubscriptionSubscribableTypeEnum {
+impl ::std::str::FromStr for NotificationSubscribableSubscribableTypeEnum {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s { 
-            "incident" => Ok(CreateUserNotificationSubscriptionSubscribableTypeEnum::INCIDENT),
+            "incident" => Ok(NotificationSubscribableSubscribableTypeEnum::INCIDENT),
+            "business_service" => Ok(NotificationSubscribableSubscribableTypeEnum::BUSINESS_SERVICE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
 }
 
-impl ::std::convert::AsRef<str> for CreateUserNotificationSubscriptionSubscribableTypeEnum {
+impl ::std::convert::AsRef<str> for NotificationSubscribableSubscribableTypeEnum {
     fn as_ref(&self) -> &str {
         match self { 
-            CreateUserNotificationSubscriptionSubscribableTypeEnum::INCIDENT => "incident",
-            CreateUserNotificationSubscriptionSubscribableTypeEnum::UNKNOWN => "unknown"
+            NotificationSubscribableSubscribableTypeEnum::INCIDENT => "incident",
+            NotificationSubscribableSubscribableTypeEnum::BUSINESS_SERVICE => "business_service",
+            NotificationSubscribableSubscribableTypeEnum::UNKNOWN => "unknown"
         }
     }
 }
 
 // Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for CreateUserNotificationSubscriptionSubscribableTypeEnum {
+impl std::default::Default for NotificationSubscribableSubscribableTypeEnum {
     fn default() -> Self {
-        CreateUserNotificationSubscriptionSubscribableTypeEnum::INCIDENT
+        NotificationSubscribableSubscribableTypeEnum::INCIDENT
     }
 }
 
 /// A reference of a subscriber entity.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CreateIncidentNotificationSubscriber {     
+pub struct NotificationSubscriber {     
     /// The ID of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
     pub subscriber_id: Option<String>,
     /// The type of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subscriber_type: Option<CreateIncidentNotificationSubscriberSubscriberTypeEnum>,
+    pub subscriber_type: Option<NotificationSubscriberSubscriberTypeEnum>,
 }
 
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum CreateIncidentNotificationSubscriberSubscriberTypeEnum { 
+pub enum NotificationSubscriberSubscriberTypeEnum { 
     #[serde(rename = "user")]
     USER,
     #[serde(rename = "team")]
@@ -5771,42 +7906,118 @@ pub enum CreateIncidentNotificationSubscriberSubscriberTypeEnum {
     UNKNOWN,
 }
 
-impl ::std::fmt::Display for CreateIncidentNotificationSubscriberSubscriberTypeEnum {
+impl ::std::fmt::Display for NotificationSubscriberSubscriberTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::USER => write!(f, "{}", "user"),
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriberSubscriberTypeEnum::USER => write!(f, "{}", "user"),
+            NotificationSubscriberSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
+            NotificationSubscriberSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
 }
 
-impl ::std::str::FromStr for CreateIncidentNotificationSubscriberSubscriberTypeEnum {
+impl ::std::str::FromStr for NotificationSubscriberSubscriberTypeEnum {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s { 
-            "user" => Ok(CreateIncidentNotificationSubscriberSubscriberTypeEnum::USER),
-            "team" => Ok(CreateIncidentNotificationSubscriberSubscriberTypeEnum::TEAM),
+            "user" => Ok(NotificationSubscriberSubscriberTypeEnum::USER),
+            "team" => Ok(NotificationSubscriberSubscriberTypeEnum::TEAM),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
 }
 
-impl ::std::convert::AsRef<str> for CreateIncidentNotificationSubscriberSubscriberTypeEnum {
+impl ::std::convert::AsRef<str> for NotificationSubscriberSubscriberTypeEnum {
     fn as_ref(&self) -> &str {
         match self { 
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::USER => "user",
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::TEAM => "team",
-            CreateIncidentNotificationSubscriberSubscriberTypeEnum::UNKNOWN => "unknown"
+            NotificationSubscriberSubscriberTypeEnum::USER => "user",
+            NotificationSubscriberSubscriberTypeEnum::TEAM => "team",
+            NotificationSubscriberSubscriberTypeEnum::UNKNOWN => "unknown"
         }
     }
 }
 
 // Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for CreateIncidentNotificationSubscriberSubscriberTypeEnum {
+impl std::default::Default for NotificationSubscriberSubscriberTypeEnum {
     fn default() -> Self {
-        CreateIncidentNotificationSubscriberSubscriberTypeEnum::USER
+        NotificationSubscriberSubscriberTypeEnum::USER
     }
+}
+
+/// A reference of a subscriber entity with additional subscription context.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NotificationSubscriberWithContext {     
+    /// The ID of the entity being subscribed
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscriber_id: Option<String>,
+    /// The type of the entity being subscribed
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscriber_type: Option<NotificationSubscriberWithContextSubscriberTypeEnum>,
+    /// If this subcriber has an indirect subscription to this incident via another object
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub has_indirect_subscription: Option<bool>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscribed_via: Option<Vec<NotificationSubscriberWithContextSubscribedVia>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum NotificationSubscriberWithContextSubscriberTypeEnum { 
+    #[serde(rename = "user")]
+    USER,
+    #[serde(rename = "team")]
+    TEAM,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for NotificationSubscriberWithContextSubscriberTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            NotificationSubscriberWithContextSubscriberTypeEnum::USER => write!(f, "{}", "user"),
+            NotificationSubscriberWithContextSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
+            NotificationSubscriberWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationSubscriberWithContextSubscriberTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "user" => Ok(NotificationSubscriberWithContextSubscriberTypeEnum::USER),
+            "team" => Ok(NotificationSubscriberWithContextSubscriberTypeEnum::TEAM),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for NotificationSubscriberWithContextSubscriberTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            NotificationSubscriberWithContextSubscriberTypeEnum::USER => "user",
+            NotificationSubscriberWithContextSubscriberTypeEnum::TEAM => "team",
+            NotificationSubscriberWithContextSubscriberTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for NotificationSubscriberWithContextSubscriberTypeEnum {
+    fn default() -> Self {
+        NotificationSubscriberWithContextSubscriberTypeEnum::USER
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NotificationSubscriberWithContextSubscribedVia {     
+    /// The id of the object this subscriber is subscribed via
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The type of the object this subscriber is subscribed via
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable.
@@ -5885,6 +8096,8 @@ impl std::default::Default for NotificationSubscriptionSubscriberTypeEnum {
 pub enum NotificationSubscriptionSubscribableTypeEnum { 
     #[serde(rename = "incident")]
     INCIDENT,
+    #[serde(rename = "business_service")]
+    BUSINESS_SERVICE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -5893,6 +8106,7 @@ impl ::std::fmt::Display for NotificationSubscriptionSubscribableTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
             NotificationSubscriptionSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
+            NotificationSubscriptionSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
             NotificationSubscriptionSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
@@ -5903,6 +8117,7 @@ impl ::std::str::FromStr for NotificationSubscriptionSubscribableTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s { 
             "incident" => Ok(NotificationSubscriptionSubscribableTypeEnum::INCIDENT),
+            "business_service" => Ok(NotificationSubscriptionSubscribableTypeEnum::BUSINESS_SERVICE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -5912,6 +8127,7 @@ impl ::std::convert::AsRef<str> for NotificationSubscriptionSubscribableTypeEnum
     fn as_ref(&self) -> &str {
         match self { 
             NotificationSubscriptionSubscribableTypeEnum::INCIDENT => "incident",
+            NotificationSubscriptionSubscribableTypeEnum::BUSINESS_SERVICE => "business_service",
             NotificationSubscriptionSubscribableTypeEnum::UNKNOWN => "unknown"
         }
     }
@@ -5922,6 +8138,194 @@ impl std::default::Default for NotificationSubscriptionSubscribableTypeEnum {
     fn default() -> Self {
         NotificationSubscriptionSubscribableTypeEnum::INCIDENT
     }
+}
+
+/// An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable with additional context on status of subscription attempt.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NotificationSubscriptionWithContext {     
+    /// The ID of the entity being subscribed
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscriber_id: Option<String>,
+    /// The type of the entity being subscribed
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscriber_type: Option<NotificationSubscriptionWithContextSubscriberTypeEnum>,
+    /// The ID of the entity being subscribed to
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscribable_id: Option<String>,
+    /// The type of the entity being subscribed to
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subscribable_type: Option<NotificationSubscriptionWithContextSubscribableTypeEnum>,
+    /// The type of the entity being subscribed to
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub account_id: Option<String>,
+    /// The resulting status of the subscription
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub result: Option<NotificationSubscriptionWithContextResultEnum>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum NotificationSubscriptionWithContextSubscriberTypeEnum { 
+    #[serde(rename = "user")]
+    USER,
+    #[serde(rename = "team")]
+    TEAM,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for NotificationSubscriptionWithContextSubscriberTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            NotificationSubscriptionWithContextSubscriberTypeEnum::USER => write!(f, "{}", "user"),
+            NotificationSubscriptionWithContextSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
+            NotificationSubscriptionWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationSubscriptionWithContextSubscriberTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "user" => Ok(NotificationSubscriptionWithContextSubscriberTypeEnum::USER),
+            "team" => Ok(NotificationSubscriptionWithContextSubscriberTypeEnum::TEAM),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for NotificationSubscriptionWithContextSubscriberTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            NotificationSubscriptionWithContextSubscriberTypeEnum::USER => "user",
+            NotificationSubscriptionWithContextSubscriberTypeEnum::TEAM => "team",
+            NotificationSubscriptionWithContextSubscriberTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for NotificationSubscriptionWithContextSubscriberTypeEnum {
+    fn default() -> Self {
+        NotificationSubscriptionWithContextSubscriberTypeEnum::USER
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum NotificationSubscriptionWithContextSubscribableTypeEnum { 
+    #[serde(rename = "incident")]
+    INCIDENT,
+    #[serde(rename = "business_service")]
+    BUSINESS_SERVICE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for NotificationSubscriptionWithContextSubscribableTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
+            NotificationSubscriptionWithContextSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
+            NotificationSubscriptionWithContextSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationSubscriptionWithContextSubscribableTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "incident" => Ok(NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT),
+            "business_service" => Ok(NotificationSubscriptionWithContextSubscribableTypeEnum::BUSINESS_SERVICE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for NotificationSubscriptionWithContextSubscribableTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT => "incident",
+            NotificationSubscriptionWithContextSubscribableTypeEnum::BUSINESS_SERVICE => "business_service",
+            NotificationSubscriptionWithContextSubscribableTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for NotificationSubscriptionWithContextSubscribableTypeEnum {
+    fn default() -> Self {
+        NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum NotificationSubscriptionWithContextResultEnum { 
+    #[serde(rename = "success")]
+    SUCCESS,
+    #[serde(rename = "duplicate")]
+    DUPLICATE,
+    #[serde(rename = "unauthorized")]
+    UNAUTHORIZED,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for NotificationSubscriptionWithContextResultEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            NotificationSubscriptionWithContextResultEnum::SUCCESS => write!(f, "{}", "success"),
+            NotificationSubscriptionWithContextResultEnum::DUPLICATE => write!(f, "{}", "duplicate"),
+            NotificationSubscriptionWithContextResultEnum::UNAUTHORIZED => write!(f, "{}", "unauthorized"),
+            NotificationSubscriptionWithContextResultEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationSubscriptionWithContextResultEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "success" => Ok(NotificationSubscriptionWithContextResultEnum::SUCCESS),
+            "duplicate" => Ok(NotificationSubscriptionWithContextResultEnum::DUPLICATE),
+            "unauthorized" => Ok(NotificationSubscriptionWithContextResultEnum::UNAUTHORIZED),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for NotificationSubscriptionWithContextResultEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            NotificationSubscriptionWithContextResultEnum::SUCCESS => "success",
+            NotificationSubscriptionWithContextResultEnum::DUPLICATE => "duplicate",
+            NotificationSubscriptionWithContextResultEnum::UNAUTHORIZED => "unauthorized",
+            NotificationSubscriptionWithContextResultEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for NotificationSubscriptionWithContextResultEnum {
+    fn default() -> Self {
+        NotificationSubscriptionWithContextResultEnum::SUCCESS
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RemoveTeamNotificationSubscriptions {     
+    pub subscribables: Vec<NotificationSubscribable>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UnsubscribeUserNotificationSubscriptions {     
+    pub subscribables: Vec<NotificationSubscribable>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -5944,14 +8348,14 @@ pub struct NotifyLogEntry {
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
     #[serde(skip_serializing_if="Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if="Option::is_none")]
     pub teams: Option<Vec<TeamReference>>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub user: Option<UserReference>,
 }
 
 
@@ -6019,6 +8423,15 @@ pub struct Oncall {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateUserHandoffNotification {     
+    pub oncall_handoff_notification_rule: HandoffNotificationRule,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EventRuleActionsCommonExtractionsItems {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContactMethodsContactMethodIdBodyContactMethod {     
 }
 
@@ -6027,11 +8440,742 @@ pub struct IdContactMethodsBodyContactMethod {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct InlineResponse20045ContactMethodsItems {     
+pub struct InlineResponse20065ContactMethodsItems {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct InlineResponse2015ContactMethod {     
+pub struct InlineResponse2018ContactMethod {     
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Orchestration {     
+    /// ID of the Orchestration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+    /// Name of the Orchestration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    /// A description of this Orchestration's purpose.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub team: Option<OrchestrationTeam>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub integrations: Option<Vec<OrchestrationIntegrations>>,
+    /// Number of different Service Orchestration being routed to
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub routes: Option<isize>,
+    /// The date the Orchestration was created at.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_by: Option<OrchestrationCreatedBy>,
+    /// The date the Orchestration was last updated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updated_by: Option<OrchestrationUpdatedBy>,
+    /// Version of the Orchestration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// Reference to the user that has created the Orchestration.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationCreatedBy {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationCreatedBy::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationCreatedBy {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_created_by"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationCreatedBy {
+    fn _type_default() -> String {
+        String::from("orchestration_created_by")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationIntegrations {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<OrchestrationParameters>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationParameters {     
+    /// Routing key that routes to this Orchestration
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub routing_key: Option<String>,
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationParameters::_type_default")]
+    pub _type: String,
+}
+
+impl Default for OrchestrationParameters {
+    fn default() -> Self {
+        Self {
+            routing_key: Default::default(),
+            _type: String::from("orchestration_parameters"),
+        }
+    }
+}
+
+impl OrchestrationParameters {
+    fn _type_default() -> String {
+        String::from("orchestration_parameters")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateOrchPathRouter {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub orchestration_path: Option<OrchestrationRouterOrchestrationPath1>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath {     
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPath::_type_default")]
+    pub _type: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parent: Option<OrchestrationRouterOrchestrationPathParent>,
+    /// Must contain at least a \"start\" set, but can contain any number of additional sets that are routed to by other rules to form a directional graph of rules.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sets: Option<Vec<OrchestrationRouterOrchestrationPathSets>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub catch_all: Option<OrchestrationRouterOrchestrationPathCatchAll>,
+    /// The date/time the object was created.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_by: Option<OrchestrationRouterOrchestrationPathCreatedBy>,
+    /// The date/time the object was last updated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub updated_by: Option<OrchestrationRouterOrchestrationPathUpdatedBy>,
+    /// Version of these Orchestration Rules
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub version: Option<String>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPath {
+    fn default() -> Self {
+        Self {
+            _type: String::from("orchestration_router_orchestration_path"),
+            parent: Default::default(),
+            sets: Default::default(),
+            catch_all: Default::default(),
+            created_at: Default::default(),
+            created_by: Default::default(),
+            updated_at: Default::default(),
+            updated_by: Default::default(),
+            version: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPath {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1 {     
+    /// Indicates that these are a \"router\" type set of rules.
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPath1::_type_default")]
+    pub _type: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parent: Option<OrchestrationRouterOrchestrationPath1Parent>,
+    /// The Router contains a single set of rules (the \"start\" set). The Router evaluates Events against these Rules, one at a time, and routes each Event to a specific Service based on the first rule that matches.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sets: Option<Vec<OrchestrationRouterOrchestrationPath1Sets>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub catch_all: Option<OrchestrationRouterOrchestrationPath1CatchAll>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPath1 {
+    fn default() -> Self {
+        Self {
+            _type: String::from("orchestration_router_orchestration_path_1"),
+            parent: Default::default(),
+            sets: Default::default(),
+            catch_all: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPath1 {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path_1")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1Actions {     
+    /// The ID of the target Service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub route_to: Option<String>,
+}
+
+/// When none of the rules match an event, the event will be routed according to the catch_all settings.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1CatchAll {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<OrchestrationRouterOrchestrationPath1CatchAllActions>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1CatchAllActions {     
+    /// With a value of 'unrouted', all events are sent to the Unrouted Orchestration.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub route_to: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1Parent {     
+    /// ID of the Global Event Orchestration this Router belongs to.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<Value>,
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPath1Parent::_type_default")]
+    pub _type: String,
+}
+
+impl Default for OrchestrationRouterOrchestrationPath1Parent {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_router_orchestration_path_1_parent"),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPath1Parent {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path_1_parent")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1Rules {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<OrchestrationRouterOrchestrationPath1Actions>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPath1Sets {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub rules: Option<Vec<OrchestrationRouterOrchestrationPath1Rules>>,
+}
+
+/// When none of the Rules in a set match an event, we apply the catch_all actions to the event.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathCatchAll {     
+    /// These are the actions that will be taken to change the resulting alert and incident.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<HashMap<String, Value>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathConditions {     
+    /// A PCL condition string
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub expression: Option<String>,
+}
+
+/// Reference to the user that created the object.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathCreatedBy {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPathCreatedBy::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPathCreatedBy {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_router_orchestration_path_created_by"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPathCreatedBy {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path_created_by")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathParent {     
+    /// ID of the object these Orchestration Rules belongs to.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the parent object
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPathParent::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the parent object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPathParent {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_router_orchestration_path_parent"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPathParent {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path_parent")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathRules {     
+    /// ID of the rule
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A description of this rule's purpose.
+    #[serde(default="OrchestrationRouterOrchestrationPathRules::label_default")]
+    pub label: String,
+    /// Each of these conditions is evaluated to check if an event matches this rule. The rule is considered a match if **any** of these conditions match.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub conditions: Option<Vec<OrchestrationRouterOrchestrationPathConditions>>,
+    /// When an event matches this rule, these are the actions that will be taken to change the resulting alert and incident.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<HashMap<String, Value>>,
+    /// Indicates whether the rule is disabled and would therefore not be evaluated.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub disabled: Option<bool>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPathRules {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            label: String::from("OrchestrationRouter_orchestration_path_rules"),
+            conditions: Default::default(),
+            actions: Default::default(),
+            disabled: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPathRules {
+    fn label_default() -> String {
+        String::from("OrchestrationRouter_orchestration_path_rules")
+    }
+}
+
+/// A set of rules
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathSets {     
+    /// The ID of this set of rules. Rules in other sets can route events into this set using the \"route_to\" properties.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub rules: Option<Vec<OrchestrationRouterOrchestrationPathRules>>,
+}
+
+/// Reference to the user that last updated the object.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationRouterOrchestrationPathUpdatedBy {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object. This must be the standard name for the entity, suffixed by `_reference` if the object is a reference.
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationRouterOrchestrationPathUpdatedBy::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationRouterOrchestrationPathUpdatedBy {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_router_orchestration_path_updated_by"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationRouterOrchestrationPathUpdatedBy {
+    fn _type_default() -> String {
+        String::from("orchestration_router_orchestration_path_updated_by")
+    }
+}
+
+/// Reference to the team that owns the Orchestration. If none is specified, only admins have access.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationTeam {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationTeam::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationTeam {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_team"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationTeam {
+    fn _type_default() -> String {
+        String::from("orchestration_team")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateOrchPathUnrouted {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub orchestration_path: Option<OrchestrationUnroutedOrchestrationPath>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPath {     
+    /// Indicates that these are a \"unrouted\" type set of rules.
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationUnroutedOrchestrationPath::_type_default")]
+    pub _type: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parent: Option<OrchestrationUnroutedOrchestrationPathParent>,
+    /// An Unrouted Orchestration must contain at least a \"start\" set, but can contain any number of additional sets that are routed to by other rules to form a directional graph.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sets: Option<Vec<OrchestrationUnroutedOrchestrationPathSets>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub catch_all: Option<OrchestrationUnroutedOrchestrationPathCatchAll>,
+}
+
+impl Default for OrchestrationUnroutedOrchestrationPath {
+    fn default() -> Self {
+        Self {
+            _type: String::from("orchestration_unrouted_orchestration_path"),
+            parent: Default::default(),
+            sets: Default::default(),
+            catch_all: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationUnroutedOrchestrationPath {
+    fn _type_default() -> String {
+        String::from("orchestration_unrouted_orchestration_path")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathCatchAll {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<OrchestrationUnroutedOrchestrationPathCatchAllActions>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathCatchAllActions {     
+    /// Set the severity of the resulting alert.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub severity: Option<OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum>,
+    /// Set whether the resulting alert status is trigger or resolve.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub event_action: Option<OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum>,
+    /// Populate variables from event payloads and use those variables in other event actions.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub variables: Option<Vec<OrchestrationUnroutedOrchestrationPathCatchAllActionsVariables>>,
+    /// Dynamically extract values to set and modify new and existing PD-CEF fields.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub extractions: Option<Vec<OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum { 
+    #[serde(rename = "info")]
+    INFO,
+    #[serde(rename = "error")]
+    ERROR,
+    #[serde(rename = "warning")]
+    WARNING,
+    #[serde(rename = "critical")]
+    CRITICAL,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO => write!(f, "{}", "info"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::ERROR => write!(f, "{}", "error"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::WARNING => write!(f, "{}", "warning"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::CRITICAL => write!(f, "{}", "critical"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "info" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO),
+            "error" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::ERROR),
+            "warning" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::WARNING),
+            "critical" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::CRITICAL),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO => "info",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::ERROR => "error",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::WARNING => "warning",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::CRITICAL => "critical",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
+    fn default() -> Self {
+        OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum { 
+    #[serde(rename = "trigger")]
+    TRIGGER,
+    #[serde(rename = "resolve")]
+    RESOLVE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER => write!(f, "{}", "trigger"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::RESOLVE => write!(f, "{}", "resolve"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "trigger" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER),
+            "resolve" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::RESOLVE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER => "trigger",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::RESOLVE => "resolve",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
+    fn default() -> Self {
+        OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsVariables {     
+    /// The name of the variable
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    /// Path to a field in an event, in dot-notation.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub path: Option<String>,
+    /// The type of operation to populate the variable. Currently only Regex-based variable extraction is supported.
+    #[serde(rename = "type")]
+    pub _type: OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum,
+    /// A RE2 regular expression. If it contains one or more capture groups, their values will be extracted and appended together. If it contains no capture groups, the whole match is used.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum { 
+    #[serde(rename = "regex")]
+    REGEX,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX => write!(f, "{}", "regex"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "regex" => Ok(OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX => "regex",
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum {
+    fn default() -> Self {
+        OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathParent {     
+    /// ID of the Global Event Orchestration this Unrouted Orchestration belongs to.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<Value>,
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationUnroutedOrchestrationPathParent::_type_default")]
+    pub _type: String,
+}
+
+impl Default for OrchestrationUnroutedOrchestrationPathParent {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_unrouted_orchestration_path_parent"),
+        }
+    }
+}
+
+impl OrchestrationUnroutedOrchestrationPathParent {
+    fn _type_default() -> String {
+        String::from("orchestration_unrouted_orchestration_path_parent")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathRules {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<AllOfOrchestrationUnroutedOrchestrationPathRulesActions>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUnroutedOrchestrationPathSets {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub rules: Option<Vec<OrchestrationUnroutedOrchestrationPathRules>>,
+}
+
+/// Reference to the user that has updated the Orchestration last.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrchestrationUpdatedBy {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// A string that determines the schema of the object
+    #[serde(rename = "type")]
+    #[serde(default="OrchestrationUpdatedBy::_type_default")]
+    pub _type: String,
+    /// The API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+impl Default for OrchestrationUpdatedBy {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("orchestration_updated_by"),
+            _self: Default::default(),
+        }
+    }
+}
+
+impl OrchestrationUpdatedBy {
+    fn _type_default() -> String {
+        String::from("orchestration_updated_by")
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -6571,18 +9715,124 @@ impl std::default::Default for PushContactMethodSoundTypeEnum {
 pub struct GetAnalyticsIncidents {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<AnalyticsrawincidentsFilters>,
-    /// Specifies an incident by ID, the paginated results will begin with the incident directly after this one.
+    /// A cursor to indicate the reference point that the results should follow
     #[serde(skip_serializing_if="Option::is_none")]
     pub starting_after: Option<String>,
-    /// Specifies an incident by ID, the paginated results will end with the incident directly before this one.
+    /// A cursor to indicate the reference point that the results should precede
     #[serde(skip_serializing_if="Option::is_none")]
     pub ending_before: Option<String>,
+    /// The order the results;  asc for ascending, desc for descending. Defaults to 'desc'.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub order: Option<GetAnalyticsIncidentsOrderEnum>,
+    /// The column to use for ordering the results. Defaults to 'created_at'.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub order_by: Option<GetAnalyticsIncidentsOrderByEnum>,
     /// Number of results to include in each batch. Limits between 1 to 1000 are accepted.
     #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<u16>,
     /// The time zone to use for the results.
     #[serde(skip_serializing_if="Option::is_none")]
     pub time_zone: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum GetAnalyticsIncidentsOrderEnum { 
+    #[serde(rename = "asc")]
+    ASC,
+    #[serde(rename = "desc")]
+    DESC,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for GetAnalyticsIncidentsOrderEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            GetAnalyticsIncidentsOrderEnum::ASC => write!(f, "{}", "asc"),
+            GetAnalyticsIncidentsOrderEnum::DESC => write!(f, "{}", "desc"),
+            GetAnalyticsIncidentsOrderEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GetAnalyticsIncidentsOrderEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "asc" => Ok(GetAnalyticsIncidentsOrderEnum::ASC),
+            "desc" => Ok(GetAnalyticsIncidentsOrderEnum::DESC),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for GetAnalyticsIncidentsOrderEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            GetAnalyticsIncidentsOrderEnum::ASC => "asc",
+            GetAnalyticsIncidentsOrderEnum::DESC => "desc",
+            GetAnalyticsIncidentsOrderEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for GetAnalyticsIncidentsOrderEnum {
+    fn default() -> Self {
+        GetAnalyticsIncidentsOrderEnum::ASC
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum GetAnalyticsIncidentsOrderByEnum { 
+    #[serde(rename = "created_at")]
+    CREATED_AT,
+    #[serde(rename = "seconds_to_resolve")]
+    SECONDS_TO_RESOLVE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for GetAnalyticsIncidentsOrderByEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            GetAnalyticsIncidentsOrderByEnum::CREATED_AT => write!(f, "{}", "created_at"),
+            GetAnalyticsIncidentsOrderByEnum::SECONDS_TO_RESOLVE => write!(f, "{}", "seconds_to_resolve"),
+            GetAnalyticsIncidentsOrderByEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GetAnalyticsIncidentsOrderByEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "created_at" => Ok(GetAnalyticsIncidentsOrderByEnum::CREATED_AT),
+            "seconds_to_resolve" => Ok(GetAnalyticsIncidentsOrderByEnum::SECONDS_TO_RESOLVE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for GetAnalyticsIncidentsOrderByEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            GetAnalyticsIncidentsOrderByEnum::CREATED_AT => "created_at",
+            GetAnalyticsIncidentsOrderByEnum::SECONDS_TO_RESOLVE => "seconds_to_resolve",
+            GetAnalyticsIncidentsOrderByEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for GetAnalyticsIncidentsOrderByEnum {
+    fn default() -> Self {
+        GetAnalyticsIncidentsOrderByEnum::CREATED_AT
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -6628,6 +9878,150 @@ impl Reference {
     fn _type_default() -> String {
         String::from("reference")
     }
+}
+
+/// The data for a type of relationship where the Incident is related due to our machine learning algorithm. 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelatedIncidentMachineLearningRelationship {     
+    /// The classification for why this Related Incident was grouped into this group. Values can be one of: [similar_contents, prior_feedback], where: similar_contents - The Related Incident was due to similar contents of the Incidents. prior_feedback - The Related Incident was determined to be related, based on User feedback or Incident merge/unmerge actions. 
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub grouping_classification: Option<RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub user_feedback: Option<RelatedIncidentMachineLearningRelationshipUserFeedback>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum { 
+    #[serde(rename = "similar_contents")]
+    SIMILAR_CONTENTS,
+    #[serde(rename = "prior_feedback")]
+    PRIOR_FEEDBACK,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS => write!(f, "{}", "similar_contents"),
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::PRIOR_FEEDBACK => write!(f, "{}", "prior_feedback"),
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "similar_contents" => Ok(RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS),
+            "prior_feedback" => Ok(RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::PRIOR_FEEDBACK),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS => "similar_contents",
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::PRIOR_FEEDBACK => "prior_feedback",
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
+    fn default() -> Self {
+        RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS
+    }
+}
+
+/// The feedback provided from Users to influence the machine learning algorithm for future Related Incidents.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelatedIncidentMachineLearningRelationshipUserFeedback {     
+    /// The total number of times Users agreed that the Incidents are related.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub positive_feedback_count: Option<isize>,
+    /// The total number of times Users disagreed that the Incidents are related.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub negative_feedback_count: Option<isize>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelatedIncidentServiceDependencyBase {     
+    /// The ID of the Service referenced.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The type of the related Service.
+    #[serde(rename = "type")]
+    pub _type: RelatedIncidentServiceDependencyBaseTypeEnum,
+    /// The API show URL at which the object is accessible.
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub _self: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum RelatedIncidentServiceDependencyBaseTypeEnum { 
+    #[serde(rename = "business_service_reference")]
+    BUSINESS_SERVICE_REFERENCE,
+    #[serde(rename = "technical_service_reference")]
+    TECHNICAL_SERVICE_REFERENCE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for RelatedIncidentServiceDependencyBaseTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE => write!(f, "{}", "business_service_reference"),
+            RelatedIncidentServiceDependencyBaseTypeEnum::TECHNICAL_SERVICE_REFERENCE => write!(f, "{}", "technical_service_reference"),
+            RelatedIncidentServiceDependencyBaseTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelatedIncidentServiceDependencyBaseTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "business_service_reference" => Ok(RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE),
+            "technical_service_reference" => Ok(RelatedIncidentServiceDependencyBaseTypeEnum::TECHNICAL_SERVICE_REFERENCE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for RelatedIncidentServiceDependencyBaseTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE => "business_service_reference",
+            RelatedIncidentServiceDependencyBaseTypeEnum::TECHNICAL_SERVICE_REFERENCE => "technical_service_reference",
+            RelatedIncidentServiceDependencyBaseTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for RelatedIncidentServiceDependencyBaseTypeEnum {
+    fn default() -> Self {
+        RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE
+    }
+}
+
+/// The data for a type of relationship where the Incident is related due to Business or Technical Service dependencies.  Both `dependent_services` and `supporting_services` are returned to signify the dependencies between the Services that the Incident and Related Incident belong to.  Each Service reference returned in the list of supporting and dependent Services has a type of: [business_service_reference, technical_service_reference]. 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelatedIncidentServiceDependencyRelationship {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub dependent_services: Option<Vec<RelatedIncidentServiceDependencyBase>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub supporting_services: Option<Vec<RelatedIncidentServiceDependencyBase>>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -6761,7 +10155,7 @@ pub struct ResponsePlay {
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team: Option<TeamReference>,
+    pub team: Option<Value>,
     /// An array containing the users and/or teams to be added as subscribers to any incident on which this response play is run.
     #[serde(skip_serializing_if="Option::is_none")]
     pub subscribers: Option<Vec<Value>>,
@@ -6783,6 +10177,9 @@ pub struct ResponsePlay {
     /// The URL that will be set as the conference URL for any incident on which this response play is run.
     #[serde(skip_serializing_if="Option::is_none")]
     pub conference_url: Option<String>,
+    /// This field has three possible values and indicates how the response play was created.   - `none` : The response play had no conference_number or conference_url set at time of creation.   - `manual` : The response play had one or both of conference_number and conference_url set at time of creation.   - `zoom` : Customers with the Zoom-Integration Entitelment can use this value to dynamicly configure conference number and url for zoom
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub conference_type: Option<ResponsePlayConferenceTypeEnum>,
 }
 
 impl Default for ResponsePlay {
@@ -6804,6 +10201,7 @@ impl Default for ResponsePlay {
             runnability: Default::default(),
             conference_number: Default::default(),
             conference_url: Default::default(),
+            conference_type: Default::default(),
         }
     }
 }
@@ -6917,6 +10315,61 @@ impl std::default::Default for ResponsePlayRunnabilityEnum {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum ResponsePlayConferenceTypeEnum { 
+    #[serde(rename = "none")]
+    NONE,
+    #[serde(rename = "manual")]
+    MANUAL,
+    #[serde(rename = "zoom")]
+    ZOOM,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for ResponsePlayConferenceTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            ResponsePlayConferenceTypeEnum::NONE => write!(f, "{}", "none"),
+            ResponsePlayConferenceTypeEnum::MANUAL => write!(f, "{}", "manual"),
+            ResponsePlayConferenceTypeEnum::ZOOM => write!(f, "{}", "zoom"),
+            ResponsePlayConferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResponsePlayConferenceTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "none" => Ok(ResponsePlayConferenceTypeEnum::NONE),
+            "manual" => Ok(ResponsePlayConferenceTypeEnum::MANUAL),
+            "zoom" => Ok(ResponsePlayConferenceTypeEnum::ZOOM),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for ResponsePlayConferenceTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            ResponsePlayConferenceTypeEnum::NONE => "none",
+            ResponsePlayConferenceTypeEnum::MANUAL => "manual",
+            ResponsePlayConferenceTypeEnum::ZOOM => "zoom",
+            ResponsePlayConferenceTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for ResponsePlayConferenceTypeEnum {
+    fn default() -> Self {
+        ResponsePlayConferenceTypeEnum::NONE
+    }
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunResponsePlay {     
     pub incident: IncidentReference,
@@ -7000,26 +10453,24 @@ impl std::default::Default for RestrictionTypeEnum {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateRulesetEventRule {     
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rule: Option<Value>,
-    /// The id of the event rule to update.
+    pub rule: Option<EventRule>,
+    /// The id of the Event Rule to update.
     #[serde(skip_serializing_if="String::is_empty")]
     pub rule_id: String,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CreateRuleset {     
+pub struct UpdateServiceEventRule {     
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ruleset: Option<RulesetsRuleset>,
+    pub rule: Option<ServiceEventRule>,
+    /// The id of the Event Rule to update on the Service.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub rule_id: String,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct UpdateRuleset {     
-    pub ruleset: Value,
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsRuleset {     
-    /// ID of the ruleset.
+pub struct Ruleset {     
+    /// ID of the Ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     /// the API show URL at which the object is accessible
@@ -7027,31 +10478,31 @@ pub struct RulesetsRuleset {
     #[serde(skip_serializing_if="Option::is_none")]
     pub _self: Option<String>,
     #[serde(rename = "type")]
-    pub _type: RulesetsRulesetTypeEnum,
-    /// Name of the ruleset.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub name: String,
-    /// Routing keys routed to this ruleset.
+    pub _type: RulesetTypeEnum,
+    /// Name of the Ruleset.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    /// Routing keys routed to this Ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
     pub routing_keys: Option<Vec<String>>,
-    /// The date the ruleset was created at.
+    /// The date the Ruleset was created at.
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creator: Option<RulesetsRulesetCreator>,
-    /// The date the ruleset was last updated.
+    pub creator: Option<RulesetCreator>,
+    /// The date the Ruleset was last updated.
     #[serde(skip_serializing_if="Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub updater: Option<RulesetsRulesetUpdater>,
+    pub updater: Option<RulesetUpdater>,
     #[serde(skip_serializing_if="Option::is_none")]
-    pub team: Option<RulesetsRulesetTeam>,
+    pub team: Option<RulesetTeam>,
 }
 
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsRulesetTypeEnum { 
+pub enum RulesetTypeEnum { 
     #[serde(rename = "global")]
     GLOBAL,
     #[serde(rename = "default_global")]
@@ -7060,52 +10511,52 @@ pub enum RulesetsRulesetTypeEnum {
     UNKNOWN,
 }
 
-impl ::std::fmt::Display for RulesetsRulesetTypeEnum {
+impl ::std::fmt::Display for RulesetTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            RulesetsRulesetTypeEnum::GLOBAL => write!(f, "{}", "global"),
-            RulesetsRulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "{}", "default_global"),
-            RulesetsRulesetTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            RulesetTypeEnum::GLOBAL => write!(f, "{}", "global"),
+            RulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "{}", "default_global"),
+            RulesetTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
         }
     }
 }
 
-impl ::std::str::FromStr for RulesetsRulesetTypeEnum {
+impl ::std::str::FromStr for RulesetTypeEnum {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s { 
-            "global" => Ok(RulesetsRulesetTypeEnum::GLOBAL),
-            "default_global" => Ok(RulesetsRulesetTypeEnum::DEFAULT_GLOBAL),
+            "global" => Ok(RulesetTypeEnum::GLOBAL),
+            "default_global" => Ok(RulesetTypeEnum::DEFAULT_GLOBAL),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
 }
 
-impl ::std::convert::AsRef<str> for RulesetsRulesetTypeEnum {
+impl ::std::convert::AsRef<str> for RulesetTypeEnum {
     fn as_ref(&self) -> &str {
         match self { 
-            RulesetsRulesetTypeEnum::GLOBAL => "global",
-            RulesetsRulesetTypeEnum::DEFAULT_GLOBAL => "default_global",
-            RulesetsRulesetTypeEnum::UNKNOWN => "unknown"
+            RulesetTypeEnum::GLOBAL => "global",
+            RulesetTypeEnum::DEFAULT_GLOBAL => "default_global",
+            RulesetTypeEnum::UNKNOWN => "unknown"
         }
     }
 }
 
 // Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsRulesetTypeEnum {
+impl std::default::Default for RulesetTypeEnum {
     fn default() -> Self {
-        RulesetsRulesetTypeEnum::GLOBAL
+        RulesetTypeEnum::GLOBAL
     }
 }
 
-/// Reference to the user that has created the ruleset.
+/// Reference to the user that has created the Ruleset.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsRulesetCreator {     
+pub struct RulesetCreator {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     /// A string that determines the schema of the object
     #[serde(rename = "type")]
-    #[serde(default="RulesetsRulesetCreator::_type_default")]
+    #[serde(default="RulesetCreator::_type_default")]
     pub _type: String,
     /// The API show URL at which the object is accessible
     #[serde(rename = "self")]
@@ -7113,30 +10564,30 @@ pub struct RulesetsRulesetCreator {
     pub _self: Option<String>,
 }
 
-impl Default for RulesetsRulesetCreator {
+impl Default for RulesetCreator {
     fn default() -> Self {
         Self {
             id: Default::default(),
-            _type: String::from("rulesets_ruleset_creator"),
+            _type: String::from("ruleset_creator"),
             _self: Default::default(),
         }
     }
 }
 
-impl RulesetsRulesetCreator {
+impl RulesetCreator {
     fn _type_default() -> String {
-        String::from("rulesets_ruleset_creator")
+        String::from("ruleset_creator")
     }
 }
 
-/// Reference to the team that owns the ruleset. If none is specified, only admins have access.
+/// Reference to the team that owns the Ruleset. If none is specified, only admins have access.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsRulesetTeam {     
+pub struct RulesetTeam {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
     /// A string that determines the schema of the object
     #[serde(rename = "type")]
-    #[serde(default="RulesetsRulesetTeam::_type_default")]
+    #[serde(default="RulesetTeam::_type_default")]
     pub _type: String,
     /// The API show URL at which the object is accessible
     #[serde(rename = "self")]
@@ -7144,30 +10595,30 @@ pub struct RulesetsRulesetTeam {
     pub _self: Option<String>,
 }
 
-impl Default for RulesetsRulesetTeam {
+impl Default for RulesetTeam {
     fn default() -> Self {
         Self {
             id: Default::default(),
-            _type: String::from("rulesets_ruleset_team"),
+            _type: String::from("ruleset_team"),
             _self: Default::default(),
         }
     }
 }
 
-impl RulesetsRulesetTeam {
+impl RulesetTeam {
     fn _type_default() -> String {
-        String::from("rulesets_ruleset_team")
+        String::from("ruleset_team")
     }
 }
 
-/// Reference to the user that has updated the ruleset last.
+/// Reference to the user that has updated the Ruleset last.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsRulesetUpdater {     
+pub struct RulesetUpdater {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     /// A string that determines the schema of the object
     #[serde(rename = "type")]
-    #[serde(default="RulesetsRulesetUpdater::_type_default")]
+    #[serde(default="RulesetUpdater::_type_default")]
     pub _type: String,
     /// The API show URL at which the object is accessible
     #[serde(rename = "self")]
@@ -7175,543 +10626,30 @@ pub struct RulesetsRulesetUpdater {
     pub _self: Option<String>,
 }
 
-impl Default for RulesetsRulesetUpdater {
+impl Default for RulesetUpdater {
     fn default() -> Self {
         Self {
             id: Default::default(),
-            _type: String::from("rulesets_ruleset_updater"),
+            _type: String::from("ruleset_updater"),
             _self: Default::default(),
         }
     }
 }
 
-impl RulesetsRulesetUpdater {
+impl RulesetUpdater {
     fn _type_default() -> String {
-        String::from("rulesets_ruleset_updater")
+        String::from("ruleset_updater")
     }
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRule {     
-    /// ID of the event rule.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<String>,
-    /// the API show URL at which the object is accessible
-    #[serde(rename = "self")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub _self: Option<String>,
-    /// Position/index of the rule within the ruleset.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub position: Option<isize>,
-    /// Indicates whether the rule is disabled and would therefore not be evaluated.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub disabled: Option<bool>,
-    /// Indicates whether the rule is the last rule of the ruleset that serves as a catch-all. It has limited functionality compared to other rules.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub catch_all: Option<bool>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub conditions: Option<RulesetsidrulesRuleConditions>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub time_frame: Option<RulesetsidrulesRuleTimeFrame>,
-    pub actions: RulesetsidrulesRuleActions,
-}
-
-/// When an event matches this rule, the actions that will be taken to change the resulting alert and incident.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActions {     
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub annotate: Option<RulesetsidrulesRuleActionsAnnotate>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub event_action: Option<RulesetsidrulesRuleActionsEventAction>,
-    /// Use regular expressions to extract values from event fields to set fields on the resulting alert.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub extractions: Option<Vec<RulesetsidrulesRuleActionsExtractions>>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub priority: Option<RulesetsidrulesRuleActionsPriority>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub route: Option<RulesetsidrulesRuleActionsRoute>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub severity: Option<RulesetsidrulesRuleActionsSeverity>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub suppress: Option<RulesetsidrulesRuleActionsSuppress>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub suspend: Option<RulesetsidrulesRuleActionsSuspend>,
-}
-
-/// Set a note on the resulting incident.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsAnnotate {     
-    /// The content of the note.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub value: String,
-}
-
-/// Set whether the resulting alert status is trigger or resolve.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsEventAction {     
-    pub value: RulesetsidrulesRuleActionsEventActionValueEnum,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleActionsEventActionValueEnum { 
-    #[serde(rename = "trigger")]
-    TRIGGER,
-    #[serde(rename = "resolve")]
-    RESOLVE,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleActionsEventActionValueEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleActionsEventActionValueEnum::TRIGGER => write!(f, "{}", "trigger"),
-            RulesetsidrulesRuleActionsEventActionValueEnum::RESOLVE => write!(f, "{}", "resolve"),
-            RulesetsidrulesRuleActionsEventActionValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleActionsEventActionValueEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "trigger" => Ok(RulesetsidrulesRuleActionsEventActionValueEnum::TRIGGER),
-            "resolve" => Ok(RulesetsidrulesRuleActionsEventActionValueEnum::RESOLVE),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleActionsEventActionValueEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleActionsEventActionValueEnum::TRIGGER => "trigger",
-            RulesetsidrulesRuleActionsEventActionValueEnum::RESOLVE => "resolve",
-            RulesetsidrulesRuleActionsEventActionValueEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleActionsEventActionValueEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleActionsEventActionValueEnum::TRIGGER
-    }
+pub struct CreateRuleset {     
+    pub ruleset: AllOfrulesetsBodyRuleset,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsExtractions {     
-    /// The alert field that will be set with the value from the regex.
-    pub target: RulesetsidrulesRuleActionsExtractionsTargetEnum,
-    /// The path to the event field where the regex will be applied to extract a value.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub source: String,
-    /// A RE2 regular expression.  If it contains one or more capture groups, their values will be extracted and appended together.  If it contains no capture groups, the whole match is used.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub regex: String,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleActionsExtractionsTargetEnum { 
-    #[serde(rename = "dedup_key")]
-    DEDUP_KEY,
-    #[serde(rename = "description")]
-    DESCRIPTION,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleActionsExtractionsTargetEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::DEDUP_KEY => write!(f, "{}", "dedup_key"),
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::DESCRIPTION => write!(f, "{}", "description"),
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleActionsExtractionsTargetEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "dedup_key" => Ok(RulesetsidrulesRuleActionsExtractionsTargetEnum::DEDUP_KEY),
-            "description" => Ok(RulesetsidrulesRuleActionsExtractionsTargetEnum::DESCRIPTION),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleActionsExtractionsTargetEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::DEDUP_KEY => "dedup_key",
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::DESCRIPTION => "description",
-            RulesetsidrulesRuleActionsExtractionsTargetEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleActionsExtractionsTargetEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleActionsExtractionsTargetEnum::DEDUP_KEY
-    }
-}
-
-/// Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsPriority {     
-    /// The priority ID.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub value: String,
-}
-
-/// Set the service ID of the target service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsRoute {     
-    /// The target service's ID.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub value: String,
-}
-
-/// Set the severity of the resulting alert.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsSeverity {     
-    pub value: RulesetsidrulesRuleActionsSeverityValueEnum,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleActionsSeverityValueEnum { 
-    #[serde(rename = "info")]
-    INFO,
-    #[serde(rename = "warning")]
-    WARNING,
-    #[serde(rename = "error")]
-    ERROR,
-    #[serde(rename = "critical")]
-    CRITICAL,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleActionsSeverityValueEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleActionsSeverityValueEnum::INFO => write!(f, "{}", "info"),
-            RulesetsidrulesRuleActionsSeverityValueEnum::WARNING => write!(f, "{}", "warning"),
-            RulesetsidrulesRuleActionsSeverityValueEnum::ERROR => write!(f, "{}", "error"),
-            RulesetsidrulesRuleActionsSeverityValueEnum::CRITICAL => write!(f, "{}", "critical"),
-            RulesetsidrulesRuleActionsSeverityValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleActionsSeverityValueEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "info" => Ok(RulesetsidrulesRuleActionsSeverityValueEnum::INFO),
-            "warning" => Ok(RulesetsidrulesRuleActionsSeverityValueEnum::WARNING),
-            "error" => Ok(RulesetsidrulesRuleActionsSeverityValueEnum::ERROR),
-            "critical" => Ok(RulesetsidrulesRuleActionsSeverityValueEnum::CRITICAL),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleActionsSeverityValueEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleActionsSeverityValueEnum::INFO => "info",
-            RulesetsidrulesRuleActionsSeverityValueEnum::WARNING => "warning",
-            RulesetsidrulesRuleActionsSeverityValueEnum::ERROR => "error",
-            RulesetsidrulesRuleActionsSeverityValueEnum::CRITICAL => "critical",
-            RulesetsidrulesRuleActionsSeverityValueEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleActionsSeverityValueEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleActionsSeverityValueEnum::INFO
-    }
-}
-
-/// Set whether the resulting alert is suppressed.  Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in window of time.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsSuppress {     
-    pub value: bool,
-    /// The number of occurences needed during the window of time to trigger the theshold.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold_value: Option<isize>,
-    /// The time unit for the window of time.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold_time_unit: Option<RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum>,
-    /// The amount of time units for the window of time.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold_time_amount: Option<isize>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum { 
-    #[serde(rename = "seconds")]
-    SECONDS,
-    #[serde(rename = "minutes")]
-    MINUTES,
-    #[serde(rename = "hours")]
-    HOURS,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::SECONDS => write!(f, "{}", "seconds"),
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::MINUTES => write!(f, "{}", "minutes"),
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::HOURS => write!(f, "{}", "hours"),
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "seconds" => Ok(RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::SECONDS),
-            "minutes" => Ok(RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::MINUTES),
-            "hours" => Ok(RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::HOURS),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::SECONDS => "seconds",
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::MINUTES => "minutes",
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::HOURS => "hours",
-            RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleActionsSuppressThresholdTimeUnitEnum::SECONDS
-    }
-}
-
-/// [Early Access] Set the length of time to suspend the resulting alert before triggering.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleActionsSuspend {     
-    /// The amount of time to suspend the alert in seconds.
-    pub value: isize,
-}
-
-/// Conditions evaluated to check if an event matches this event rule. Is always empty for the catch all rule, though.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleConditions {     
-    /// Operator to combine sub-conditions.
-    pub operator: RulesetsidrulesRuleConditionsOperatorEnum,
-    /// Array of sub-conditions.
-    pub subconditions: Vec<RulesetsidrulesRuleConditionsSubconditions>,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleConditionsOperatorEnum { 
-    #[serde(rename = "and")]
-    AND,
-    #[serde(rename = "or")]
-    OR,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleConditionsOperatorEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleConditionsOperatorEnum::AND => write!(f, "{}", "and"),
-            RulesetsidrulesRuleConditionsOperatorEnum::OR => write!(f, "{}", "or"),
-            RulesetsidrulesRuleConditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleConditionsOperatorEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "and" => Ok(RulesetsidrulesRuleConditionsOperatorEnum::AND),
-            "or" => Ok(RulesetsidrulesRuleConditionsOperatorEnum::OR),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleConditionsOperatorEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleConditionsOperatorEnum::AND => "and",
-            RulesetsidrulesRuleConditionsOperatorEnum::OR => "or",
-            RulesetsidrulesRuleConditionsOperatorEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleConditionsOperatorEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleConditionsOperatorEnum::AND
-    }
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleConditionsParameters {     
-    /// Path to a field in an event, in dot-notation.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub path: String,
-    /// Value to apply to the operator.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub value: String,
-    /// Options to configure the operator.
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub options: Option<HashMap<String, Value>>,
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleConditionsSubconditions {     
-    /// The type of operator to apply.
-    pub operator: RulesetsidrulesRuleConditionsSubconditionsOperatorEnum,
-    pub parameters: RulesetsidrulesRuleConditionsParameters,
-}
-
-
-#[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum RulesetsidrulesRuleConditionsSubconditionsOperatorEnum { 
-    #[serde(rename = "exists")]
-    EXISTS,
-    #[serde(rename = "nexists")]
-    NEXISTS,
-    #[serde(rename = "equals")]
-    EQUALS,
-    #[serde(rename = "nequals")]
-    NEQUALS,
-    #[serde(rename = "contains")]
-    CONTAINS,
-    #[serde(rename = "ncontains")]
-    NCONTAINS,
-    #[serde(rename = "matches")]
-    MATCHES,
-    #[serde(rename = "nmatches")]
-    NMATCHES,
-    #[serde(other)]
-    UNKNOWN,
-}
-
-impl ::std::fmt::Display for RulesetsidrulesRuleConditionsSubconditionsOperatorEnum {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { 
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EXISTS => write!(f, "{}", "exists"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEXISTS => write!(f, "{}", "nexists"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EQUALS => write!(f, "{}", "equals"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEQUALS => write!(f, "{}", "nequals"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::CONTAINS => write!(f, "{}", "contains"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NCONTAINS => write!(f, "{}", "ncontains"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::MATCHES => write!(f, "{}", "matches"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NMATCHES => write!(f, "{}", "nmatches"),
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
-        }
-    }
-}
-
-impl ::std::str::FromStr for RulesetsidrulesRuleConditionsSubconditionsOperatorEnum {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
-            "exists" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EXISTS),
-            "nexists" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEXISTS),
-            "equals" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EQUALS),
-            "nequals" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEQUALS),
-            "contains" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::CONTAINS),
-            "ncontains" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NCONTAINS),
-            "matches" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::MATCHES),
-            "nmatches" => Ok(RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NMATCHES),
-            x => Err(format!("Invalid enum type: {}", x)),
-        }
-    }
-}
-
-impl ::std::convert::AsRef<str> for RulesetsidrulesRuleConditionsSubconditionsOperatorEnum {
-    fn as_ref(&self) -> &str {
-        match self { 
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EXISTS => "exists",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEXISTS => "nexists",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EQUALS => "equals",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NEQUALS => "nequals",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::CONTAINS => "contains",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NCONTAINS => "ncontains",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::MATCHES => "matches",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::NMATCHES => "nmatches",
-            RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::UNKNOWN => "unknown"
-        }
-    }
-}
-
-// Pick the first enum var as default. Please report this as a bug if it's not correct.
-impl std::default::Default for RulesetsidrulesRuleConditionsSubconditionsOperatorEnum {
-    fn default() -> Self {
-        RulesetsidrulesRuleConditionsSubconditionsOperatorEnum::EXISTS
-    }
-}
-
-/// Time-based conditions for limiting when the rule is active.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleTimeFrame {     
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub active_between: Option<RulesetsidrulesRuleTimeFrameActiveBetween>,
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub scheduled_weekly: Option<RulesetsidrulesRuleTimeFrameScheduledWeekly>,
-}
-
-/// A fixed window of time during which the rule is active.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleTimeFrameActiveBetween {     
-    /// The start time in milliseconds.
-    pub start_time: isize,
-    /// End time in milliseconds.
-    pub end_time: isize,
-}
-
-/// A reccuring window of time based on the day of the week, during which the rule is active.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RulesetsidrulesRuleTimeFrameScheduledWeekly {     
-    /// The amount of milliseconds into the day at which the window starts.
-    pub start_time: isize,
-    /// The duration of the window in milliseconds.
-    pub duration: isize,
-    /// The timezone.
-    #[serde(skip_serializing_if="String::is_empty")]
-    pub timezone: String,
-    /// An array of day values. Ex [1, 3, 5] is Monday, Wednesday, Friday.
-    pub weekdays: Vec<i32>,
+pub struct UpdateRuleset {     
+    pub ruleset: Ruleset,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -7735,7 +10673,8 @@ pub struct Schedule {
     #[serde(rename = "type")]
     pub _type: ScheduleTypeEnum,
     /// A list of schedule layers.
-    pub schedule_layers: Vec<ScheduleLayer>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub schedule_layers: Option<Vec<ScheduleLayer>>,
     /// The time zone of the schedule.
     #[serde(skip_serializing_if="String::is_empty")]
     pub time_zone: String,
@@ -8227,13 +11166,15 @@ pub struct Service {
     /// The date/time when this service was created
     #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
-    /// The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents. 
+    /// The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents. 
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ServiceStatusEnum>,
     /// The date/time when the most recent incident was created for this service.
     #[serde(skip_serializing_if="Option::is_none")]
     pub last_incident_timestamp: Option<chrono::DateTime<chrono::Utc>>,
     pub escalation_policy: EscalationPolicyReference,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_play: Option<Value>,
     /// The set of teams associated with this service.
     #[serde(skip_serializing_if="Option::is_none")]
     pub teams: Option<Vec<TeamReference>>,
@@ -8253,12 +11194,16 @@ pub struct Service {
     /// Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * \"create_incidents\" - The service will create one incident and zero alerts for each incoming event. * \"create_alerts_and_incidents\" - The service will create one incident and one associated alert for each incoming event. 
     #[serde(skip_serializing_if="Option::is_none")]
     pub alert_creation: Option<ServiceAlertCreationEnum>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub alert_grouping_parameters: Option<AlertGroupingParameters>,
     /// Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. There are three available options: * null - No alert grouping on the service. Each alert will create a separate incident; * \"time\" - All alerts within a specified duration will be grouped into the same incident. This duration is set in the `alert_grouping_timeout` setting (described below). Available on Standard, Enterprise, and Event Intelligence plans; * \"intelligent\" - Alerts will be intelligently grouped based on a machine learning model that looks at the alert summary, timing, and the history of grouped alerts. Available on Enterprise and Event Intelligence plans 
     #[serde(skip_serializing_if="Option::is_none")]
     pub alert_grouping: Option<ServiceAlertGroupingEnum>,
-    /// The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `\"time\"`. To continue grouping alerts until the incident is resolved, set this value to `0`. 
+    /// The duration in minutes within which to automatically group incoming alerts. This setting applies only when `alert_grouping` is set to `time`. To continue grouping alerts until the Incident is resolved, set this value to `0`. 
     #[serde(skip_serializing_if="Option::is_none")]
     pub alert_grouping_timeout: Option<isize>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub auto_pause_notifications_parameters: Option<AutoPauseNotificationsParameters>,
 }
 
 impl Default for Service {
@@ -8278,6 +11223,7 @@ impl Default for Service {
             status: Default::default(),
             last_incident_timestamp: Default::default(),
             escalation_policy: Default::default(),
+            response_play: Default::default(),
             teams: Default::default(),
             integrations: Default::default(),
             incident_urgency_rule: Default::default(),
@@ -8285,8 +11231,10 @@ impl Default for Service {
             scheduled_actions: Default::default(),
             addons: Default::default(),
             alert_creation: Default::default(),
+            alert_grouping_parameters: Default::default(),
             alert_grouping: Default::default(),
             alert_grouping_timeout: Default::default(),
+            auto_pause_notifications_parameters: Default::default(),
         }
     }
 }
@@ -8582,6 +11530,96 @@ impl ServiceDependenciesassociateSupportingService {
     }
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceEventRule {     
+    /// Position/index of the Event Rule on the Service.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching Event Rule is found or the end of the list is reached.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub position: Option<isize>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<EventRuleActionsCommon>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateOrchPathService {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub orchestration_path: Option<ServiceOrchestrationOrchestrationPath>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceOrchestrationOrchestrationPath {     
+    /// Indicates that these are sets of rules belonging to a service.
+    #[serde(rename = "type")]
+    #[serde(default="ServiceOrchestrationOrchestrationPath::_type_default")]
+    pub _type: String,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parent: Option<ServiceOrchestrationOrchestrationPathParent>,
+    /// A Service Orchestration must contain at least a \"start\" set, but can contain any number of additional sets that are routed to by other rules to form a directional graph.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub sets: Option<Vec<ServiceOrchestrationOrchestrationPathSets>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub catch_all: Option<ServiceOrchestrationOrchestrationPathCatchAll>,
+}
+
+impl Default for ServiceOrchestrationOrchestrationPath {
+    fn default() -> Self {
+        Self {
+            _type: String::from("service_orchestration_orchestration_path"),
+            parent: Default::default(),
+            sets: Default::default(),
+            catch_all: Default::default(),
+        }
+    }
+}
+
+impl ServiceOrchestrationOrchestrationPath {
+    fn _type_default() -> String {
+        String::from("service_orchestration_orchestration_path")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceOrchestrationOrchestrationPathCatchAll {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<AllOfServiceOrchestrationOrchestrationPathCatchAllActions>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceOrchestrationOrchestrationPathParent {     
+    /// The ID of the Service this Orchestration belongs to.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<Value>,
+    #[serde(rename = "type")]
+    #[serde(default="ServiceOrchestrationOrchestrationPathParent::_type_default")]
+    pub _type: String,
+}
+
+impl Default for ServiceOrchestrationOrchestrationPathParent {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("service_orchestration_orchestration_path_parent"),
+        }
+    }
+}
+
+impl ServiceOrchestrationOrchestrationPathParent {
+    fn _type_default() -> String {
+        String::from("service_orchestration_orchestration_path_parent")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceOrchestrationOrchestrationPathRules {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub actions: Option<AllOfServiceOrchestrationOrchestrationPathRulesActions>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceOrchestrationOrchestrationPathSets {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub rules: Option<Vec<ServiceOrchestrationOrchestrationPathRules>>,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceReference {     
     /// The label of the tag.
@@ -8700,6 +11738,8 @@ pub struct SnoozeLogEntry {
     #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceReference>,
     #[serde(skip_serializing_if="Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8756,6 +11796,16 @@ impl std::default::Default for SnoozeLogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StatusDashboard {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub url_slug: Option<String>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StatusUpdate {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8767,11 +11817,33 @@ pub struct StatusUpdate {
     pub created_at: Option<String>,
     #[serde(skip_serializing_if="Option::is_none")]
     pub sender: Option<UserReference>,
+    /// The subject of the custom html email status update. Present if included in request body.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub subject: Option<String>,
+    /// The html content of the custom html email status update. Present if included in request body.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub html_message: Option<String>,
+}
+
+/// A rule for contacting the user for Incident Status Updates.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StatusUpdateNotificationRule {     
+    pub contact_method: ContactMethodReference,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateUserStatusUpdateNotificationRule {     
-    pub status_update_notification_rule: Value,
+    pub status_update_notification_rule: StatusUpdateNotificationRule,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateIncidentNotificationSubscribers {     
+    pub subscribers: Vec<NotificationSubscriber>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RemoveIncidentNotificationSubscribers {     
+    pub subscribers: Vec<NotificationSubscriber>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -9294,9 +12366,17 @@ impl std::default::Default for TeamTypeEnum {
     }
 }
 
-/// Reference to the team that owns the business service.
+/// Reference to the team that owns the Business Service.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Team1 {     
+    /// The Team ID
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+}
+
+/// Reference to the team that owns the Business Service.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Team2 {     
     /// The team ID
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -9304,12 +12384,12 @@ pub struct Team1 {
 
 /// Reference to the team that owns the business service.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Team2 {     
+pub struct Team3 {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
     /// A string that determines the schema of the object.
     #[serde(rename = "type")]
-    #[serde(default="Team2::_type_default")]
+    #[serde(default="Team3::_type_default")]
     pub _type: String,
     /// The API show URL at which the object is accessible.
     #[serde(rename = "self")]
@@ -9317,19 +12397,19 @@ pub struct Team2 {
     pub _self: Option<String>,
 }
 
-impl Default for Team2 {
+impl Default for Team3 {
     fn default() -> Self {
         Self {
             id: Default::default(),
-            _type: String::from("team_2"),
+            _type: String::from("team_3"),
             _self: Default::default(),
         }
     }
 }
 
-impl Team2 {
+impl Team3 {
     fn _type_default() -> String {
-        String::from("team_2")
+        String::from("team_3")
     }
 }
 
@@ -9429,6 +12509,14 @@ pub struct CreateTeam {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateTeam {     
     pub team: Team,
+}
+
+/// The configuration for Time Based Alert Grouping
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TimeBasedAlertGroupingConfiguration {     
+    /// The duration in minutes within which to automatically group incoming Alerts.  To continue grouping Alerts until the Incident is resolved, set this value to 0.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub timeout: Option<isize>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -9939,12 +13027,6 @@ impl std::default::Default for UpdateTeamUserRoleEnum {
     }
 }
 
-/// A rule for contacting the user for Incident Status Updates.
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-pub struct UsersidstatusUpdateNotificationRulesStatusUpdateNotificationRule {     
-    pub contact_method: ContactMethodReference,
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Vendor {     
     /// The label of the tag.
@@ -10399,6 +13481,292 @@ impl std::default::Default for WebhookReferenceTypeEnum {
     fn default() -> Self {
         WebhookReferenceTypeEnum::WEBHOOK_REFERENCE
     }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookSubscription {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The type indicating the schema of the object.
+    #[serde(rename = "type")]
+    pub _type: WebhookSubscriptionTypeEnum,
+    /// Determines whether this subscription will produce webhook events.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active: Option<bool>,
+    pub delivery_method: WebhookSubscriptionDeliveryMethod,
+    /// A short description of the webhook subscription.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// The set of outbound event types the webhook will receive.
+    pub events: Vec<String>,
+    pub filter: WebhookSubscriptionFilter,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum WebhookSubscriptionTypeEnum { 
+    #[serde(rename = "webhook_subscription")]
+    WEBHOOK_SUBSCRIPTION,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for WebhookSubscriptionTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION => write!(f, "{}", "webhook_subscription"),
+            WebhookSubscriptionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookSubscriptionTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "webhook_subscription" => Ok(WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for WebhookSubscriptionTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION => "webhook_subscription",
+            WebhookSubscriptionTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for WebhookSubscriptionTypeEnum {
+    fn default() -> Self {
+        WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookSubscriptionDeliveryMethod {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The secret used to sign webhook payloads. Only provided on the initial create response.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub secret: Option<String>,
+    /// Whether or not this webhook subscription is temporarily disabled. Becomes `true` if the delivery method URL is repeatedly rejected by the server.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub temporarily_disabled: Option<bool>,
+    /// Indicates the type of the delivery method.
+    #[serde(rename = "type")]
+    pub _type: WebhookSubscriptionDeliveryMethodTypeEnum,
+    /// The destination URL for webhook delivery.
+    #[serde(skip_serializing_if="String::is_empty")]
+    pub url: String,
+    /// Optional headers to be set on this webhook subscription when sent. The header values are redacted in GET requests, but are not redacted on the webhook when delivered to the webhook's endpoint.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub custom_headers: Option<Vec<Value>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum WebhookSubscriptionDeliveryMethodTypeEnum { 
+    #[serde(rename = "http_delivery_method")]
+    HTTP_DELIVERY_METHOD,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for WebhookSubscriptionDeliveryMethodTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD => write!(f, "{}", "http_delivery_method"),
+            WebhookSubscriptionDeliveryMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookSubscriptionDeliveryMethodTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "http_delivery_method" => Ok(WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for WebhookSubscriptionDeliveryMethodTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD => "http_delivery_method",
+            WebhookSubscriptionDeliveryMethodTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for WebhookSubscriptionDeliveryMethodTypeEnum {
+    fn default() -> Self {
+        WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookSubscriptionFilter {     
+    /// The id of the object being used as the filter.  This field is required for all filter types except account_reference.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The type of object being used as the filter.
+    #[serde(rename = "type")]
+    pub _type: WebhookSubscriptionFilterTypeEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum WebhookSubscriptionFilterTypeEnum { 
+    #[serde(rename = "account_reference")]
+    ACCOUNT_REFERENCE,
+    #[serde(rename = "service_reference")]
+    SERVICE_REFERENCE,
+    #[serde(rename = "team_reference")]
+    TEAM_REFERENCE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for WebhookSubscriptionFilterTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "{}", "account_reference"),
+            WebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
+            WebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
+            WebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookSubscriptionFilterTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "account_reference" => Ok(WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE),
+            "service_reference" => Ok(WebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE),
+            "team_reference" => Ok(WebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for WebhookSubscriptionFilterTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => "account_reference",
+            WebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => "service_reference",
+            WebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => "team_reference",
+            WebhookSubscriptionFilterTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for WebhookSubscriptionFilterTypeEnum {
+    fn default() -> Self {
+        WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdateWebhookSubscription {     
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub webhook_subscription: Option<WebhookSubscriptionUpdateWebhookSubscription>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookSubscriptionUpdateWebhookSubscription {     
+    /// A short description of the webhook subscription.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<String>,
+    /// The set of outbound event types the subscription will receive.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub events: Option<Vec<String>>,
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub filter: Option<WebhookSubscriptionUpdateWebhookSubscriptionFilter>,
+    /// If true, a webhook will be sent. True is the default state. If false, a webhook will not be sent.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub active: Option<bool>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookSubscriptionUpdateWebhookSubscriptionFilter {     
+    /// The id of the object being used as the filter.  This field is required for all filter types except account_reference.
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<String>,
+    /// The type of object being used as the filter.
+    #[serde(rename = "type")]
+    pub _type: WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum { 
+    #[serde(rename = "account_reference")]
+    ACCOUNT_REFERENCE,
+    #[serde(rename = "service_reference")]
+    SERVICE_REFERENCE,
+    #[serde(rename = "team_reference")]
+    TEAM_REFERENCE,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self { 
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "{}", "account_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s { 
+            "account_reference" => Ok(WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE),
+            "service_reference" => Ok(WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE),
+            "team_reference" => Ok(WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self { 
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => "account_reference",
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => "service_reference",
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => "team_reference",
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::UNKNOWN => "unknown"
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
+    fn default() -> Self {
+        WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateWebhookSubscription {     
+    pub webhook_subscription: WebhookSubscription,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]

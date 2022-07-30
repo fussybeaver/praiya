@@ -19,16 +19,15 @@
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
-mod gen;
+mod macros;
 
 use std::collections::HashMap;
 
-pub mod adapters;
+pub mod default_models;
 pub mod endpoints;
 pub mod errors;
-pub mod default_models;
-pub mod slack_models;
 mod praiya;
+pub mod slack_models;
 
 pub(crate) use crate::praiya::{
     BaseOption, BaseRequest, PaginatedResponse, PaginationQueryComponent, SingleResponse, SubSystem,
@@ -44,5 +43,5 @@ pub mod auth {
     }
 }
 
-pub use endpoints as api;
 pub use default_models as models;
+pub use endpoints as api;

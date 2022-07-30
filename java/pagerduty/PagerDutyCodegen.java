@@ -56,7 +56,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
     }
 
-    private static HashMap<String, Object> patchOperationBodyNames = new HashMap();
+    private static final HashMap<String, Object> patchOperationBodyNames = new HashMap();
 
     @Override
     public void preprocessOpenAPI(OpenAPI openAPI) {
@@ -65,7 +65,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         while (versionComponents.size() < 3) {
             // Add the package version as a version component to the official specification
             // version
-            versionComponents.add((String) additionalProperties.get(CodegenConstants.PACKAGE_VERSION));
+            versionComponents.add(additionalProperties.get(CodegenConstants.PACKAGE_VERSION));
         }
 
         info.setVersion(StringUtils.join(versionComponents, "."));
@@ -89,9 +89,11 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
     @Override
     public CodegenModel fromModel(String name, Schema schema, Map<String, Schema> allDefinitions) {
-        // This model schema crashes the generator - do not remove 
+        //List excludedModels = ArrayList<String>("AllOfOrchestrationUnrouted_orchestration_path_rulesActions");
+
+        // This model schema crashes the generator - do not remove
         // We generate a dummy model and return before calling the super method
-        if (name.equals("inline_response_200_11")) {
+        if (name.equals("inline_response_200_11") || name.equals("AllOfOrchestrationUnrouted_orchestration_path_rulesActions") || name.equals("AllOfServiceOrchestration_orchestration_path_catch_allActions") || name.equals("AllOfServiceOrchestration_orchestration_path_rulesActions")) {
             final CodegenModel codegenModel = CodegenModelFactory.newInstance(CodegenModelType.MODEL);
             if (reservedWords.contains(name)) {
                 codegenModel.name = escapeReservedWord(name);
@@ -293,7 +295,17 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     prop.datatype = "f32";
                 }
 
-                if (prop.baseName != null && !prop.baseName.equals("type") && prop.allowableValues != null) {
+                // Skip properties that exist but are empty strings
+                if (prop.baseName != null && prop.baseName.isEmpty()) {
+                    prop.vendorExtensions.put("x-rustgen-skip-prop", true);
+                }
+
+                // All PagerDuty `type` properties are Strings
+                if (prop.baseName != null && prop.baseName.equals("type") && prop.datatype.equals("Value")) {
+                    prop.datatype = "String";
+                }
+
+                if (prop.baseName != null && !prop.baseName.equals("type") && prop.allowableValues != null && prop.datatype.equals("String")) {
                     ArrayList<HashMap<String, String>> vars = (ArrayList<HashMap<String, String>>) prop.allowableValues.get("enumVars");
                     if (vars != null && vars.size() > 0) {
                         prop.vendorExtensions.put("is-enum", true);
@@ -404,7 +416,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         // Index all CodegenModels by model name.
         HashMap<String, CodegenModel> allTheModels = new HashMap<String, CodegenModel>();
 
-        for (Object obj : (List<Object>) allModels) {
+        for (Object obj : allModels) {
             Map<String, Object> map = (Map<String, Object>) obj;
 
             CodegenModel cm = (CodegenModel) map.get("model");

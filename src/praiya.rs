@@ -22,7 +22,6 @@ use log::{debug, warn};
 use serde::de::DeserializeOwned;
 use serde::ser;
 
-use crate::endpoints::incidents_macro;
 use crate::errors::Error::*;
 use crate::errors::{self, Error};
 use crate::models::*;
@@ -47,8 +46,6 @@ impl<'a> Into<HyperUri> for Uri<'a> {
     }
 }
 
-const PAGERDUTY_API_HOST: &str = "https://api.pagerduty.com";
-
 /// Default timeout for all requests is 2 minutes.
 const DEFAULT_TIMEOUT: u64 = 120;
 
@@ -58,6 +55,17 @@ const MAX_ALLOWED_RESPONSE_SIZE: u64 = 32768;
 pub enum PraiyaCustomHeaders {
     None,
     EarlyAccess,
+    AuditEarlyAccess,
+}
+
+impl Into<&'static str> for PraiyaCustomHeaders {
+    fn into(self) -> &'static str {
+        match self {
+            PraiyaCustomHeaders::EarlyAccess => "x-early-access",
+            PraiyaCustomHeaders::AuditEarlyAccess => "x-audit-early-access",
+            PraiyaCustomHeaders::None => panic!("no key for this header"),
+        }
+    }
 }
 
 impl Praiya {
@@ -107,7 +115,7 @@ impl Praiya {
         builder: Builder,
         query: Arc<dyn BaseOption + Send + Sync>,
         body: Body,
-        pagination: PaginationQueryComponent,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> Result<Request<Body>, Error> {
         let uri = Praiya::parse_paginated_url(host, path, query, pagination)?;
         let request_uri: hyper::Uri = uri.into();
@@ -125,7 +133,11 @@ impl Praiya {
             .body(body)?)
     }
 
-    pub(crate) fn parse_url<'a>(host: &str, path: &str, query: Option<&str>) -> Result<Uri<'a>, Error> {
+    pub(crate) fn parse_url<'a>(
+        host: &str,
+        path: &str,
+        query: Option<&str>,
+    ) -> Result<Uri<'a>, Error> {
         let mut url = url::Url::parse(host)?;
         url = url.join(path)?;
 
@@ -140,7 +152,7 @@ impl Praiya {
         host: &str,
         path: &str,
         query: Arc<dyn BaseOption + Send + Sync>,
-        pagination: PaginationQueryComponent,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> Result<Uri<'a>, Error> {
         let mut url = url::Url::parse(host)?;
         url = url.join(path)?;
@@ -156,61 +168,52 @@ impl Praiya {
         'a,
         'b: 'a,
         T: DeserializeOwned,
-        P: PaginatedResponse<Inner = Vec<T>> + DeserializeOwned + 'b,
+        P: PaginatedResponse<PC, Inner = Vec<T>> + DeserializeOwned + 'b,
+        PC: PaginatedCursor,
+        PQC: PaginationQueryComponent + From<PC> + Sync + Send + 'static
     >(
         &'a self,
         base_req: BaseRequest,
-        pagination: PaginationQueryComponent,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> impl Stream<Item = Result<T, Error>> + Unpin + 'a {
         let next_client = self.clone();
         let next_base_req = base_req.clone();
         Box::pin(
             self.process_request(base_req.build_request(self, pagination))
                 .and_then(Praiya::decode_response)
-                .map_ok(|first: P| next_client.unfold(first, next_base_req))
+                .map_ok(|first: P| next_client.unfold::<P, T, PC, PQC>(first, next_base_req))
                 .try_flatten_stream(),
         )
     }
 
-    fn unfold<P: PaginatedResponse<Inner = Vec<T>> + DeserializeOwned, T: DeserializeOwned>(
+    fn unfold<
+        P: PaginatedResponse<PC, Inner = Vec<T>> + DeserializeOwned,
+        T: DeserializeOwned,
+        PC: PaginatedCursor,
+        PQC: PaginationQueryComponent + From<PC> + Sync + Send + 'static,
+    >(
         self,
         first: P,
         base_req: BaseRequest,
     ) -> impl Stream<Item = Result<T, Error>> {
-        let offset = first.get_offset();
-        let limit = first.get_limit();
-        let has_more = first.has_more();
+        let cursor = first.into_cursor();
         let iter = first.inner().into_iter();
-        let cursor = PaginatedCursor {
-            offset,
-            has_more,
-            limit,
-        };
         Box::pin(stream::try_unfold(
             (self, base_req, cursor, iter),
-            |(client, base_req, cursor, mut iter)| async {
+            |(client, base_req, cursor, mut iter): (_, _, PC, _)| async {
                 match iter.next() {
                     Some(val) => Ok(Some((val, (client, base_req, cursor, iter)))),
-                    None if cursor.has_more => {
+                    None if cursor.has_more() => {
+                        let pqc: PQC = cursor.into();
                         let res: P = client
                             .process_request(base_req.build_request(
                                 &client,
-                                PaginationQueryComponent {
-                                    offset: cursor.offset + cursor.limit,
-                                    limit: cursor.limit,
-                                },
+                                Arc::new(pqc),
                             ))
                             .and_then(Praiya::decode_response)
                             .await?;
-                        let has_more = res.has_more();
-                        let offset = res.get_offset();
-                        let limit = res.get_limit();
+                        let cursor = res.into_cursor();
                         let mut iter = res.inner().into_iter();
-                        let cursor = PaginatedCursor {
-                            offset,
-                            has_more,
-                            limit,
-                        };
                         Ok(iter
                             .next()
                             .map(move |v| (v, (client, base_req, cursor, iter))))
@@ -335,96 +338,13 @@ impl Praiya {
     where
         S: ser::Serialize,
     {
-        Ok(serde_json::to_string(&body)
-            .map(|content| content.into())?)
-    }
-
-    pub async fn post_request<
-        B: serde::Serialize,
-        R: DeserializeOwned,
-        I: SingleResponse<Inner = R> + DeserializeOwned,
-    >(
-        &self,
-        url: Uri<'_>,
-        body: B,
-        headers: PraiyaCustomHeaders,
-    ) -> Result<R, Error> {
-        let mut builder = http::request::Builder::new();
-        builder = builder.header(FROM, "foobar@example.com");
-        if let PraiyaCustomHeaders::EarlyAccess = headers {
-            builder = builder.header("x-early-access", "true");
-        }
-
-        let req = self.build_request(
-            url,
-            builder.method(http::Method::POST),
-            Praiya::serialize_payload(body)?,
-        );
-
-        self.process_into_value::<R, I>(req).await
-    }
-
-    pub async fn put_request<
-        B: serde::Serialize,
-        R: DeserializeOwned,
-        I: SingleResponse<Inner = R> + DeserializeOwned,
-    >(
-        &self,
-        url: Uri<'_>,
-        body: B,
-        headers: PraiyaCustomHeaders,
-    ) -> Result<R, Error> {
-        let mut builder = http::request::Builder::new();
-        builder = builder.header(FROM, "foobar@example.com");
-        if let PraiyaCustomHeaders::EarlyAccess = headers {
-            builder = builder.header("x-early-access", "true");
-        }
-
-        let req = self.build_request(
-            url,
-            builder.method(http::Method::PUT),
-            Praiya::serialize_payload(body)?,
-        );
-
-        self.process_into_value::<R, I>(req).await
-    }
-
-    pub async fn single_request<
-        B: serde::Serialize,
-        R: DeserializeOwned,
-        I: SingleResponse<Inner = R> + DeserializeOwned,
-    >(
-        &self,
-        url: Uri<'_>,
-        body: Option<B>,
-        method: http::Method,
-        headers: PraiyaCustomHeaders,
-    ) -> Result<R, Error> {
-        let mut builder = http::request::Builder::new();
-        builder = builder.header(FROM, "foobar@example.com");
-        if let PraiyaCustomHeaders::EarlyAccess = headers {
-            builder = builder.header("x-early-access", "true");
-        }
-
-        let req_body = if let Some(inner_body) = body {
-            Praiya::serialize_payload(inner_body)?
-        } else {
-            Body::empty()
-        };
-
-        let req = self.build_request(
-            url,
-            builder.method(method),
-            req_body,
-        );
-
-        self.process_into_value::<R, I>(req).await
+        Ok(serde_json::to_string(&body).map(|content| content.into())?)
     }
 
     pub fn list_request<
         R: DeserializeOwned + Sync + Send + 'static,
         B: BaseOption + 'static,
-        I: PaginatedResponse<Inner = Vec<R>> + DeserializeOwned + 'static,
+        I: PaginatedResponse<PaginatedLegacyPosition, Inner = Vec<R>> + DeserializeOwned + 'static,
     >(
         &self,
         host: &str,
@@ -433,8 +353,12 @@ impl Praiya {
         headers: PraiyaCustomHeaders,
     ) -> impl Stream<Item = Result<R, Error>> + '_ {
         let mut header_map = HashMap::new();
-        if let PraiyaCustomHeaders::EarlyAccess = headers {
-            header_map.insert(String::from("x-early-access"), String::from("true"));
+        match headers {
+            PraiyaCustomHeaders::None => (),
+            _ => {
+                let key: &str = headers.into();
+                header_map.insert(String::from(key), String::from("true"));
+            }
         }
         let base_request = BaseRequest {
             host: String::from(host),
@@ -444,35 +368,14 @@ impl Praiya {
             headers: header_map,
         };
 
-        debug!("host: {}", host);
-
-        self.process_into_paginated_stream::<R, I>(
+        self.process_into_paginated_stream::<R, I, PaginatedLegacyPosition, PaginationLegacyQueryComponent>(
             base_request,
-            PaginationQueryComponent {
+            Arc::new(PaginationLegacyQueryComponent {
                 offset: 0,
                 limit: DEFAULT_PAGERDUTY_API_LIMIT,
-            },
+            }),
         )
         .boxed()
-    }
-
-    pub async fn get_request<
-        R: DeserializeOwned,
-        I: SingleResponse<Inner = R> + DeserializeOwned,
-    >(
-        &self,
-        url: Uri<'_>,
-        headers: PraiyaCustomHeaders,
-    ) -> Result<R, Error> {
-        let mut builder = http::request::Builder::new();
-        builder = builder.header(FROM, "foobar@example.com");
-        if let PraiyaCustomHeaders::EarlyAccess = headers {
-            builder = builder.header("x-early-access", "true");
-        }
-
-        let req = self.build_request(url, builder.method(Method::GET), Body::empty());
-
-        self.process_into_value::<R, I>(req).await
     }
 }
 
@@ -489,7 +392,7 @@ trait RequestBuilder {
     fn build_request(
         &self,
         client: &Praiya,
-        offset: PaginationQueryComponent,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> Result<Request<Body>, Error>;
 }
 
@@ -497,7 +400,7 @@ impl RequestBuilder for BaseRequest {
     fn build_request(
         &self,
         client: &Praiya,
-        pagination: PaginationQueryComponent,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> Result<Request<Body>, Error> {
         let mut builder = Builder::new().method(self.method.clone());
         for (key, value) in self.headers.iter() {
@@ -518,19 +421,68 @@ pub(crate) trait SubSystem {
     fn path(&self) -> &'static str;
 }
 
-pub trait PaginatedResponse {
+pub trait PaginatedResponse<PC: PaginatedCursor> {
     type Inner;
+    type Cursor;
 
-    fn get_offset(&self) -> usize;
+    fn get_pos(&self) -> Self::Cursor;
     fn get_limit(&self) -> usize;
     fn inner(self) -> Self::Inner;
     fn has_more(&self) -> bool;
+    fn into_cursor(&self) -> PC;
 }
 
-pub(crate) struct PaginatedCursor {
-    pub(crate) offset: usize,
+pub trait PaginatedCursor {
+    fn has_more(&self) -> bool;
+    fn get_limit(&self) -> usize;
+}
+
+pub struct PaginatedLegacyPosition {
+    pub offset: usize,
+    pub has_more: bool,
+    pub limit: usize,
+}
+
+impl PaginatedCursor for PaginatedLegacyPosition {
+    fn has_more(&self) -> bool {
+        self.has_more
+    }
+    fn get_limit(&self) -> usize {
+        self.limit
+    }
+}
+
+impl From<PaginatedLegacyPosition> for PaginationLegacyQueryComponent {
+    fn from(cursor: PaginatedLegacyPosition) -> Self {
+        Self {
+            offset: cursor.offset,
+            limit: cursor.limit,
+        }
+    }
+}
+
+impl From<PaginatedCursorPosition> for PaginationCursorQueryComponent {
+    fn from(cursor: PaginatedCursorPosition) -> Self {
+        Self {
+            cursor: cursor.cursor,
+            limit: cursor.limit,
+        }
+    }
+}
+
+pub(crate) struct PaginatedCursorPosition {
+    pub(crate) cursor: Option<String>,
     pub(crate) has_more: bool,
     pub(crate) limit: usize,
+}
+
+impl PaginatedCursor for PaginatedCursorPosition {
+    fn has_more(&self) -> bool {
+        self.has_more
+    }
+    fn get_limit(&self) -> usize {
+        self.limit
+    }
 }
 
 pub trait SingleResponse {
@@ -539,10 +491,38 @@ pub trait SingleResponse {
     fn inner(self) -> Self::Inner;
 }
 
+pub trait PaginationQueryComponent {
+    fn append_paginated_query_string(&self, query: &mut url::form_urlencoded::Serializer<String>);
+}
+
+/// Legacy pagination
 #[derive(Debug, PartialEq, Serialize)]
-pub struct PaginationQueryComponent {
+pub struct PaginationLegacyQueryComponent {
     pub offset: usize,
     pub limit: usize,
+}
+
+impl PaginationQueryComponent for PaginationLegacyQueryComponent {
+    fn append_paginated_query_string(&self, query: &mut url::form_urlencoded::Serializer<String>) {
+        query.append_pair("offset", &self.offset.to_string());
+        query.append_pair("limit", &self.limit.to_string());
+    }
+}
+
+/// Cursor-based pagination
+#[derive(Debug, PartialEq, Serialize)]
+pub struct PaginationCursorQueryComponent {
+    pub cursor: Option<String>,
+    pub limit: usize,
+}
+
+impl PaginationQueryComponent for PaginationCursorQueryComponent {
+    fn append_paginated_query_string(&self, query: &mut url::form_urlencoded::Serializer<String>) {
+        if let Some(cursor) = &self.cursor {
+            query.append_pair("cursor", cursor);
+        }
+        query.append_pair("limit", &self.limit.to_string());
+    }
 }
 
 pub(crate) trait ParamsBuilder<B: BaseOption> {
@@ -550,7 +530,10 @@ pub(crate) trait ParamsBuilder<B: BaseOption> {
 }
 
 pub trait BaseOption: Send + Sync {
-    fn build_paginated_query_string(&self, pagination: PaginationQueryComponent) -> String;
+    fn build_paginated_query_string(
+        &self,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
+    ) -> String;
 }
 
 use url::form_urlencoded;
@@ -561,10 +544,12 @@ pub const DEFAULT_PAGERDUTY_API_LIMIT: usize = 25;
 pub(crate) struct NoopParams {}
 
 impl BaseOption for NoopParams {
-    fn build_paginated_query_string(&self, pagination: PaginationQueryComponent) -> String {
+    fn build_paginated_query_string(
+        &self,
+        pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
+    ) -> String {
         let mut query = url::form_urlencoded::Serializer::new(String::new());
-        query.append_pair("offset", &pagination.offset.to_string());
-        query.append_pair("limit", &pagination.limit.to_string());
+        pagination.append_paginated_query_string(&mut query);
         query.finish()
     }
 }

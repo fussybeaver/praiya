@@ -65,10 +65,11 @@ macro_rules! list_response_type {
                 pub [< $key >]: Vec<$return>,
             }
 
-            impl PaginatedResponse for [< $name Response >] {
+            impl PaginatedResponse<crate::praiya::PaginatedLegacyPosition> for [< $name Response >] {
                 type Inner = Vec<$return>;
+                type Cursor = usize;
 
-                fn get_offset(&self) -> usize {
+                fn get_pos(&self) -> Self::Cursor {
                     self.offset.unwrap_or(1)
                 }
 
@@ -82,6 +83,14 @@ macro_rules! list_response_type {
 
                 fn has_more(&self) -> bool {
                     self.offset.is_some() && self.limit.is_some() && self.more.unwrap_or(false)
+                }
+
+                fn into_cursor(&self) -> crate::praiya::PaginatedLegacyPosition {
+                    crate::praiya::PaginatedLegacyPosition {
+                        offset: self.get_pos(),
+                        has_more: self.has_more(),
+                        limit: self.get_limit(),
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 use proc_macro::{self, TokenStream};
 use proc_macro2::{Ident, Span};
 use quote::quote;
-use syn::{parse_macro_input, DataEnum, DataUnion, DeriveInput, FieldsNamed, FieldsUnnamed, Type};
+use syn::{parse_macro_input, DeriveInput, FieldsNamed, Type};
 
 #[proc_macro_derive(PraiyaParamsBuilder)]
 pub fn builder(input: TokenStream) -> TokenStream {
@@ -122,10 +122,9 @@ pub fn builder(input: TokenStream) -> TokenStream {
         }
 
         impl crate::praiya::BaseOption for #name {
-            fn build_paginated_query_string(&self, pagination: PaginationQueryComponent) -> String {
+            fn build_paginated_query_string(&self, pagination: std::sync::Arc<dyn PaginationQueryComponent + Sync + Send>) -> String {
                 let mut query = url::form_urlencoded::Serializer::new(self.qs.clone());
-                query.append_pair("offset", &pagination.offset.to_string());
-                query.append_pair("limit", &pagination.limit.to_string());
+                pagination.append_paginated_query_string(&mut query);
                 query.finish()
             }
         }
