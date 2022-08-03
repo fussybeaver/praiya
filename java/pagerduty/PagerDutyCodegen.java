@@ -28,9 +28,6 @@ import io.swagger.v3.core.util.Json;
 public class PagerDutyCodegen extends RustServerCodegen {
     private static final Logger LOGGER = LoggerFactory.getLogger(PagerDutyCodegen.class);
 
-    protected Map<String, CodegenTag> tagList = new HashMap<String, CodegenTag>();
-    protected Map<String, List<CodegenProperty>> mapLikeModels = new HashMap<String, List<CodegenProperty>>();
-
     public PagerDutyCodegen() {
         super();
 
@@ -39,7 +36,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
         apiTemplateFiles.remove("api.mustache");
 
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
-        additionalProperties.put("tags", tagList.values());
         supportingFiles.remove(new SupportingFile("models.mustache", "src", "models.rs"));
     }
 
@@ -381,34 +377,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     prop.vendorExtensions.put("x-rustgen-is-required", true);
                 }
             }
-
-            if (mapLikeModels.containsKey(model.name)) {
-                model.vars = mapLikeModels.get(model.name);
-            }
         }
 
         return newObjs;
-    }
-
-    @Override
-    public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co,
-            Map<String, List<CodegenOperation>> operations) {
-
-        super.addOperationToGroup(tag, resourcePath, operation, co, operations);
-        CodegenTag codegenTag;
-        if (tagList.containsKey(tag)) {
-            codegenTag = tagList.get(tag);
-        } else {
-            codegenTag = new CodegenTag();
-            codegenTag.baseName = underscore(tag);
-            codegenTag.classname = tag;
-            codegenTag.operations = new ArrayList<CodegenOperation>();
-            tagList.put(tag, codegenTag);
-        }
-
-        List<CodegenOperation> codegenOperations = codegenTag.getOperations();
-        codegenOperations.add(co);
-        codegenTag.setContents(co.getContents());
     }
 
     @Override

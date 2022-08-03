@@ -21,10 +21,7 @@
                 <goal>generate</goal>
               </goals>
               <configuration>
-                <inputSpec>/Users/fussybeaver/projects/pagerduty-api-schema/reference/REST/openapiv3.json</inputSpec>
-                <!--
-                <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/master/reference/REST/openapiv3.json</inputSpec>
-                -->
+                <inputSpec>https://raw.githubusercontent.com/fussybeaver/pagerduty-api-schema/praiya-master/reference/REST/openapiv3.json</inputSpec>
                 <language>pagerduty.PagerDutyCodegen</language>
                 <output>${project.basedir}</output>
                 <generateApis>true</generateApis>
@@ -42,10 +39,7 @@
                 <goal>generate</goal>
               </goals>
               <configuration>
-                <inputSpec>https://raw.githubusercontent.com/PagerDuty/api-schema/main/reference/integration-slack-service/openapiv3.json</inputSpec>
-                <!--
-                <inputSpec>/Users/fussybeaver/projects/praiya/openapiv3.json</inputSpec>
-                -->
+                <inputSpec>https://raw.githubusercontent.com/fussybeaver/pagerduty-api-schema/praiya-master/reference/integration-slack-service/openapiv3.json</inputSpec>
                 <language>pagerduty.PagerDutyCodegen</language>
                 <output>${project.basedir}</output>
                 <generateApis>true</generateApis>
@@ -57,24 +51,6 @@
                 </configOptions>
               </configuration>
             </execution>
-          <!--
-            <execution>
-              <goals>
-                <goal>generate</goal>
-              </goals>
-              <configuration>
-                <inputSpec>/home/fussybeaver/projects/praiya/slack/openapiv3.json</inputSpec>
-                <language>pagerduty.PagerDutyCodegen</language>
-                <output>${project.basedir}/slack</output>
-                <generateApis>true</generateApis>
-                <templateDirectory>${project.basedir}/templates</templateDirectory>
-                <configOptions>
-                  <packageName>pagerduty-slack-models</packageName>
-                  <packageVersion>0</packageVersion>
-                </configOptions>
-              </configuration>
-            </execution>
-                -->
           </executions>
           <dependencies>
               <dependency>
