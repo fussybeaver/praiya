@@ -97,8 +97,8 @@ pub enum SlackConnectionNotifiationType {
 impl Display for SlackConnectionNotifiationType {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self { 
-            SlackConnectionNotifiationType::RESPONDER => write!(f, "{}", "responder"),
-            SlackConnectionNotifiationType::STAKEHOLDER => write!(f, "{}", "stakeholder"),
+            SlackConnectionNotifiationType::RESPONDER => write!(f, "responder"),
+            SlackConnectionNotifiationType::STAKEHOLDER => write!(f, "stakeholder"),
         }
     }
 }
@@ -134,8 +134,8 @@ pub enum SlackConnectionSourceType {
 impl Display for SlackConnectionSourceType {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self { 
-            SlackConnectionSourceType::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            SlackConnectionSourceType::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
+            SlackConnectionSourceType::SERVICE_REFERENCE => write!(f, "service_reference"),
+            SlackConnectionSourceType::TEAM_REFERENCE => write!(f, "team_reference"),
         }
     }
 }
@@ -170,9 +170,9 @@ pub enum SlackConnectionUrgency {
 impl Display for SlackConnectionUrgency {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self { 
-            SlackConnectionUrgency::HIGH => write!(f, "{}", "high"),
-            SlackConnectionUrgency::LOW => write!(f, "{}", "low"),
-            SlackConnectionUrgency::NULL => write!(f, "{}", "null"),
+            SlackConnectionUrgency::HIGH => write!(f, "high"),
+            SlackConnectionUrgency::LOW => write!(f, "low"),
+            SlackConnectionUrgency::NULL => write!(f, "null"),
         }
     }
 }

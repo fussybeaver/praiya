@@ -96,7 +96,7 @@ impl PaginatedResponse<crate::praiya::PaginatedCursorPosition> for PaginatedCurs
         self.next_cursor.is_some()
     }
 
-    fn into_cursor(&self) -> crate::praiya::PaginatedCursorPosition {
+    fn to_cursor(&self) -> crate::praiya::PaginatedCursorPosition {
         crate::praiya::PaginatedCursorPosition {
             cursor: self.get_pos(),
             has_more: self.has_more(),
@@ -502,7 +502,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_service_audit_records() {
-        env_logger::try_init();
         let pagerduty = crate::Praiya::connect("test").unwrap();
 
         let mut opts_builder = super::ServicesListServiceAuditRecordsParamsBuilder::new();

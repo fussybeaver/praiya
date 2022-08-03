@@ -700,7 +700,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_notification_subscribers() {
-        env_logger::try_init();
         let pagerduty = crate::Praiya::connect("test").unwrap();
         let create_incident_notification_subscriber = NotificationSubscriber {
             subscriber_id: Some(String::from("PD1234")),

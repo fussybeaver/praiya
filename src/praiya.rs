@@ -40,9 +40,9 @@ pub struct Uri<'a> {
     encoded: Cow<'a, str>,
 }
 
-impl<'a> Into<HyperUri> for Uri<'a> {
-    fn into(self) -> HyperUri {
-        self.encoded.as_ref().parse().unwrap()
+impl<'a> From<Uri<'a>> for HyperUri {
+    fn from(uri: Uri<'a>) -> Self {
+        uri.encoded.as_ref().parse().unwrap()
     }
 }
 
@@ -58,9 +58,9 @@ pub enum PraiyaCustomHeaders {
     AuditEarlyAccess,
 }
 
-impl Into<&'static str> for PraiyaCustomHeaders {
-    fn into(self) -> &'static str {
-        match self {
+impl From<PraiyaCustomHeaders> for &'static str {
+    fn from(headers: PraiyaCustomHeaders) -> Self {
+        match headers {
             PraiyaCustomHeaders::EarlyAccess => "x-early-access",
             PraiyaCustomHeaders::AuditEarlyAccess => "x-audit-early-access",
             PraiyaCustomHeaders::None => panic!("no key for this header"),
@@ -196,7 +196,7 @@ impl Praiya {
         first: P,
         base_req: BaseRequest,
     ) -> impl Stream<Item = Result<T, Error>> {
-        let cursor = first.into_cursor();
+        let cursor = first.to_cursor();
         let iter = first.inner().into_iter();
         Box::pin(stream::try_unfold(
             (self, base_req, cursor, iter),
@@ -212,7 +212,7 @@ impl Praiya {
                             ))
                             .and_then(Praiya::decode_response)
                             .await?;
-                        let cursor = res.into_cursor();
+                        let cursor = res.to_cursor();
                         let mut iter = res.inner().into_iter();
                         Ok(iter
                             .next()
@@ -296,6 +296,7 @@ impl Praiya {
         }
     }
 
+    #[allow(dead_code)]
     async fn decode_into_string(response: Response<Body>) -> Result<String, Error> {
         let body = hyper::body::to_bytes(response.into_body()).await?;
 
@@ -429,7 +430,7 @@ pub trait PaginatedResponse<PC: PaginatedCursor> {
     fn get_limit(&self) -> usize;
     fn inner(self) -> Self::Inner;
     fn has_more(&self) -> bool;
-    fn into_cursor(&self) -> PC;
+    fn to_cursor(&self) -> PC;
 }
 
 pub trait PaginatedCursor {

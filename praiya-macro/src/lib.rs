@@ -10,69 +10,63 @@ pub fn builder(input: TokenStream) -> TokenStream {
     } = parse_macro_input!(input);
 
     let mut fields = vec![];
-    match data {
-        syn::Data::Struct(s) => match s.fields {
-            syn::Fields::Named(FieldsNamed { named, .. }) => {
-                for f in named {
-                    let ident = f.ident;
-                    match f.ty {
-                        Type::Path(syn::TypePath {
-                            path: syn::Path { segments, .. },
-                            ..
-                        }) if segments.iter().any(|p| p.ident == "Vec") => {
-                            fields.push(quote! {
+    if let syn::Data::Struct(s) = data {
+        if let syn::Fields::Named(FieldsNamed { named, .. }) = s.fields {
+            for f in named {
+                let ident = f.ident;
+                match f.ty {
+                    Type::Path(syn::TypePath {
+                        path: syn::Path { segments, .. },
+                        ..
+                    }) if segments.iter().any(|p| p.ident == "Vec") => {
+                        fields.push(quote! {
                                 pub fn #ident<I: IntoIterator<Item = &'req str>>(&mut self, #ident: I) -> &mut Self {
                                     for item in #ident {
                                         self.qs.append_pair(&format!("{}[]", stringify!(#ident)), &item);
                                     }
                                     self
-                                }                    
-                            
-                            });
-                        }
-                        Type::Path(syn::TypePath {
-                            path: syn::Path { segments, .. },
-                            ..
-                        }) if segments.iter().any(|p| p.ident == "String") => {
-                            fields.push(quote! {
-                                pub fn #ident(&mut self, #ident: &'req str) -> &mut Self {
-                                    self.qs.append_pair(stringify!(#ident), &#ident);
-
-                                    self
                                 }
-
                             });
-                        }
-                        Type::Path(syn::TypePath {
-                            path: syn::Path { segments, .. },
-                            ..
-                        }) if segments.iter().any(|p| p.ident == "chrono") => {
-                            fields.push(quote! {
+                    }
+                    Type::Path(syn::TypePath {
+                        path: syn::Path { segments, .. },
+                        ..
+                    }) if segments.iter().any(|p| p.ident == "String") => {
+                        fields.push(quote! {
+                            pub fn #ident(&mut self, #ident: &'req str) -> &mut Self {
+                                self.qs.append_pair(stringify!(#ident), &#ident);
+
+                                self
+                            }
+
+                        });
+                    }
+                    Type::Path(syn::TypePath {
+                        path: syn::Path { segments, .. },
+                        ..
+                    }) if segments.iter().any(|p| p.ident == "chrono") => {
+                        fields.push(quote! {
                                 pub fn #ident(&mut self, #ident: &'req chrono::DateTime<chrono::Utc>) -> &mut Self {
                                     self.qs.append_pair(stringify!(#ident), &#ident.to_rfc3339());
 
                                     self
-                                }                    
-                            
+                                }
                             });
-                        }
-                        x => {
-                            fields.push(quote! {
-                                pub fn #ident(&mut self, #ident: &'req #x) -> &mut Self {
-                                    self.qs.append_pair(stringify!(#ident), &format!("{}", &#ident));
+                    }
+                    x => {
+                        fields.push(quote! {
+                            pub fn #ident(&mut self, #ident: &'req #x) -> &mut Self {
+                                self.qs.append_pair(stringify!(#ident), &format!("{}", &#ident));
 
-                                    self
-                                }                    
-                            
-                            });
-                        }
+                                self
+                            }
+
+                        });
                     }
                 }
             }
-            _ => (),
-        },
-        _ => (),
-    };
+        }
+    }
 
     let mut source_method_doclink = String::new();
     for attr in attrs {
@@ -90,7 +84,7 @@ pub fn builder(input: TokenStream) -> TokenStream {
     let param_docstring = format!(
         "Options built using [{}] for {}",
         builder,
-        source_method_doclink.replace("\"", "")
+        source_method_doclink.replace('\"', "")
     );
     let output = quote! {
         #[derive(Default, Serialize)]

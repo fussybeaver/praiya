@@ -83,9 +83,9 @@ pub enum AcknowledgerReferenceTypeEnum {
 impl ::std::fmt::Display for AcknowledgerReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AcknowledgerReferenceTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            AcknowledgerReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            AcknowledgerReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AcknowledgerReferenceTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            AcknowledgerReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            AcknowledgerReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -198,9 +198,9 @@ pub enum AddonTypeEnum {
 impl ::std::fmt::Display for AddonTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AddonTypeEnum::FULL_PAGE_ADDON => write!(f, "{}", "full_page_addon"),
-            AddonTypeEnum::INCIDENT_SHOW_ADDON => write!(f, "{}", "incident_show_addon"),
-            AddonTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AddonTypeEnum::FULL_PAGE_ADDON => write!(f, "full_page_addon"),
+            AddonTypeEnum::INCIDENT_SHOW_ADDON => write!(f, "incident_show_addon"),
+            AddonTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -299,9 +299,9 @@ pub enum AddonReferenceTypeEnum {
 impl ::std::fmt::Display for AddonReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AddonReferenceTypeEnum::FULL_PAGE_ADDON_REFERENCE => write!(f, "{}", "full_page_addon_reference"),
-            AddonReferenceTypeEnum::INCIDENT_SHOW_ADDON_REFERENCE => write!(f, "{}", "incident_show_addon_reference"),
-            AddonReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AddonReferenceTypeEnum::FULL_PAGE_ADDON_REFERENCE => write!(f, "full_page_addon_reference"),
+            AddonReferenceTypeEnum::INCIDENT_SHOW_ADDON_REFERENCE => write!(f, "incident_show_addon_reference"),
+            AddonReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -404,10 +404,10 @@ pub enum AgentReferenceTypeEnum {
 impl ::std::fmt::Display for AgentReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AgentReferenceTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            AgentReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            AgentReferenceTypeEnum::INTEGRATION_REFERENCE => write!(f, "{}", "integration_reference"),
-            AgentReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AgentReferenceTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            AgentReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            AgentReferenceTypeEnum::INTEGRATION_REFERENCE => write!(f, "integration_reference"),
+            AgentReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -534,8 +534,8 @@ pub enum AlertTypeEnum {
 impl ::std::fmt::Display for AlertTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AlertTypeEnum::ALERT => write!(f, "{}", "alert"),
-            AlertTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AlertTypeEnum::ALERT => write!(f, "alert"),
+            AlertTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -581,9 +581,9 @@ pub enum AlertStatusEnum {
 impl ::std::fmt::Display for AlertStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AlertStatusEnum::TRIGGERED => write!(f, "{}", "triggered"),
-            AlertStatusEnum::RESOLVED => write!(f, "{}", "resolved"),
-            AlertStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AlertStatusEnum::TRIGGERED => write!(f, "triggered"),
+            AlertStatusEnum::RESOLVED => write!(f, "resolved"),
+            AlertStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -635,11 +635,11 @@ pub enum AlertSeverityEnum {
 impl ::std::fmt::Display for AlertSeverityEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AlertSeverityEnum::INFO => write!(f, "{}", "info"),
-            AlertSeverityEnum::WARNING => write!(f, "{}", "warning"),
-            AlertSeverityEnum::ERROR => write!(f, "{}", "error"),
-            AlertSeverityEnum::CRITICAL => write!(f, "{}", "critical"),
-            AlertSeverityEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AlertSeverityEnum::INFO => write!(f, "info"),
+            AlertSeverityEnum::WARNING => write!(f, "warning"),
+            AlertSeverityEnum::ERROR => write!(f, "error"),
+            AlertSeverityEnum::CRITICAL => write!(f, "critical"),
+            AlertSeverityEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -716,10 +716,10 @@ pub enum AlertGroupingParametersTypeEnum {
 impl ::std::fmt::Display for AlertGroupingParametersTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AlertGroupingParametersTypeEnum::TIME => write!(f, "{}", "time"),
-            AlertGroupingParametersTypeEnum::INTELLIGENT => write!(f, "{}", "intelligent"),
-            AlertGroupingParametersTypeEnum::CONTENT_BASED => write!(f, "{}", "content_based"),
-            AlertGroupingParametersTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AlertGroupingParametersTypeEnum::TIME => write!(f, "time"),
+            AlertGroupingParametersTypeEnum::INTELLIGENT => write!(f, "intelligent"),
+            AlertGroupingParametersTypeEnum::CONTENT_BASED => write!(f, "content_based"),
+            AlertGroupingParametersTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -810,8 +810,8 @@ pub enum AlertReferenceTypeEnum {
 impl ::std::fmt::Display for AlertReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AlertReferenceTypeEnum::ALERT_REFERENCE => write!(f, "{}", "alert_reference"),
-            AlertReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AlertReferenceTypeEnum::ALERT_REFERENCE => write!(f, "alert_reference"),
+            AlertReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -905,9 +905,9 @@ pub enum AllOfIncidentNoteUserTypeEnum {
 impl ::std::fmt::Display for AllOfIncidentNoteUserTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AllOfIncidentNoteUserTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            AllOfIncidentNoteUserTypeEnum::BOT_USER_REFERENCE => write!(f, "{}", "bot_user_reference"),
-            AllOfIncidentNoteUserTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AllOfIncidentNoteUserTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            AllOfIncidentNoteUserTypeEnum::BOT_USER_REFERENCE => write!(f, "bot_user_reference"),
+            AllOfIncidentNoteUserTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -981,8 +981,8 @@ pub enum AllOfWebhooksV1AssignedToObjectTypeEnum {
 impl ::std::fmt::Display for AllOfWebhooksV1AssignedToObjectTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AllOfWebhooksV1AssignedToObjectTypeEnum::USER => write!(f, "{}", "user"),
-            AllOfWebhooksV1AssignedToObjectTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AllOfWebhooksV1AssignedToObjectTypeEnum::USER => write!(f, "user"),
+            AllOfWebhooksV1AssignedToObjectTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1060,8 +1060,8 @@ pub enum AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
 impl ::std::fmt::Display for AllOfinlineResponse20036ChangeEventsItemsTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT => write!(f, "{}", "change_event"),
-            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT => write!(f, "change_event"),
+            AllOfinlineResponse20036ChangeEventsItemsTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1138,9 +1138,9 @@ pub enum AllOfrulesetsBodyRulesetTypeEnum {
 impl ::std::fmt::Display for AllOfrulesetsBodyRulesetTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AllOfrulesetsBodyRulesetTypeEnum::GLOBAL => write!(f, "{}", "global"),
-            AllOfrulesetsBodyRulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "{}", "default_global"),
-            AllOfrulesetsBodyRulesetTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AllOfrulesetsBodyRulesetTypeEnum::GLOBAL => write!(f, "global"),
+            AllOfrulesetsBodyRulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "default_global"),
+            AllOfrulesetsBodyRulesetTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1263,10 +1263,10 @@ pub enum GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
 impl ::std::fmt::Display for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => write!(f, "{}", "day"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => write!(f, "{}", "week"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => write!(f, "{}", "month"),
-            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::DAY => write!(f, "day"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::WEEK => write!(f, "week"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::MONTH => write!(f, "month"),
+            GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1345,9 +1345,9 @@ pub enum AnalyticsModelFiltersUrgencyEnum {
 impl ::std::fmt::Display for AnalyticsModelFiltersUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AnalyticsModelFiltersUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            AnalyticsModelFiltersUrgencyEnum::LOW => write!(f, "{}", "low"),
-            AnalyticsModelFiltersUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AnalyticsModelFiltersUrgencyEnum::HIGH => write!(f, "high"),
+            AnalyticsModelFiltersUrgencyEnum::LOW => write!(f, "low"),
+            AnalyticsModelFiltersUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1549,8 +1549,8 @@ pub enum AssignLogEntryTypeEnum {
 impl ::std::fmt::Display for AssignLogEntryTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            AssignLogEntryTypeEnum::ASSIGN_LOG_ENTRY => write!(f, "{}", "assign_log_entry"),
-            AssignLogEntryTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            AssignLogEntryTypeEnum::ASSIGN_LOG_ENTRY => write!(f, "assign_log_entry"),
+            AssignLogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1749,8 +1749,8 @@ pub enum BodyTypeEnum {
 impl ::std::fmt::Display for BodyTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            BodyTypeEnum::ALERT_BODY => write!(f, "{}", "alert_body"),
-            BodyTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            BodyTypeEnum::ALERT_BODY => write!(f, "alert_body"),
+            BodyTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1861,9 +1861,9 @@ pub enum PutIncidentManualBusinessServiceAssociationRelationEnum {
 impl ::std::fmt::Display for PutIncidentManualBusinessServiceAssociationRelationEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED => write!(f, "{}", "impacted"),
-            PutIncidentManualBusinessServiceAssociationRelationEnum::NOT_IMPACTED => write!(f, "{}", "not_impacted"),
-            PutIncidentManualBusinessServiceAssociationRelationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED => write!(f, "impacted"),
+            PutIncidentManualBusinessServiceAssociationRelationEnum::NOT_IMPACTED => write!(f, "not_impacted"),
+            PutIncidentManualBusinessServiceAssociationRelationEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -1952,8 +1952,8 @@ pub enum BusinessServiceReferenceTypeEnum {
 impl ::std::fmt::Display for BusinessServiceReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            BusinessServiceReferenceTypeEnum::BUSINESS_SERVICE_REFERENCE => write!(f, "{}", "business_service_reference"),
-            BusinessServiceReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            BusinessServiceReferenceTypeEnum::BUSINESS_SERVICE_REFERENCE => write!(f, "business_service_reference"),
+            BusinessServiceReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2127,8 +2127,8 @@ pub enum ChangeEventTypeEnum {
 impl ::std::fmt::Display for ChangeEventTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ChangeEventTypeEnum::CHANGE_EVENT => write!(f, "{}", "change_event"),
-            ChangeEventTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ChangeEventTypeEnum::CHANGE_EVENT => write!(f, "change_event"),
+            ChangeEventTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2295,11 +2295,11 @@ pub enum ContactMethodTypeEnum {
 impl ::std::fmt::Display for ContactMethodTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ContactMethodTypeEnum::EMAIL_CONTACT_METHOD => write!(f, "{}", "email_contact_method"),
-            ContactMethodTypeEnum::PHONE_CONTACT_METHOD => write!(f, "{}", "phone_contact_method"),
-            ContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => write!(f, "{}", "push_notification_contact_method"),
-            ContactMethodTypeEnum::SMS_CONTACT_METHOD => write!(f, "{}", "sms_contact_method"),
-            ContactMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ContactMethodTypeEnum::EMAIL_CONTACT_METHOD => write!(f, "email_contact_method"),
+            ContactMethodTypeEnum::PHONE_CONTACT_METHOD => write!(f, "phone_contact_method"),
+            ContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => write!(f, "push_notification_contact_method"),
+            ContactMethodTypeEnum::SMS_CONTACT_METHOD => write!(f, "sms_contact_method"),
+            ContactMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2398,11 +2398,11 @@ pub enum ContactMethodReferenceTypeEnum {
 impl ::std::fmt::Display for ContactMethodReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE => write!(f, "{}", "email_contact_method_reference"),
-            ContactMethodReferenceTypeEnum::PHONE_CONTACT_METHOD_REFERENCE => write!(f, "{}", "phone_contact_method_reference"),
-            ContactMethodReferenceTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD_REFERENCE => write!(f, "{}", "push_notification_contact_method_reference"),
-            ContactMethodReferenceTypeEnum::SMS_CONTACT_METHOD_REFERENCE => write!(f, "{}", "sms_contact_method_reference"),
-            ContactMethodReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE => write!(f, "email_contact_method_reference"),
+            ContactMethodReferenceTypeEnum::PHONE_CONTACT_METHOD_REFERENCE => write!(f, "phone_contact_method_reference"),
+            ContactMethodReferenceTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD_REFERENCE => write!(f, "push_notification_contact_method_reference"),
+            ContactMethodReferenceTypeEnum::SMS_CONTACT_METHOD_REFERENCE => write!(f, "sms_contact_method_reference"),
+            ContactMethodReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2468,8 +2468,8 @@ pub enum ContentBasedAlertGroupingConfigurationAggregateEnum {
 impl ::std::fmt::Display for ContentBasedAlertGroupingConfigurationAggregateEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY => write!(f, "{}", "all, any"),
-            ContentBasedAlertGroupingConfigurationAggregateEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ContentBasedAlertGroupingConfigurationAggregateEnum::ALL_ANY => write!(f, "all, any"),
+            ContentBasedAlertGroupingConfigurationAggregateEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2531,9 +2531,9 @@ pub enum ContextTypeEnum {
 impl ::std::fmt::Display for ContextTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ContextTypeEnum::LINK => write!(f, "{}", "link"),
-            ContextTypeEnum::IMAGE => write!(f, "{}", "image"),
-            ContextTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ContextTypeEnum::LINK => write!(f, "link"),
+            ContextTypeEnum::IMAGE => write!(f, "image"),
+            ContextTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2621,8 +2621,8 @@ pub enum EmailContactMethodTypeEnum {
 impl ::std::fmt::Display for EmailContactMethodTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD => write!(f, "{}", "email_contact_method"),
-            EmailContactMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD => write!(f, "email_contact_method"),
+            EmailContactMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2677,9 +2677,9 @@ pub enum EmailParserActionEnum {
 impl ::std::fmt::Display for EmailParserActionEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EmailParserActionEnum::TRIGGER => write!(f, "{}", "trigger"),
-            EmailParserActionEnum::RESOLVE => write!(f, "{}", "resolve"),
-            EmailParserActionEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EmailParserActionEnum::TRIGGER => write!(f, "trigger"),
+            EmailParserActionEnum::RESOLVE => write!(f, "resolve"),
+            EmailParserActionEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2745,10 +2745,10 @@ pub enum EmailParserValueExtractorsTypeEnum {
 impl ::std::fmt::Display for EmailParserValueExtractorsTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EmailParserValueExtractorsTypeEnum::ENTIRE => write!(f, "{}", "entire"),
-            EmailParserValueExtractorsTypeEnum::REGEX => write!(f, "{}", "regex"),
-            EmailParserValueExtractorsTypeEnum::BETWEEN => write!(f, "{}", "between"),
-            EmailParserValueExtractorsTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EmailParserValueExtractorsTypeEnum::ENTIRE => write!(f, "entire"),
+            EmailParserValueExtractorsTypeEnum::REGEX => write!(f, "regex"),
+            EmailParserValueExtractorsTypeEnum::BETWEEN => write!(f, "between"),
+            EmailParserValueExtractorsTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2800,10 +2800,10 @@ pub enum EmailParserValueExtractorsPartEnum {
 impl ::std::fmt::Display for EmailParserValueExtractorsPartEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EmailParserValueExtractorsPartEnum::BODY => write!(f, "{}", "body"),
-            EmailParserValueExtractorsPartEnum::SUBJECT => write!(f, "{}", "subject"),
-            EmailParserValueExtractorsPartEnum::FROM_ADDRESSES => write!(f, "{}", "from_addresses"),
-            EmailParserValueExtractorsPartEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EmailParserValueExtractorsPartEnum::BODY => write!(f, "body"),
+            EmailParserValueExtractorsPartEnum::SUBJECT => write!(f, "subject"),
+            EmailParserValueExtractorsPartEnum::FROM_ADDRESSES => write!(f, "from_addresses"),
+            EmailParserValueExtractorsPartEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2898,10 +2898,10 @@ pub enum EntityReferenceTypeEnum {
 impl ::std::fmt::Display for EntityReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EntityReferenceTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            EntityReferenceTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
-            EntityReferenceTypeEnum::ESCALATION_POLICY_REFERENCE => write!(f, "{}", "escalation_policy_reference"),
-            EntityReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EntityReferenceTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            EntityReferenceTypeEnum::TEAM_REFERENCE => write!(f, "team_reference"),
+            EntityReferenceTypeEnum::ESCALATION_POLICY_REFERENCE => write!(f, "escalation_policy_reference"),
+            EntityReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -2982,8 +2982,8 @@ pub enum EscalateLogEntryTypeEnum {
 impl ::std::fmt::Display for EscalateLogEntryTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EscalateLogEntryTypeEnum::ESCALATE_LOG_ENTRY => write!(f, "{}", "escalate_log_entry"),
-            EscalateLogEntryTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EscalateLogEntryTypeEnum::ESCALATE_LOG_ENTRY => write!(f, "escalate_log_entry"),
+            EscalateLogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3106,8 +3106,8 @@ pub enum EscalationPolicyTypeEnum {
 impl ::std::fmt::Display for EscalationPolicyTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EscalationPolicyTypeEnum::ESCALATION_POLICY => write!(f, "{}", "escalation_policy"),
-            EscalationPolicyTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EscalationPolicyTypeEnum::ESCALATION_POLICY => write!(f, "escalation_policy"),
+            EscalationPolicyTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3153,9 +3153,9 @@ pub enum EscalationPolicyOnCallHandoffNotificationsEnum {
 impl ::std::fmt::Display for EscalationPolicyOnCallHandoffNotificationsEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EscalationPolicyOnCallHandoffNotificationsEnum::IF_HAS_SERVICES => write!(f, "{}", "if_has_services"),
-            EscalationPolicyOnCallHandoffNotificationsEnum::ALWAYS => write!(f, "{}", "always"),
-            EscalationPolicyOnCallHandoffNotificationsEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EscalationPolicyOnCallHandoffNotificationsEnum::IF_HAS_SERVICES => write!(f, "if_has_services"),
+            EscalationPolicyOnCallHandoffNotificationsEnum::ALWAYS => write!(f, "always"),
+            EscalationPolicyOnCallHandoffNotificationsEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3244,8 +3244,8 @@ pub enum EscalationPolicyReferenceTypeEnum {
 impl ::std::fmt::Display for EscalationPolicyReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EscalationPolicyReferenceTypeEnum::ESCALATION_POLICY_REFERENCE => write!(f, "{}", "escalation_policy_reference"),
-            EscalationPolicyReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EscalationPolicyReferenceTypeEnum::ESCALATION_POLICY_REFERENCE => write!(f, "escalation_policy_reference"),
+            EscalationPolicyReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3348,11 +3348,11 @@ pub enum EscalationTargetReferenceTypeEnum {
 impl ::std::fmt::Display for EscalationTargetReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EscalationTargetReferenceTypeEnum::USER => write!(f, "{}", "user"),
-            EscalationTargetReferenceTypeEnum::SCHEDULE => write!(f, "{}", "schedule"),
-            EscalationTargetReferenceTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            EscalationTargetReferenceTypeEnum::SCHEDULE_REFERENCE => write!(f, "{}", "schedule_reference"),
-            EscalationTargetReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EscalationTargetReferenceTypeEnum::USER => write!(f, "user"),
+            EscalationTargetReferenceTypeEnum::SCHEDULE => write!(f, "schedule"),
+            EscalationTargetReferenceTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            EscalationTargetReferenceTypeEnum::SCHEDULE_REFERENCE => write!(f, "schedule_reference"),
+            EscalationTargetReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3461,9 +3461,9 @@ pub enum EventRuleActionsCommonEventActionValueEnum {
 impl ::std::fmt::Display for EventRuleActionsCommonEventActionValueEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleActionsCommonEventActionValueEnum::TRIGGER => write!(f, "{}", "trigger"),
-            EventRuleActionsCommonEventActionValueEnum::RESOLVE => write!(f, "{}", "resolve"),
-            EventRuleActionsCommonEventActionValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleActionsCommonEventActionValueEnum::TRIGGER => write!(f, "trigger"),
+            EventRuleActionsCommonEventActionValueEnum::RESOLVE => write!(f, "resolve"),
+            EventRuleActionsCommonEventActionValueEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3529,11 +3529,11 @@ pub enum EventRuleActionsCommonSeverityValueEnum {
 impl ::std::fmt::Display for EventRuleActionsCommonSeverityValueEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleActionsCommonSeverityValueEnum::INFO => write!(f, "{}", "info"),
-            EventRuleActionsCommonSeverityValueEnum::WARNING => write!(f, "{}", "warning"),
-            EventRuleActionsCommonSeverityValueEnum::ERROR => write!(f, "{}", "error"),
-            EventRuleActionsCommonSeverityValueEnum::CRITICAL => write!(f, "{}", "critical"),
-            EventRuleActionsCommonSeverityValueEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleActionsCommonSeverityValueEnum::INFO => write!(f, "info"),
+            EventRuleActionsCommonSeverityValueEnum::WARNING => write!(f, "warning"),
+            EventRuleActionsCommonSeverityValueEnum::ERROR => write!(f, "error"),
+            EventRuleActionsCommonSeverityValueEnum::CRITICAL => write!(f, "critical"),
+            EventRuleActionsCommonSeverityValueEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3602,10 +3602,10 @@ pub enum EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
 impl ::std::fmt::Display for EventRuleActionsCommonSuppressThresholdTimeUnitEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS => write!(f, "{}", "seconds"),
-            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::MINUTES => write!(f, "{}", "minutes"),
-            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::HOURS => write!(f, "{}", "hours"),
-            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::SECONDS => write!(f, "seconds"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::MINUTES => write!(f, "minutes"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::HOURS => write!(f, "hours"),
+            EventRuleActionsCommonSuppressThresholdTimeUnitEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3671,9 +3671,9 @@ pub enum EventRuleConditionsOperatorEnum {
 impl ::std::fmt::Display for EventRuleConditionsOperatorEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleConditionsOperatorEnum::AND => write!(f, "{}", "and"),
-            EventRuleConditionsOperatorEnum::OR => write!(f, "{}", "or"),
-            EventRuleConditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleConditionsOperatorEnum::AND => write!(f, "and"),
+            EventRuleConditionsOperatorEnum::OR => write!(f, "or"),
+            EventRuleConditionsOperatorEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3753,15 +3753,15 @@ pub enum EventRuleConditionsSubconditionsOperatorEnum {
 impl ::std::fmt::Display for EventRuleConditionsSubconditionsOperatorEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleConditionsSubconditionsOperatorEnum::EXISTS => write!(f, "{}", "exists"),
-            EventRuleConditionsSubconditionsOperatorEnum::NEXISTS => write!(f, "{}", "nexists"),
-            EventRuleConditionsSubconditionsOperatorEnum::EQUALS => write!(f, "{}", "equals"),
-            EventRuleConditionsSubconditionsOperatorEnum::NEQUALS => write!(f, "{}", "nequals"),
-            EventRuleConditionsSubconditionsOperatorEnum::CONTAINS => write!(f, "{}", "contains"),
-            EventRuleConditionsSubconditionsOperatorEnum::NCONTAINS => write!(f, "{}", "ncontains"),
-            EventRuleConditionsSubconditionsOperatorEnum::MATCHES => write!(f, "{}", "matches"),
-            EventRuleConditionsSubconditionsOperatorEnum::NMATCHES => write!(f, "{}", "nmatches"),
-            EventRuleConditionsSubconditionsOperatorEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleConditionsSubconditionsOperatorEnum::EXISTS => write!(f, "exists"),
+            EventRuleConditionsSubconditionsOperatorEnum::NEXISTS => write!(f, "nexists"),
+            EventRuleConditionsSubconditionsOperatorEnum::EQUALS => write!(f, "equals"),
+            EventRuleConditionsSubconditionsOperatorEnum::NEQUALS => write!(f, "nequals"),
+            EventRuleConditionsSubconditionsOperatorEnum::CONTAINS => write!(f, "contains"),
+            EventRuleConditionsSubconditionsOperatorEnum::NCONTAINS => write!(f, "ncontains"),
+            EventRuleConditionsSubconditionsOperatorEnum::MATCHES => write!(f, "matches"),
+            EventRuleConditionsSubconditionsOperatorEnum::NMATCHES => write!(f, "nmatches"),
+            EventRuleConditionsSubconditionsOperatorEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3873,8 +3873,8 @@ pub enum EventRuleVariablesTypeEnum {
 impl ::std::fmt::Display for EventRuleVariablesTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            EventRuleVariablesTypeEnum::REGEX => write!(f, "{}", "regex"),
-            EventRuleVariablesTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            EventRuleVariablesTypeEnum::REGEX => write!(f, "regex"),
+            EventRuleVariablesTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -3983,8 +3983,8 @@ pub enum ExtensionTypeEnum {
 impl ::std::fmt::Display for ExtensionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ExtensionTypeEnum::EXTENSION => write!(f, "{}", "extension"),
-            ExtensionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ExtensionTypeEnum::EXTENSION => write!(f, "extension"),
+            ExtensionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4071,8 +4071,8 @@ pub enum ExtensionReferenceTypeEnum {
 impl ::std::fmt::Display for ExtensionReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ExtensionReferenceTypeEnum::EXTENSION_REFERENCE => write!(f, "{}", "extension_reference"),
-            ExtensionReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ExtensionReferenceTypeEnum::EXTENSION_REFERENCE => write!(f, "extension_reference"),
+            ExtensionReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4208,8 +4208,8 @@ pub enum ExtensionSchemaReferenceTypeEnum {
 impl ::std::fmt::Display for ExtensionSchemaReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ExtensionSchemaReferenceTypeEnum::EXTENSION_SCHEMA_REFERENCE => write!(f, "{}", "extension_schema_reference"),
-            ExtensionSchemaReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ExtensionSchemaReferenceTypeEnum::EXTENSION_SCHEMA_REFERENCE => write!(f, "extension_schema_reference"),
+            ExtensionSchemaReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4280,10 +4280,10 @@ pub enum HandoffNotificationRuleHandoffTypeEnum {
 impl ::std::fmt::Display for HandoffNotificationRuleHandoffTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            HandoffNotificationRuleHandoffTypeEnum::BOTH => write!(f, "{}", "both"),
-            HandoffNotificationRuleHandoffTypeEnum::ONCALL => write!(f, "{}", "oncall"),
-            HandoffNotificationRuleHandoffTypeEnum::OFFCALL => write!(f, "{}", "offcall"),
-            HandoffNotificationRuleHandoffTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            HandoffNotificationRuleHandoffTypeEnum::BOTH => write!(f, "both"),
+            HandoffNotificationRuleHandoffTypeEnum::ONCALL => write!(f, "oncall"),
+            HandoffNotificationRuleHandoffTypeEnum::OFFCALL => write!(f, "offcall"),
+            HandoffNotificationRuleHandoffTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4472,8 +4472,8 @@ pub enum ImpactTypeEnum {
 impl ::std::fmt::Display for ImpactTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ImpactTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
-            ImpactTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ImpactTypeEnum::BUSINESS_SERVICE => write!(f, "business_service"),
+            ImpactTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4519,9 +4519,9 @@ pub enum ImpactStatusEnum {
 impl ::std::fmt::Display for ImpactStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ImpactStatusEnum::IMPACTED => write!(f, "{}", "impacted"),
-            ImpactStatusEnum::NOT_IMPACTED => write!(f, "{}", "not_impacted"),
-            ImpactStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ImpactStatusEnum::IMPACTED => write!(f, "impacted"),
+            ImpactStatusEnum::NOT_IMPACTED => write!(f, "not_impacted"),
+            ImpactStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4591,8 +4591,8 @@ pub enum ImpactorTypeEnum {
 impl ::std::fmt::Display for ImpactorTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ImpactorTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            ImpactorTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ImpactorTypeEnum::INCIDENT => write!(f, "incident"),
+            ImpactorTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4769,10 +4769,10 @@ pub enum IncidentStatusEnum {
 impl ::std::fmt::Display for IncidentStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentStatusEnum::TRIGGERED => write!(f, "{}", "triggered"),
-            IncidentStatusEnum::ACKNOWLEDGED => write!(f, "{}", "acknowledged"),
-            IncidentStatusEnum::RESOLVED => write!(f, "{}", "resolved"),
-            IncidentStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentStatusEnum::TRIGGERED => write!(f, "triggered"),
+            IncidentStatusEnum::ACKNOWLEDGED => write!(f, "acknowledged"),
+            IncidentStatusEnum::RESOLVED => write!(f, "resolved"),
+            IncidentStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4822,9 +4822,9 @@ pub enum IncidentAssignedViaEnum {
 impl ::std::fmt::Display for IncidentAssignedViaEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentAssignedViaEnum::ESCALATION_POLICY => write!(f, "{}", "escalation_policy"),
-            IncidentAssignedViaEnum::DIRECT_ASSIGNMENT => write!(f, "{}", "direct_assignment"),
-            IncidentAssignedViaEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentAssignedViaEnum::ESCALATION_POLICY => write!(f, "escalation_policy"),
+            IncidentAssignedViaEnum::DIRECT_ASSIGNMENT => write!(f, "direct_assignment"),
+            IncidentAssignedViaEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4872,9 +4872,9 @@ pub enum IncidentUrgencyEnum {
 impl ::std::fmt::Display for IncidentUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            IncidentUrgencyEnum::LOW => write!(f, "{}", "low"),
-            IncidentUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentUrgencyEnum::HIGH => write!(f, "high"),
+            IncidentUrgencyEnum::LOW => write!(f, "low"),
+            IncidentUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -4935,11 +4935,11 @@ pub enum IncidentActionTypeEnum {
 impl ::std::fmt::Display for IncidentActionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentActionTypeEnum::UNACKNOWLEDGE => write!(f, "{}", "unacknowledge"),
-            IncidentActionTypeEnum::ESCALATE => write!(f, "{}", "escalate"),
-            IncidentActionTypeEnum::RESOLVE => write!(f, "{}", "resolve"),
-            IncidentActionTypeEnum::URGENCY_CHANGE => write!(f, "{}", "urgency_change"),
-            IncidentActionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentActionTypeEnum::UNACKNOWLEDGE => write!(f, "unacknowledge"),
+            IncidentActionTypeEnum::ESCALATE => write!(f, "escalate"),
+            IncidentActionTypeEnum::RESOLVE => write!(f, "resolve"),
+            IncidentActionTypeEnum::URGENCY_CHANGE => write!(f, "urgency_change"),
+            IncidentActionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5007,9 +5007,9 @@ pub enum IncidentAddonTypeEnum {
 impl ::std::fmt::Display for IncidentAddonTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentAddonTypeEnum::FULL_PAGE_ADDON => write!(f, "{}", "full_page_addon"),
-            IncidentAddonTypeEnum::INCIDENT_SHOW_ADDON => write!(f, "{}", "incident_show_addon"),
-            IncidentAddonTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentAddonTypeEnum::FULL_PAGE_ADDON => write!(f, "full_page_addon"),
+            IncidentAddonTypeEnum::INCIDENT_SHOW_ADDON => write!(f, "incident_show_addon"),
+            IncidentAddonTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5064,8 +5064,8 @@ pub enum IncidentBodyTypeEnum {
 impl ::std::fmt::Display for IncidentBodyTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentBodyTypeEnum::INCIDENT_BODY => write!(f, "{}", "incident_body"),
-            IncidentBodyTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentBodyTypeEnum::INCIDENT_BODY => write!(f, "incident_body"),
+            IncidentBodyTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5189,11 +5189,11 @@ pub enum IncidentOccurrenceCategoryEnum {
 impl ::std::fmt::Display for IncidentOccurrenceCategoryEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentOccurrenceCategoryEnum::NOVEL => write!(f, "{}", "novel"),
-            IncidentOccurrenceCategoryEnum::RARE => write!(f, "{}", "rare"),
-            IncidentOccurrenceCategoryEnum::FREQUENT => write!(f, "{}", "frequent"),
-            IncidentOccurrenceCategoryEnum::OTHER => write!(f, "{}", "other"),
-            IncidentOccurrenceCategoryEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentOccurrenceCategoryEnum::NOVEL => write!(f, "novel"),
+            IncidentOccurrenceCategoryEnum::RARE => write!(f, "rare"),
+            IncidentOccurrenceCategoryEnum::FREQUENT => write!(f, "frequent"),
+            IncidentOccurrenceCategoryEnum::OTHER => write!(f, "other"),
+            IncidentOccurrenceCategoryEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5286,8 +5286,8 @@ pub enum IncidentReferenceTypeEnum {
 impl ::std::fmt::Display for IncidentReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentReferenceTypeEnum::INCIDENT_REFERENCE => write!(f, "{}", "incident_reference"),
-            IncidentReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentReferenceTypeEnum::INCIDENT_REFERENCE => write!(f, "incident_reference"),
+            IncidentReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5347,9 +5347,9 @@ pub enum IncidentUrgencyRuleTypeEnum {
 impl ::std::fmt::Display for IncidentUrgencyRuleTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentUrgencyRuleTypeEnum::CONSTANT => write!(f, "{}", "constant"),
-            IncidentUrgencyRuleTypeEnum::USE_SUPPORT_HOURS => write!(f, "{}", "use_support_hours"),
-            IncidentUrgencyRuleTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentUrgencyRuleTypeEnum::CONSTANT => write!(f, "constant"),
+            IncidentUrgencyRuleTypeEnum::USE_SUPPORT_HOURS => write!(f, "use_support_hours"),
+            IncidentUrgencyRuleTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5399,10 +5399,10 @@ pub enum IncidentUrgencyRuleUrgencyEnum {
 impl ::std::fmt::Display for IncidentUrgencyRuleUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentUrgencyRuleUrgencyEnum::LOW => write!(f, "{}", "low"),
-            IncidentUrgencyRuleUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            IncidentUrgencyRuleUrgencyEnum::SEVERITY_BASED => write!(f, "{}", "severity_based"),
-            IncidentUrgencyRuleUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentUrgencyRuleUrgencyEnum::LOW => write!(f, "low"),
+            IncidentUrgencyRuleUrgencyEnum::HIGH => write!(f, "high"),
+            IncidentUrgencyRuleUrgencyEnum::SEVERITY_BASED => write!(f, "severity_based"),
+            IncidentUrgencyRuleUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5462,9 +5462,9 @@ pub enum IncidentUrgencyTypeTypeEnum {
 impl ::std::fmt::Display for IncidentUrgencyTypeTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentUrgencyTypeTypeEnum::CONSTANT => write!(f, "{}", "constant"),
-            IncidentUrgencyTypeTypeEnum::USE_SUPPORT_HOURS => write!(f, "{}", "use_support_hours"),
-            IncidentUrgencyTypeTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentUrgencyTypeTypeEnum::CONSTANT => write!(f, "constant"),
+            IncidentUrgencyTypeTypeEnum::USE_SUPPORT_HOURS => write!(f, "use_support_hours"),
+            IncidentUrgencyTypeTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5514,10 +5514,10 @@ pub enum IncidentUrgencyTypeUrgencyEnum {
 impl ::std::fmt::Display for IncidentUrgencyTypeUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentUrgencyTypeUrgencyEnum::LOW => write!(f, "{}", "low"),
-            IncidentUrgencyTypeUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            IncidentUrgencyTypeUrgencyEnum::SEVERITY_BASED => write!(f, "{}", "severity_based"),
-            IncidentUrgencyTypeUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentUrgencyTypeUrgencyEnum::LOW => write!(f, "low"),
+            IncidentUrgencyTypeUrgencyEnum::HIGH => write!(f, "high"),
+            IncidentUrgencyTypeUrgencyEnum::SEVERITY_BASED => write!(f, "severity_based"),
+            IncidentUrgencyTypeUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5615,8 +5615,8 @@ pub enum IncidentsIncidentTypeEnum {
 impl ::std::fmt::Display for IncidentsIncidentTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsIncidentTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            IncidentsIncidentTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsIncidentTypeEnum::INCIDENT => write!(f, "incident"),
+            IncidentsIncidentTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5662,9 +5662,9 @@ pub enum IncidentsIncidentUrgencyEnum {
 impl ::std::fmt::Display for IncidentsIncidentUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsIncidentUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            IncidentsIncidentUrgencyEnum::LOW => write!(f, "{}", "low"),
-            IncidentsIncidentUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsIncidentUrgencyEnum::HIGH => write!(f, "high"),
+            IncidentsIncidentUrgencyEnum::LOW => write!(f, "low"),
+            IncidentsIncidentUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5743,9 +5743,9 @@ pub enum IncidentsIncidentsTypeEnum {
 impl ::std::fmt::Display for IncidentsIncidentsTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsIncidentsTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            IncidentsIncidentsTypeEnum::INCIDENT_REFERENCE => write!(f, "{}", "incident_reference"),
-            IncidentsIncidentsTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsIncidentsTypeEnum::INCIDENT => write!(f, "incident"),
+            IncidentsIncidentsTypeEnum::INCIDENT_REFERENCE => write!(f, "incident_reference"),
+            IncidentsIncidentsTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5793,9 +5793,9 @@ pub enum IncidentsIncidentsStatusEnum {
 impl ::std::fmt::Display for IncidentsIncidentsStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsIncidentsStatusEnum::RESOLVED => write!(f, "{}", "resolved"),
-            IncidentsIncidentsStatusEnum::ACKNOWLEDGED => write!(f, "{}", "acknowledged"),
-            IncidentsIncidentsStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsIncidentsStatusEnum::RESOLVED => write!(f, "resolved"),
+            IncidentsIncidentsStatusEnum::ACKNOWLEDGED => write!(f, "acknowledged"),
+            IncidentsIncidentsStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5895,9 +5895,9 @@ pub enum IncidentsidIncidentTypeEnum {
 impl ::std::fmt::Display for IncidentsidIncidentTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsidIncidentTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            IncidentsidIncidentTypeEnum::INCIDENT_REFERENCE => write!(f, "{}", "incident_reference"),
-            IncidentsidIncidentTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsidIncidentTypeEnum::INCIDENT => write!(f, "incident"),
+            IncidentsidIncidentTypeEnum::INCIDENT_REFERENCE => write!(f, "incident_reference"),
+            IncidentsidIncidentTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5945,9 +5945,9 @@ pub enum IncidentsidIncidentStatusEnum {
 impl ::std::fmt::Display for IncidentsidIncidentStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsidIncidentStatusEnum::RESOLVED => write!(f, "{}", "resolved"),
-            IncidentsidIncidentStatusEnum::ACKNOWLEDGED => write!(f, "{}", "acknowledged"),
-            IncidentsidIncidentStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsidIncidentStatusEnum::RESOLVED => write!(f, "resolved"),
+            IncidentsidIncidentStatusEnum::ACKNOWLEDGED => write!(f, "acknowledged"),
+            IncidentsidIncidentStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -5995,9 +5995,9 @@ pub enum IncidentsidIncidentUrgencyEnum {
 impl ::std::fmt::Display for IncidentsidIncidentUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IncidentsidIncidentUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            IncidentsidIncidentUrgencyEnum::LOW => write!(f, "{}", "low"),
-            IncidentsidIncidentUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IncidentsidIncidentUrgencyEnum::HIGH => write!(f, "high"),
+            IncidentsidIncidentUrgencyEnum::LOW => write!(f, "low"),
+            IncidentsidIncidentUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6149,17 +6149,17 @@ pub enum IntegrationTypeEnum {
 impl ::std::fmt::Display for IntegrationTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationTypeEnum::AWS_CLOUDWATCH_INBOUND_INTEGRATION => write!(f, "{}", "aws_cloudwatch_inbound_integration"),
-            IntegrationTypeEnum::CLOUDKICK_INBOUND_INTEGRATION => write!(f, "{}", "cloudkick_inbound_integration"),
-            IntegrationTypeEnum::EVENT_TRANSFORMER_API_INBOUND_INTEGRATION => write!(f, "{}", "event_transformer_api_inbound_integration"),
-            IntegrationTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION => write!(f, "{}", "generic_email_inbound_integration"),
-            IntegrationTypeEnum::GENERIC_EVENTS_API_INBOUND_INTEGRATION => write!(f, "{}", "generic_events_api_inbound_integration"),
-            IntegrationTypeEnum::KEYNOTE_INBOUND_INTEGRATION => write!(f, "{}", "keynote_inbound_integration"),
-            IntegrationTypeEnum::NAGIOS_INBOUND_INTEGRATION => write!(f, "{}", "nagios_inbound_integration"),
-            IntegrationTypeEnum::PINGDOM_INBOUND_INTEGRATION => write!(f, "{}", "pingdom_inbound_integration"),
-            IntegrationTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION => write!(f, "{}", "sql_monitor_inbound_integration"),
-            IntegrationTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION => write!(f, "{}", "events_api_v2_inbound_integration"),
-            IntegrationTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationTypeEnum::AWS_CLOUDWATCH_INBOUND_INTEGRATION => write!(f, "aws_cloudwatch_inbound_integration"),
+            IntegrationTypeEnum::CLOUDKICK_INBOUND_INTEGRATION => write!(f, "cloudkick_inbound_integration"),
+            IntegrationTypeEnum::EVENT_TRANSFORMER_API_INBOUND_INTEGRATION => write!(f, "event_transformer_api_inbound_integration"),
+            IntegrationTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION => write!(f, "generic_email_inbound_integration"),
+            IntegrationTypeEnum::GENERIC_EVENTS_API_INBOUND_INTEGRATION => write!(f, "generic_events_api_inbound_integration"),
+            IntegrationTypeEnum::KEYNOTE_INBOUND_INTEGRATION => write!(f, "keynote_inbound_integration"),
+            IntegrationTypeEnum::NAGIOS_INBOUND_INTEGRATION => write!(f, "nagios_inbound_integration"),
+            IntegrationTypeEnum::PINGDOM_INBOUND_INTEGRATION => write!(f, "pingdom_inbound_integration"),
+            IntegrationTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION => write!(f, "sql_monitor_inbound_integration"),
+            IntegrationTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION => write!(f, "events_api_v2_inbound_integration"),
+            IntegrationTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6227,11 +6227,11 @@ pub enum IntegrationEmailIncidentCreationEnum {
 impl ::std::fmt::Display for IntegrationEmailIncidentCreationEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL => write!(f, "{}", "on_new_email"),
-            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL_SUBJECT => write!(f, "{}", "on_new_email_subject"),
-            IntegrationEmailIncidentCreationEnum::ONLY_IF_NO_OPEN_INCIDENTS => write!(f, "{}", "only_if_no_open_incidents"),
-            IntegrationEmailIncidentCreationEnum::USE_RULES => write!(f, "{}", "use_rules"),
-            IntegrationEmailIncidentCreationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL => write!(f, "on_new_email"),
+            IntegrationEmailIncidentCreationEnum::ON_NEW_EMAIL_SUBJECT => write!(f, "on_new_email_subject"),
+            IntegrationEmailIncidentCreationEnum::ONLY_IF_NO_OPEN_INCIDENTS => write!(f, "only_if_no_open_incidents"),
+            IntegrationEmailIncidentCreationEnum::USE_RULES => write!(f, "use_rules"),
+            IntegrationEmailIncidentCreationEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6285,10 +6285,10 @@ pub enum IntegrationEmailFilterModeEnum {
 impl ::std::fmt::Display for IntegrationEmailFilterModeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailFilterModeEnum::ALL_EMAIL => write!(f, "{}", "all-email"),
-            IntegrationEmailFilterModeEnum::OR_RULES_EMAIL => write!(f, "{}", "or-rules-email"),
-            IntegrationEmailFilterModeEnum::AND_RULES_EMAIL => write!(f, "{}", "and-rules-email"),
-            IntegrationEmailFilterModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailFilterModeEnum::ALL_EMAIL => write!(f, "all-email"),
+            IntegrationEmailFilterModeEnum::OR_RULES_EMAIL => write!(f, "or-rules-email"),
+            IntegrationEmailFilterModeEnum::AND_RULES_EMAIL => write!(f, "and-rules-email"),
+            IntegrationEmailFilterModeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6338,9 +6338,9 @@ pub enum IntegrationEmailParsingFallbackEnum {
 impl ::std::fmt::Display for IntegrationEmailParsingFallbackEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT => write!(f, "{}", "open_new_incident"),
-            IntegrationEmailParsingFallbackEnum::DISCARD => write!(f, "{}", "discard"),
-            IntegrationEmailParsingFallbackEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailParsingFallbackEnum::OPEN_NEW_INCIDENT => write!(f, "open_new_incident"),
+            IntegrationEmailParsingFallbackEnum::DISCARD => write!(f, "discard"),
+            IntegrationEmailParsingFallbackEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6406,10 +6406,10 @@ pub enum IntegrationEmailFiltersSubjectModeEnum {
 impl ::std::fmt::Display for IntegrationEmailFiltersSubjectModeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailFiltersSubjectModeEnum::MATCH => write!(f, "{}", "match"),
-            IntegrationEmailFiltersSubjectModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
-            IntegrationEmailFiltersSubjectModeEnum::ALWAYS => write!(f, "{}", "always"),
-            IntegrationEmailFiltersSubjectModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailFiltersSubjectModeEnum::MATCH => write!(f, "match"),
+            IntegrationEmailFiltersSubjectModeEnum::NO_MATCH => write!(f, "no-match"),
+            IntegrationEmailFiltersSubjectModeEnum::ALWAYS => write!(f, "always"),
+            IntegrationEmailFiltersSubjectModeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6461,10 +6461,10 @@ pub enum IntegrationEmailFiltersBodyModeEnum {
 impl ::std::fmt::Display for IntegrationEmailFiltersBodyModeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailFiltersBodyModeEnum::MATCH => write!(f, "{}", "match"),
-            IntegrationEmailFiltersBodyModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
-            IntegrationEmailFiltersBodyModeEnum::ALWAYS => write!(f, "{}", "always"),
-            IntegrationEmailFiltersBodyModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailFiltersBodyModeEnum::MATCH => write!(f, "match"),
+            IntegrationEmailFiltersBodyModeEnum::NO_MATCH => write!(f, "no-match"),
+            IntegrationEmailFiltersBodyModeEnum::ALWAYS => write!(f, "always"),
+            IntegrationEmailFiltersBodyModeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6516,10 +6516,10 @@ pub enum IntegrationEmailFiltersFromEmailModeEnum {
 impl ::std::fmt::Display for IntegrationEmailFiltersFromEmailModeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationEmailFiltersFromEmailModeEnum::MATCH => write!(f, "{}", "match"),
-            IntegrationEmailFiltersFromEmailModeEnum::NO_MATCH => write!(f, "{}", "no-match"),
-            IntegrationEmailFiltersFromEmailModeEnum::ALWAYS => write!(f, "{}", "always"),
-            IntegrationEmailFiltersFromEmailModeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationEmailFiltersFromEmailModeEnum::MATCH => write!(f, "match"),
+            IntegrationEmailFiltersFromEmailModeEnum::NO_MATCH => write!(f, "no-match"),
+            IntegrationEmailFiltersFromEmailModeEnum::ALWAYS => write!(f, "always"),
+            IntegrationEmailFiltersFromEmailModeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6630,18 +6630,18 @@ pub enum IntegrationReferenceTypeEnum {
 impl ::std::fmt::Display for IntegrationReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            IntegrationReferenceTypeEnum::AWS_CLOUDWATCH_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "aws_cloudwatch_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::CLOUDKICK_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "cloudkick_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::EVENT_TRANSFORMER_API_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "event_transformer_api_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "generic_email_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::GENERIC_EVENTS_API_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "generic_events_api_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::KEYNOTE_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "keynote_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::NAGIOS_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "nagios_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::PINGDOM_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "pingdom_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "sql_monitor_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "events_api_v2_inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::INBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "inbound_integration_reference"),
-            IntegrationReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            IntegrationReferenceTypeEnum::AWS_CLOUDWATCH_INBOUND_INTEGRATION_REFERENCE => write!(f, "aws_cloudwatch_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::CLOUDKICK_INBOUND_INTEGRATION_REFERENCE => write!(f, "cloudkick_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::EVENT_TRANSFORMER_API_INBOUND_INTEGRATION_REFERENCE => write!(f, "event_transformer_api_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION_REFERENCE => write!(f, "generic_email_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::GENERIC_EVENTS_API_INBOUND_INTEGRATION_REFERENCE => write!(f, "generic_events_api_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::KEYNOTE_INBOUND_INTEGRATION_REFERENCE => write!(f, "keynote_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::NAGIOS_INBOUND_INTEGRATION_REFERENCE => write!(f, "nagios_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::PINGDOM_INBOUND_INTEGRATION_REFERENCE => write!(f, "pingdom_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION_REFERENCE => write!(f, "sql_monitor_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION_REFERENCE => write!(f, "events_api_v2_inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::INBOUND_INTEGRATION_REFERENCE => write!(f, "inbound_integration_reference"),
+            IntegrationReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6733,9 +6733,9 @@ pub enum LogEntriesidchannelChannelTypeEnum {
 impl ::std::fmt::Display for LogEntriesidchannelChannelTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            LogEntriesidchannelChannelTypeEnum::WEB_TRIGGER => write!(f, "{}", "web_trigger"),
-            LogEntriesidchannelChannelTypeEnum::MOBILE => write!(f, "{}", "mobile"),
-            LogEntriesidchannelChannelTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            LogEntriesidchannelChannelTypeEnum::WEB_TRIGGER => write!(f, "web_trigger"),
+            LogEntriesidchannelChannelTypeEnum::MOBILE => write!(f, "mobile"),
+            LogEntriesidchannelChannelTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -6880,19 +6880,19 @@ pub enum LogEntryTypeEnum {
 impl ::std::fmt::Display for LogEntryTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            LogEntryTypeEnum::ACKNOWLEDGE_LOG_ENTRY => write!(f, "{}", "acknowledge_log_entry"),
-            LogEntryTypeEnum::ANNOTATE_LOG_ENTRY => write!(f, "{}", "annotate_log_entry"),
-            LogEntryTypeEnum::ASSIGN_LOG_ENTRY => write!(f, "{}", "assign_log_entry"),
-            LogEntryTypeEnum::ESCALATE_LOG_ENTRY => write!(f, "{}", "escalate_log_entry"),
-            LogEntryTypeEnum::EXHAUST_ESCALATION_PATH_LOG_ENTRY => write!(f, "{}", "exhaust_escalation_path_log_entry"),
-            LogEntryTypeEnum::NOTIFY_LOG_ENTRY => write!(f, "{}", "notify_log_entry"),
-            LogEntryTypeEnum::REACH_TRIGGER_LIMIT_LOG_ENTRY => write!(f, "{}", "reach_trigger_limit_log_entry"),
-            LogEntryTypeEnum::REPEAT_ESCALATION_PATH_LOG_ENTRY => write!(f, "{}", "repeat_escalation_path_log_entry"),
-            LogEntryTypeEnum::RESOLVE_LOG_ENTRY => write!(f, "{}", "resolve_log_entry"),
-            LogEntryTypeEnum::SNOOZE_LOG_ENTRY => write!(f, "{}", "snooze_log_entry"),
-            LogEntryTypeEnum::TRIGGER_LOG_ENTRY => write!(f, "{}", "trigger_log_entry"),
-            LogEntryTypeEnum::UNACKNOWLEDGE_LOG_ENTRY => write!(f, "{}", "unacknowledge_log_entry"),
-            LogEntryTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            LogEntryTypeEnum::ACKNOWLEDGE_LOG_ENTRY => write!(f, "acknowledge_log_entry"),
+            LogEntryTypeEnum::ANNOTATE_LOG_ENTRY => write!(f, "annotate_log_entry"),
+            LogEntryTypeEnum::ASSIGN_LOG_ENTRY => write!(f, "assign_log_entry"),
+            LogEntryTypeEnum::ESCALATE_LOG_ENTRY => write!(f, "escalate_log_entry"),
+            LogEntryTypeEnum::EXHAUST_ESCALATION_PATH_LOG_ENTRY => write!(f, "exhaust_escalation_path_log_entry"),
+            LogEntryTypeEnum::NOTIFY_LOG_ENTRY => write!(f, "notify_log_entry"),
+            LogEntryTypeEnum::REACH_TRIGGER_LIMIT_LOG_ENTRY => write!(f, "reach_trigger_limit_log_entry"),
+            LogEntryTypeEnum::REPEAT_ESCALATION_PATH_LOG_ENTRY => write!(f, "repeat_escalation_path_log_entry"),
+            LogEntryTypeEnum::RESOLVE_LOG_ENTRY => write!(f, "resolve_log_entry"),
+            LogEntryTypeEnum::SNOOZE_LOG_ENTRY => write!(f, "snooze_log_entry"),
+            LogEntryTypeEnum::TRIGGER_LOG_ENTRY => write!(f, "trigger_log_entry"),
+            LogEntryTypeEnum::UNACKNOWLEDGE_LOG_ENTRY => write!(f, "unacknowledge_log_entry"),
+            LogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7030,19 +7030,19 @@ pub enum LogEntryReferenceTypeEnum {
 impl ::std::fmt::Display for LogEntryReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            LogEntryReferenceTypeEnum::ACKNOWLEDGE_LOG_ENTRY_REFERENCE => write!(f, "{}", "acknowledge_log_entry_reference"),
-            LogEntryReferenceTypeEnum::ANNOTATE_LOG_ENTRY_REFERENCE => write!(f, "{}", "annotate_log_entry_reference"),
-            LogEntryReferenceTypeEnum::ASSIGN_LOG_ENTRY_REFERENCE => write!(f, "{}", "assign_log_entry_reference"),
-            LogEntryReferenceTypeEnum::ESCALATE_LOG_ENTRY_REFERENCE => write!(f, "{}", "escalate_log_entry_reference"),
-            LogEntryReferenceTypeEnum::EXHAUST_ESCALATION_PATH_LOG_ENTRY_REFERENCE => write!(f, "{}", "exhaust_escalation_path_log_entry_reference"),
-            LogEntryReferenceTypeEnum::NOTIFY_LOG_ENTRY_REFERENCE => write!(f, "{}", "notify_log_entry_reference"),
-            LogEntryReferenceTypeEnum::REACH_TRIGGER_LIMIT_LOG_ENTRY_REFERENCE => write!(f, "{}", "reach_trigger_limit_log_entry_reference"),
-            LogEntryReferenceTypeEnum::REPEAT_ESCALATION_PATH_LOG_ENTRY_REFERENCE => write!(f, "{}", "repeat_escalation_path_log_entry_reference"),
-            LogEntryReferenceTypeEnum::RESOLVE_LOG_ENTRY_REFERENCE => write!(f, "{}", "resolve_log_entry_reference"),
-            LogEntryReferenceTypeEnum::SNOOZE_LOG_ENTRY_REFERENCE => write!(f, "{}", "snooze_log_entry_reference"),
-            LogEntryReferenceTypeEnum::TRIGGER_LOG_ENTRY_REFERENCE => write!(f, "{}", "trigger_log_entry_reference"),
-            LogEntryReferenceTypeEnum::UNACKNOWLEDGE_LOG_ENTRY_REFERENCE => write!(f, "{}", "unacknowledge_log_entry_reference"),
-            LogEntryReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            LogEntryReferenceTypeEnum::ACKNOWLEDGE_LOG_ENTRY_REFERENCE => write!(f, "acknowledge_log_entry_reference"),
+            LogEntryReferenceTypeEnum::ANNOTATE_LOG_ENTRY_REFERENCE => write!(f, "annotate_log_entry_reference"),
+            LogEntryReferenceTypeEnum::ASSIGN_LOG_ENTRY_REFERENCE => write!(f, "assign_log_entry_reference"),
+            LogEntryReferenceTypeEnum::ESCALATE_LOG_ENTRY_REFERENCE => write!(f, "escalate_log_entry_reference"),
+            LogEntryReferenceTypeEnum::EXHAUST_ESCALATION_PATH_LOG_ENTRY_REFERENCE => write!(f, "exhaust_escalation_path_log_entry_reference"),
+            LogEntryReferenceTypeEnum::NOTIFY_LOG_ENTRY_REFERENCE => write!(f, "notify_log_entry_reference"),
+            LogEntryReferenceTypeEnum::REACH_TRIGGER_LIMIT_LOG_ENTRY_REFERENCE => write!(f, "reach_trigger_limit_log_entry_reference"),
+            LogEntryReferenceTypeEnum::REPEAT_ESCALATION_PATH_LOG_ENTRY_REFERENCE => write!(f, "repeat_escalation_path_log_entry_reference"),
+            LogEntryReferenceTypeEnum::RESOLVE_LOG_ENTRY_REFERENCE => write!(f, "resolve_log_entry_reference"),
+            LogEntryReferenceTypeEnum::SNOOZE_LOG_ENTRY_REFERENCE => write!(f, "snooze_log_entry_reference"),
+            LogEntryReferenceTypeEnum::TRIGGER_LOG_ENTRY_REFERENCE => write!(f, "trigger_log_entry_reference"),
+            LogEntryReferenceTypeEnum::UNACKNOWLEDGE_LOG_ENTRY_REFERENCE => write!(f, "unacknowledge_log_entry_reference"),
+            LogEntryReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7176,8 +7176,8 @@ pub enum MaintenanceWindowTypeEnum {
 impl ::std::fmt::Display for MaintenanceWindowTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW => write!(f, "{}", "maintenance_window"),
-            MaintenanceWindowTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW => write!(f, "maintenance_window"),
+            MaintenanceWindowTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7264,8 +7264,8 @@ pub enum MaintenanceWindowReferenceTypeEnum {
 impl ::std::fmt::Display for MaintenanceWindowReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            MaintenanceWindowReferenceTypeEnum::MAINTENANCE_WINDOW_REFERENCE => write!(f, "{}", "maintenance_window_reference"),
-            MaintenanceWindowReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            MaintenanceWindowReferenceTypeEnum::MAINTENANCE_WINDOW_REFERENCE => write!(f, "maintenance_window_reference"),
+            MaintenanceWindowReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7342,13 +7342,13 @@ pub enum MatchPredicateTypeEnum {
 impl ::std::fmt::Display for MatchPredicateTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            MatchPredicateTypeEnum::ALL => write!(f, "{}", "all"),
-            MatchPredicateTypeEnum::ANY => write!(f, "{}", "any"),
-            MatchPredicateTypeEnum::NOT => write!(f, "{}", "not"),
-            MatchPredicateTypeEnum::CONTAINS => write!(f, "{}", "contains"),
-            MatchPredicateTypeEnum::EXACTLY => write!(f, "{}", "exactly"),
-            MatchPredicateTypeEnum::REGEX => write!(f, "{}", "regex"),
-            MatchPredicateTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            MatchPredicateTypeEnum::ALL => write!(f, "all"),
+            MatchPredicateTypeEnum::ANY => write!(f, "any"),
+            MatchPredicateTypeEnum::NOT => write!(f, "not"),
+            MatchPredicateTypeEnum::CONTAINS => write!(f, "contains"),
+            MatchPredicateTypeEnum::EXACTLY => write!(f, "exactly"),
+            MatchPredicateTypeEnum::REGEX => write!(f, "regex"),
+            MatchPredicateTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7406,10 +7406,10 @@ pub enum MatchPredicatePartEnum {
 impl ::std::fmt::Display for MatchPredicatePartEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            MatchPredicatePartEnum::BODY => write!(f, "{}", "body"),
-            MatchPredicatePartEnum::SUBJECT => write!(f, "{}", "subject"),
-            MatchPredicatePartEnum::FROM_ADDRESSES => write!(f, "{}", "from_addresses"),
-            MatchPredicatePartEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            MatchPredicatePartEnum::BODY => write!(f, "body"),
+            MatchPredicatePartEnum::SUBJECT => write!(f, "subject"),
+            MatchPredicatePartEnum::FROM_ADDRESSES => write!(f, "from_addresses"),
+            MatchPredicatePartEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7541,11 +7541,11 @@ pub enum NotificationTypeEnum {
 impl ::std::fmt::Display for NotificationTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationTypeEnum::SMS_NOTIFICATION => write!(f, "{}", "sms_notification"),
-            NotificationTypeEnum::EMAIL_NOTIFICATION => write!(f, "{}", "email_notification"),
-            NotificationTypeEnum::PHONE_NOTIFICATION => write!(f, "{}", "phone_notification"),
-            NotificationTypeEnum::PUSH_NOTIFICATION => write!(f, "{}", "push_notification"),
-            NotificationTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationTypeEnum::SMS_NOTIFICATION => write!(f, "sms_notification"),
+            NotificationTypeEnum::EMAIL_NOTIFICATION => write!(f, "email_notification"),
+            NotificationTypeEnum::PHONE_NOTIFICATION => write!(f, "phone_notification"),
+            NotificationTypeEnum::PUSH_NOTIFICATION => write!(f, "push_notification"),
+            NotificationTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7647,8 +7647,8 @@ pub enum NotificationRuleTypeEnum {
 impl ::std::fmt::Display for NotificationRuleTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE => write!(f, "{}", "assignment_notification_rule"),
-            NotificationRuleTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE => write!(f, "assignment_notification_rule"),
+            NotificationRuleTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7694,9 +7694,9 @@ pub enum NotificationRuleUrgencyEnum {
 impl ::std::fmt::Display for NotificationRuleUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationRuleUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            NotificationRuleUrgencyEnum::LOW => write!(f, "{}", "low"),
-            NotificationRuleUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationRuleUrgencyEnum::HIGH => write!(f, "high"),
+            NotificationRuleUrgencyEnum::LOW => write!(f, "low"),
+            NotificationRuleUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7785,8 +7785,8 @@ pub enum NotificationRuleReferenceTypeEnum {
 impl ::std::fmt::Display for NotificationRuleReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationRuleReferenceTypeEnum::ASSIGNMENT_NOTIFICATION_RULE_REFERENCE => write!(f, "{}", "assignment_notification_rule_reference"),
-            NotificationRuleReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationRuleReferenceTypeEnum::ASSIGNMENT_NOTIFICATION_RULE_REFERENCE => write!(f, "assignment_notification_rule_reference"),
+            NotificationRuleReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7848,9 +7848,9 @@ pub enum NotificationSubscribableSubscribableTypeEnum {
 impl ::std::fmt::Display for NotificationSubscribableSubscribableTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscribableSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            NotificationSubscribableSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
-            NotificationSubscribableSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscribableSubscribableTypeEnum::INCIDENT => write!(f, "incident"),
+            NotificationSubscribableSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "business_service"),
+            NotificationSubscribableSubscribableTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7909,9 +7909,9 @@ pub enum NotificationSubscriberSubscriberTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriberSubscriberTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriberSubscriberTypeEnum::USER => write!(f, "{}", "user"),
-            NotificationSubscriberSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
-            NotificationSubscriberSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriberSubscriberTypeEnum::USER => write!(f, "user"),
+            NotificationSubscriberSubscriberTypeEnum::TEAM => write!(f, "team"),
+            NotificationSubscriberSubscriberTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -7975,9 +7975,9 @@ pub enum NotificationSubscriberWithContextSubscriberTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriberWithContextSubscriberTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriberWithContextSubscriberTypeEnum::USER => write!(f, "{}", "user"),
-            NotificationSubscriberWithContextSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
-            NotificationSubscriberWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriberWithContextSubscriberTypeEnum::USER => write!(f, "user"),
+            NotificationSubscriberWithContextSubscriberTypeEnum::TEAM => write!(f, "team"),
+            NotificationSubscriberWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8055,9 +8055,9 @@ pub enum NotificationSubscriptionSubscriberTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriptionSubscriberTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriptionSubscriberTypeEnum::USER => write!(f, "{}", "user"),
-            NotificationSubscriptionSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
-            NotificationSubscriptionSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriptionSubscriberTypeEnum::USER => write!(f, "user"),
+            NotificationSubscriptionSubscriberTypeEnum::TEAM => write!(f, "team"),
+            NotificationSubscriptionSubscriberTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8105,9 +8105,9 @@ pub enum NotificationSubscriptionSubscribableTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriptionSubscribableTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriptionSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            NotificationSubscriptionSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
-            NotificationSubscriptionSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriptionSubscribableTypeEnum::INCIDENT => write!(f, "incident"),
+            NotificationSubscriptionSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "business_service"),
+            NotificationSubscriptionSubscribableTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8178,9 +8178,9 @@ pub enum NotificationSubscriptionWithContextSubscriberTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriptionWithContextSubscriberTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriptionWithContextSubscriberTypeEnum::USER => write!(f, "{}", "user"),
-            NotificationSubscriptionWithContextSubscriberTypeEnum::TEAM => write!(f, "{}", "team"),
-            NotificationSubscriptionWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriptionWithContextSubscriberTypeEnum::USER => write!(f, "user"),
+            NotificationSubscriptionWithContextSubscriberTypeEnum::TEAM => write!(f, "team"),
+            NotificationSubscriptionWithContextSubscriberTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8228,9 +8228,9 @@ pub enum NotificationSubscriptionWithContextSubscribableTypeEnum {
 impl ::std::fmt::Display for NotificationSubscriptionWithContextSubscribableTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT => write!(f, "{}", "incident"),
-            NotificationSubscriptionWithContextSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "{}", "business_service"),
-            NotificationSubscriptionWithContextSubscribableTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriptionWithContextSubscribableTypeEnum::INCIDENT => write!(f, "incident"),
+            NotificationSubscriptionWithContextSubscribableTypeEnum::BUSINESS_SERVICE => write!(f, "business_service"),
+            NotificationSubscriptionWithContextSubscribableTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8280,10 +8280,10 @@ pub enum NotificationSubscriptionWithContextResultEnum {
 impl ::std::fmt::Display for NotificationSubscriptionWithContextResultEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotificationSubscriptionWithContextResultEnum::SUCCESS => write!(f, "{}", "success"),
-            NotificationSubscriptionWithContextResultEnum::DUPLICATE => write!(f, "{}", "duplicate"),
-            NotificationSubscriptionWithContextResultEnum::UNAUTHORIZED => write!(f, "{}", "unauthorized"),
-            NotificationSubscriptionWithContextResultEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotificationSubscriptionWithContextResultEnum::SUCCESS => write!(f, "success"),
+            NotificationSubscriptionWithContextResultEnum::DUPLICATE => write!(f, "duplicate"),
+            NotificationSubscriptionWithContextResultEnum::UNAUTHORIZED => write!(f, "unauthorized"),
+            NotificationSubscriptionWithContextResultEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8371,8 +8371,8 @@ pub enum NotifyLogEntryTypeEnum {
 impl ::std::fmt::Display for NotifyLogEntryTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            NotifyLogEntryTypeEnum::NOTIFY_LOG_ENTRY => write!(f, "{}", "notify_log_entry"),
-            NotifyLogEntryTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            NotifyLogEntryTypeEnum::NOTIFY_LOG_ENTRY => write!(f, "notify_log_entry"),
+            NotifyLogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -8958,11 +8958,11 @@ pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
 impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO => write!(f, "{}", "info"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::ERROR => write!(f, "{}", "error"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::WARNING => write!(f, "{}", "warning"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::CRITICAL => write!(f, "{}", "critical"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::INFO => write!(f, "info"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::ERROR => write!(f, "error"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::WARNING => write!(f, "warning"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::CRITICAL => write!(f, "critical"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsSeverityEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9014,9 +9014,9 @@ pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
 impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER => write!(f, "{}", "trigger"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::RESOLVE => write!(f, "{}", "resolve"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::TRIGGER => write!(f, "trigger"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::RESOLVE => write!(f, "resolve"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsEventActionEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9078,8 +9078,8 @@ pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum 
 impl ::std::fmt::Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX => write!(f, "{}", "regex"),
-            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::REGEX => write!(f, "regex"),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsVariablesTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9234,8 +9234,8 @@ pub enum OutboundIntegrationReferenceTypeEnum {
 impl ::std::fmt::Display for OutboundIntegrationReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            OutboundIntegrationReferenceTypeEnum::OUTBOUND_INTEGRATION_REFERENCE => write!(f, "{}", "outbound_integration_reference"),
-            OutboundIntegrationReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            OutboundIntegrationReferenceTypeEnum::OUTBOUND_INTEGRATION_REFERENCE => write!(f, "outbound_integration_reference"),
+            OutboundIntegrationReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9337,9 +9337,9 @@ pub enum PhoneContactMethodTypeEnum {
 impl ::std::fmt::Display for PhoneContactMethodTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PhoneContactMethodTypeEnum::PHONE_CONTACT_METHOD => write!(f, "{}", "phone_contact_method"),
-            PhoneContactMethodTypeEnum::SMS_CONTACT_METHOD => write!(f, "{}", "sms_contact_method"),
-            PhoneContactMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PhoneContactMethodTypeEnum::PHONE_CONTACT_METHOD => write!(f, "phone_contact_method"),
+            PhoneContactMethodTypeEnum::SMS_CONTACT_METHOD => write!(f, "sms_contact_method"),
+            PhoneContactMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9481,8 +9481,8 @@ pub enum PriorityReferenceTypeEnum {
 impl ::std::fmt::Display for PriorityReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PriorityReferenceTypeEnum::PRIORITY_REFERENCE => write!(f, "{}", "priority_reference"),
-            PriorityReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PriorityReferenceTypeEnum::PRIORITY_REFERENCE => write!(f, "priority_reference"),
+            PriorityReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9569,8 +9569,8 @@ pub enum PushContactMethodTypeEnum {
 impl ::std::fmt::Display for PushContactMethodTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PushContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => write!(f, "{}", "push_notification_contact_method"),
-            PushContactMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PushContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => write!(f, "push_notification_contact_method"),
+            PushContactMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9616,9 +9616,9 @@ pub enum PushContactMethodDeviceTypeEnum {
 impl ::std::fmt::Display for PushContactMethodDeviceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PushContactMethodDeviceTypeEnum::ANDROID => write!(f, "{}", "android"),
-            PushContactMethodDeviceTypeEnum::IOS => write!(f, "{}", "ios"),
-            PushContactMethodDeviceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PushContactMethodDeviceTypeEnum::ANDROID => write!(f, "android"),
+            PushContactMethodDeviceTypeEnum::IOS => write!(f, "ios"),
+            PushContactMethodDeviceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9676,9 +9676,9 @@ pub enum PushContactMethodSoundTypeEnum {
 impl ::std::fmt::Display for PushContactMethodSoundTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            PushContactMethodSoundTypeEnum::HIGH_URGENCY => write!(f, "{}", "alert_high_urgency"),
-            PushContactMethodSoundTypeEnum::LOW_URGENCY => write!(f, "{}", "alert_low_urgency"),
-            PushContactMethodSoundTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            PushContactMethodSoundTypeEnum::HIGH_URGENCY => write!(f, "alert_high_urgency"),
+            PushContactMethodSoundTypeEnum::LOW_URGENCY => write!(f, "alert_low_urgency"),
+            PushContactMethodSoundTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9750,9 +9750,9 @@ pub enum GetAnalyticsIncidentsOrderEnum {
 impl ::std::fmt::Display for GetAnalyticsIncidentsOrderEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            GetAnalyticsIncidentsOrderEnum::ASC => write!(f, "{}", "asc"),
-            GetAnalyticsIncidentsOrderEnum::DESC => write!(f, "{}", "desc"),
-            GetAnalyticsIncidentsOrderEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            GetAnalyticsIncidentsOrderEnum::ASC => write!(f, "asc"),
+            GetAnalyticsIncidentsOrderEnum::DESC => write!(f, "desc"),
+            GetAnalyticsIncidentsOrderEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9800,9 +9800,9 @@ pub enum GetAnalyticsIncidentsOrderByEnum {
 impl ::std::fmt::Display for GetAnalyticsIncidentsOrderByEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            GetAnalyticsIncidentsOrderByEnum::CREATED_AT => write!(f, "{}", "created_at"),
-            GetAnalyticsIncidentsOrderByEnum::SECONDS_TO_RESOLVE => write!(f, "{}", "seconds_to_resolve"),
-            GetAnalyticsIncidentsOrderByEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            GetAnalyticsIncidentsOrderByEnum::CREATED_AT => write!(f, "created_at"),
+            GetAnalyticsIncidentsOrderByEnum::SECONDS_TO_RESOLVE => write!(f, "seconds_to_resolve"),
+            GetAnalyticsIncidentsOrderByEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9905,9 +9905,9 @@ pub enum RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
 impl ::std::fmt::Display for RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS => write!(f, "{}", "similar_contents"),
-            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::PRIOR_FEEDBACK => write!(f, "{}", "prior_feedback"),
-            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::SIMILAR_CONTENTS => write!(f, "similar_contents"),
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::PRIOR_FEEDBACK => write!(f, "prior_feedback"),
+            RelatedIncidentMachineLearningRelationshipGroupingClassificationEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -9980,9 +9980,9 @@ pub enum RelatedIncidentServiceDependencyBaseTypeEnum {
 impl ::std::fmt::Display for RelatedIncidentServiceDependencyBaseTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE => write!(f, "{}", "business_service_reference"),
-            RelatedIncidentServiceDependencyBaseTypeEnum::TECHNICAL_SERVICE_REFERENCE => write!(f, "{}", "technical_service_reference"),
-            RelatedIncidentServiceDependencyBaseTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            RelatedIncidentServiceDependencyBaseTypeEnum::BUSINESS_SERVICE_REFERENCE => write!(f, "business_service_reference"),
+            RelatedIncidentServiceDependencyBaseTypeEnum::TECHNICAL_SERVICE_REFERENCE => write!(f, "technical_service_reference"),
+            RelatedIncidentServiceDependencyBaseTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10046,8 +10046,8 @@ pub enum ResolveReasonTypeEnum {
 impl ::std::fmt::Display for ResolveReasonTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ResolveReasonTypeEnum::MERGE_RESOLVE_REASON => write!(f, "{}", "merge_resolve_reason"),
-            ResolveReasonTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ResolveReasonTypeEnum::MERGE_RESOLVE_REASON => write!(f, "merge_resolve_reason"),
+            ResolveReasonTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10228,8 +10228,8 @@ pub enum ResponsePlayTypeEnum {
 impl ::std::fmt::Display for ResponsePlayTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ResponsePlayTypeEnum::RESPONSE_PLAY => write!(f, "{}", "response_play"),
-            ResponsePlayTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ResponsePlayTypeEnum::RESPONSE_PLAY => write!(f, "response_play"),
+            ResponsePlayTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10277,10 +10277,10 @@ pub enum ResponsePlayRunnabilityEnum {
 impl ::std::fmt::Display for ResponsePlayRunnabilityEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ResponsePlayRunnabilityEnum::SERVICES => write!(f, "{}", "services"),
-            ResponsePlayRunnabilityEnum::TEAMS => write!(f, "{}", "teams"),
-            ResponsePlayRunnabilityEnum::RESPONDERS => write!(f, "{}", "responders"),
-            ResponsePlayRunnabilityEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ResponsePlayRunnabilityEnum::SERVICES => write!(f, "services"),
+            ResponsePlayRunnabilityEnum::TEAMS => write!(f, "teams"),
+            ResponsePlayRunnabilityEnum::RESPONDERS => write!(f, "responders"),
+            ResponsePlayRunnabilityEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10332,10 +10332,10 @@ pub enum ResponsePlayConferenceTypeEnum {
 impl ::std::fmt::Display for ResponsePlayConferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ResponsePlayConferenceTypeEnum::NONE => write!(f, "{}", "none"),
-            ResponsePlayConferenceTypeEnum::MANUAL => write!(f, "{}", "manual"),
-            ResponsePlayConferenceTypeEnum::ZOOM => write!(f, "{}", "zoom"),
-            ResponsePlayConferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ResponsePlayConferenceTypeEnum::NONE => write!(f, "none"),
+            ResponsePlayConferenceTypeEnum::MANUAL => write!(f, "manual"),
+            ResponsePlayConferenceTypeEnum::ZOOM => write!(f, "zoom"),
+            ResponsePlayConferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10415,9 +10415,9 @@ pub enum RestrictionTypeEnum {
 impl ::std::fmt::Display for RestrictionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            RestrictionTypeEnum::DAILY_RESTRICTION => write!(f, "{}", "daily_restriction"),
-            RestrictionTypeEnum::WEEKLY_RESTRICTION => write!(f, "{}", "weekly_restriction"),
-            RestrictionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            RestrictionTypeEnum::DAILY_RESTRICTION => write!(f, "daily_restriction"),
+            RestrictionTypeEnum::WEEKLY_RESTRICTION => write!(f, "weekly_restriction"),
+            RestrictionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10514,9 +10514,9 @@ pub enum RulesetTypeEnum {
 impl ::std::fmt::Display for RulesetTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            RulesetTypeEnum::GLOBAL => write!(f, "{}", "global"),
-            RulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "{}", "default_global"),
-            RulesetTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            RulesetTypeEnum::GLOBAL => write!(f, "global"),
+            RulesetTypeEnum::DEFAULT_GLOBAL => write!(f, "default_global"),
+            RulesetTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10743,8 +10743,8 @@ pub enum ScheduleTypeEnum {
 impl ::std::fmt::Display for ScheduleTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduleTypeEnum::SCHEDULE => write!(f, "{}", "schedule"),
-            ScheduleTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduleTypeEnum::SCHEDULE => write!(f, "schedule"),
+            ScheduleTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10879,8 +10879,8 @@ pub enum ScheduleReferenceTypeEnum {
 impl ::std::fmt::Display for ScheduleReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduleReferenceTypeEnum::SCHEDULE_REFERENCE => write!(f, "{}", "schedule_reference"),
-            ScheduleReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduleReferenceTypeEnum::SCHEDULE_REFERENCE => write!(f, "schedule_reference"),
+            ScheduleReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10934,8 +10934,8 @@ pub enum ScheduledActionTypeEnum {
 impl ::std::fmt::Display for ScheduledActionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduledActionTypeEnum::URGENCY_CHANGE => write!(f, "{}", "urgency_change"),
-            ScheduledActionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduledActionTypeEnum::URGENCY_CHANGE => write!(f, "urgency_change"),
+            ScheduledActionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -10979,8 +10979,8 @@ pub enum ScheduledActionToUrgencyEnum {
 impl ::std::fmt::Display for ScheduledActionToUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduledActionToUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            ScheduledActionToUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduledActionToUrgencyEnum::HIGH => write!(f, "high"),
+            ScheduledActionToUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11034,8 +11034,8 @@ pub enum ScheduledActionAtTypeEnum {
 impl ::std::fmt::Display for ScheduledActionAtTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduledActionAtTypeEnum::NAMED_TIME => write!(f, "{}", "named_time"),
-            ScheduledActionAtTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduledActionAtTypeEnum::NAMED_TIME => write!(f, "named_time"),
+            ScheduledActionAtTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11081,9 +11081,9 @@ pub enum ScheduledActionAtNameEnum {
 impl ::std::fmt::Display for ScheduledActionAtNameEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ScheduledActionAtNameEnum::START => write!(f, "{}", "support_hours_start"),
-            ScheduledActionAtNameEnum::END => write!(f, "{}", "support_hours_end"),
-            ScheduledActionAtNameEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ScheduledActionAtNameEnum::START => write!(f, "support_hours_start"),
+            ScheduledActionAtNameEnum::END => write!(f, "support_hours_end"),
+            ScheduledActionAtNameEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11261,8 +11261,8 @@ pub enum ServiceTypeEnum {
 impl ::std::fmt::Display for ServiceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ServiceTypeEnum::SERVICE => write!(f, "{}", "service"),
-            ServiceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ServiceTypeEnum::SERVICE => write!(f, "service"),
+            ServiceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11314,12 +11314,12 @@ pub enum ServiceStatusEnum {
 impl ::std::fmt::Display for ServiceStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ServiceStatusEnum::ACTIVE => write!(f, "{}", "active"),
-            ServiceStatusEnum::WARNING => write!(f, "{}", "warning"),
-            ServiceStatusEnum::CRITICAL => write!(f, "{}", "critical"),
-            ServiceStatusEnum::MAINTENANCE => write!(f, "{}", "maintenance"),
-            ServiceStatusEnum::DISABLED => write!(f, "{}", "disabled"),
-            ServiceStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ServiceStatusEnum::ACTIVE => write!(f, "active"),
+            ServiceStatusEnum::WARNING => write!(f, "warning"),
+            ServiceStatusEnum::CRITICAL => write!(f, "critical"),
+            ServiceStatusEnum::MAINTENANCE => write!(f, "maintenance"),
+            ServiceStatusEnum::DISABLED => write!(f, "disabled"),
+            ServiceStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11373,9 +11373,9 @@ pub enum ServiceAlertCreationEnum {
 impl ::std::fmt::Display for ServiceAlertCreationEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ServiceAlertCreationEnum::INCIDENTS => write!(f, "{}", "create_incidents"),
-            ServiceAlertCreationEnum::ALERTS_AND_INCIDENTS => write!(f, "{}", "create_alerts_and_incidents"),
-            ServiceAlertCreationEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ServiceAlertCreationEnum::INCIDENTS => write!(f, "create_incidents"),
+            ServiceAlertCreationEnum::ALERTS_AND_INCIDENTS => write!(f, "create_alerts_and_incidents"),
+            ServiceAlertCreationEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11423,9 +11423,9 @@ pub enum ServiceAlertGroupingEnum {
 impl ::std::fmt::Display for ServiceAlertGroupingEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ServiceAlertGroupingEnum::TIME => write!(f, "{}", "time"),
-            ServiceAlertGroupingEnum::INTELLIGENT => write!(f, "{}", "intelligent"),
-            ServiceAlertGroupingEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ServiceAlertGroupingEnum::TIME => write!(f, "time"),
+            ServiceAlertGroupingEnum::INTELLIGENT => write!(f, "intelligent"),
+            ServiceAlertGroupingEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11676,8 +11676,8 @@ pub enum ServiceReferenceTypeEnum {
 impl ::std::fmt::Display for ServiceReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            ServiceReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            ServiceReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            ServiceReferenceTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            ServiceReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11763,8 +11763,8 @@ pub enum SnoozeLogEntryTypeEnum {
 impl ::std::fmt::Display for SnoozeLogEntryTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            SnoozeLogEntryTypeEnum::SNOOZE_LOG_ENTRY => write!(f, "{}", "snooze_log_entry"),
-            SnoozeLogEntryTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            SnoozeLogEntryTypeEnum::SNOOZE_LOG_ENTRY => write!(f, "snooze_log_entry"),
+            SnoozeLogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11873,9 +11873,9 @@ pub enum SubScheduleNameEnum {
 impl ::std::fmt::Display for SubScheduleNameEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            SubScheduleNameEnum::FINAL_SCHEDULE => write!(f, "{}", "Final Schedule"),
-            SubScheduleNameEnum::OVERRIDES => write!(f, "{}", "Overrides"),
-            SubScheduleNameEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            SubScheduleNameEnum::FINAL_SCHEDULE => write!(f, "Final Schedule"),
+            SubScheduleNameEnum::OVERRIDES => write!(f, "Overrides"),
+            SubScheduleNameEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -11939,8 +11939,8 @@ pub enum SupportHoursTypeEnum {
 impl ::std::fmt::Display for SupportHoursTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            SupportHoursTypeEnum::FIXED_TIME_PER_DAY => write!(f, "{}", "fixed_time_per_day"),
-            SupportHoursTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            SupportHoursTypeEnum::FIXED_TIME_PER_DAY => write!(f, "fixed_time_per_day"),
+            SupportHoursTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12009,8 +12009,8 @@ pub enum TagTypeEnum {
 impl ::std::fmt::Display for TagTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TagTypeEnum::TAG => write!(f, "{}", "tag"),
-            TagTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TagTypeEnum::TAG => write!(f, "tag"),
+            TagTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12097,8 +12097,8 @@ pub enum TagReferenceTypeEnum {
 impl ::std::fmt::Display for TagReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TagReferenceTypeEnum::TAG_REFERENCE => write!(f, "{}", "tag_reference"),
-            TagReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TagReferenceTypeEnum::TAG_REFERENCE => write!(f, "tag_reference"),
+            TagReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12177,9 +12177,9 @@ pub enum TagsToAddTypeEnum {
 impl ::std::fmt::Display for TagsToAddTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TagsToAddTypeEnum::TAG => write!(f, "{}", "tag"),
-            TagsToAddTypeEnum::TAG_REFERENCE => write!(f, "{}", "tag_reference"),
-            TagsToAddTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TagsToAddTypeEnum::TAG => write!(f, "tag"),
+            TagsToAddTypeEnum::TAG_REFERENCE => write!(f, "tag_reference"),
+            TagsToAddTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12234,8 +12234,8 @@ pub enum TagsToRemove_TypeEnum {
 impl ::std::fmt::Display for TagsToRemove_TypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TagsToRemove_TypeEnum::TAG_REFERENCE => write!(f, "{}", "tag_reference"),
-            TagsToRemove_TypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TagsToRemove_TypeEnum::TAG_REFERENCE => write!(f, "tag_reference"),
+            TagsToRemove_TypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12334,8 +12334,8 @@ pub enum TeamTypeEnum {
 impl ::std::fmt::Display for TeamTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TeamTypeEnum::TEAM => write!(f, "{}", "team"),
-            TeamTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TeamTypeEnum::TEAM => write!(f, "team"),
+            TeamTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12469,8 +12469,8 @@ pub enum TeamReferenceTypeEnum {
 impl ::std::fmt::Display for TeamReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            TeamReferenceTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
-            TeamReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            TeamReferenceTypeEnum::TEAM_REFERENCE => write!(f, "team_reference"),
+            TeamReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12624,8 +12624,8 @@ pub enum UserTypeEnum {
 impl ::std::fmt::Display for UserTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UserTypeEnum::USER => write!(f, "{}", "user"),
-            UserTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UserTypeEnum::USER => write!(f, "user"),
+            UserTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12683,15 +12683,15 @@ pub enum UserRoleEnum {
 impl ::std::fmt::Display for UserRoleEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UserRoleEnum::ADMIN => write!(f, "{}", "admin"),
-            UserRoleEnum::LIMITED_USER => write!(f, "{}", "limited_user"),
-            UserRoleEnum::OBSERVER => write!(f, "{}", "observer"),
-            UserRoleEnum::OWNER => write!(f, "{}", "owner"),
-            UserRoleEnum::READ_ONLY_USER => write!(f, "{}", "read_only_user"),
-            UserRoleEnum::RESTRICTED_ACCESS => write!(f, "{}", "restricted_access"),
-            UserRoleEnum::READ_ONLY_LIMITED_USER => write!(f, "{}", "read_only_limited_user"),
-            UserRoleEnum::USER => write!(f, "{}", "user"),
-            UserRoleEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UserRoleEnum::ADMIN => write!(f, "admin"),
+            UserRoleEnum::LIMITED_USER => write!(f, "limited_user"),
+            UserRoleEnum::OBSERVER => write!(f, "observer"),
+            UserRoleEnum::OWNER => write!(f, "owner"),
+            UserRoleEnum::READ_ONLY_USER => write!(f, "read_only_user"),
+            UserRoleEnum::RESTRICTED_ACCESS => write!(f, "restricted_access"),
+            UserRoleEnum::READ_ONLY_LIMITED_USER => write!(f, "read_only_limited_user"),
+            UserRoleEnum::USER => write!(f, "user"),
+            UserRoleEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12792,8 +12792,8 @@ pub enum UserReferenceTypeEnum {
 impl ::std::fmt::Display for UserReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UserReferenceTypeEnum::USER_REFERENCE => write!(f, "{}", "user_reference"),
-            UserReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UserReferenceTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
+            UserReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12850,10 +12850,10 @@ pub enum UserRoleRoleEnum {
 impl ::std::fmt::Display for UserRoleRoleEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UserRoleRoleEnum::OBSERVER => write!(f, "{}", "observer"),
-            UserRoleRoleEnum::RESPONDER => write!(f, "{}", "responder"),
-            UserRoleRoleEnum::MANAGER => write!(f, "{}", "manager"),
-            UserRoleRoleEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UserRoleRoleEnum::OBSERVER => write!(f, "observer"),
+            UserRoleRoleEnum::RESPONDER => write!(f, "responder"),
+            UserRoleRoleEnum::MANAGER => write!(f, "manager"),
+            UserRoleRoleEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12920,9 +12920,9 @@ pub enum UserSessionTypeEnum {
 impl ::std::fmt::Display for UserSessionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UserSessionTypeEnum::BROWSER => write!(f, "{}", "browser"),
-            UserSessionTypeEnum::OAUTH => write!(f, "{}", "oauth"),
-            UserSessionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UserSessionTypeEnum::BROWSER => write!(f, "browser"),
+            UserSessionTypeEnum::OAUTH => write!(f, "oauth"),
+            UserSessionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -12989,10 +12989,10 @@ pub enum UpdateTeamUserRoleEnum {
 impl ::std::fmt::Display for UpdateTeamUserRoleEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            UpdateTeamUserRoleEnum::OBSERVER => write!(f, "{}", "observer"),
-            UpdateTeamUserRoleEnum::RESPONDER => write!(f, "{}", "responder"),
-            UpdateTeamUserRoleEnum::MANAGER => write!(f, "{}", "manager"),
-            UpdateTeamUserRoleEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            UpdateTeamUserRoleEnum::OBSERVER => write!(f, "observer"),
+            UpdateTeamUserRoleEnum::RESPONDER => write!(f, "responder"),
+            UpdateTeamUserRoleEnum::MANAGER => write!(f, "manager"),
+            UpdateTeamUserRoleEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13152,8 +13152,8 @@ pub enum VendorReferenceTypeEnum {
 impl ::std::fmt::Display for VendorReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            VendorReferenceTypeEnum::VENDOR_REFERENCE => write!(f, "{}", "vendor_reference"),
-            VendorReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            VendorReferenceTypeEnum::VENDOR_REFERENCE => write!(f, "vendor_reference"),
+            VendorReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13249,15 +13249,15 @@ pub enum WebhookIncidentActionTypeEnum {
 impl ::std::fmt::Display for WebhookIncidentActionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookIncidentActionTypeEnum::TRIGGER => write!(f, "{}", "incident.trigger"),
-            WebhookIncidentActionTypeEnum::ACKNOWLEDGE => write!(f, "{}", "incident.acknowledge"),
-            WebhookIncidentActionTypeEnum::UNACKNOWLEDGE => write!(f, "{}", "incident.unacknowledge"),
-            WebhookIncidentActionTypeEnum::RESOLVE => write!(f, "{}", "incident.resolve"),
-            WebhookIncidentActionTypeEnum::ASSIGN => write!(f, "{}", "incident.assign"),
-            WebhookIncidentActionTypeEnum::ESCALATE => write!(f, "{}", "incident.escalate"),
-            WebhookIncidentActionTypeEnum::DELEGATE => write!(f, "{}", "incident.delegate"),
-            WebhookIncidentActionTypeEnum::ANNOTATE => write!(f, "{}", "incident.annotate"),
-            WebhookIncidentActionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookIncidentActionTypeEnum::TRIGGER => write!(f, "incident.trigger"),
+            WebhookIncidentActionTypeEnum::ACKNOWLEDGE => write!(f, "incident.acknowledge"),
+            WebhookIncidentActionTypeEnum::UNACKNOWLEDGE => write!(f, "incident.unacknowledge"),
+            WebhookIncidentActionTypeEnum::RESOLVE => write!(f, "incident.resolve"),
+            WebhookIncidentActionTypeEnum::ASSIGN => write!(f, "incident.assign"),
+            WebhookIncidentActionTypeEnum::ESCALATE => write!(f, "incident.escalate"),
+            WebhookIncidentActionTypeEnum::DELEGATE => write!(f, "incident.delegate"),
+            WebhookIncidentActionTypeEnum::ANNOTATE => write!(f, "incident.annotate"),
+            WebhookIncidentActionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13360,9 +13360,9 @@ pub enum WebhookObjectTypeEnum {
 impl ::std::fmt::Display for WebhookObjectTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookObjectTypeEnum::SERVICE => write!(f, "{}", "service"),
-            WebhookObjectTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            WebhookObjectTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookObjectTypeEnum::SERVICE => write!(f, "service"),
+            WebhookObjectTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            WebhookObjectTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13451,8 +13451,8 @@ pub enum WebhookReferenceTypeEnum {
 impl ::std::fmt::Display for WebhookReferenceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookReferenceTypeEnum::WEBHOOK_REFERENCE => write!(f, "{}", "webhook_reference"),
-            WebhookReferenceTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookReferenceTypeEnum::WEBHOOK_REFERENCE => write!(f, "webhook_reference"),
+            WebhookReferenceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13515,8 +13515,8 @@ pub enum WebhookSubscriptionTypeEnum {
 impl ::std::fmt::Display for WebhookSubscriptionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION => write!(f, "{}", "webhook_subscription"),
-            WebhookSubscriptionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookSubscriptionTypeEnum::WEBHOOK_SUBSCRIPTION => write!(f, "webhook_subscription"),
+            WebhookSubscriptionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13581,8 +13581,8 @@ pub enum WebhookSubscriptionDeliveryMethodTypeEnum {
 impl ::std::fmt::Display for WebhookSubscriptionDeliveryMethodTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD => write!(f, "{}", "http_delivery_method"),
-            WebhookSubscriptionDeliveryMethodTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookSubscriptionDeliveryMethodTypeEnum::HTTP_DELIVERY_METHOD => write!(f, "http_delivery_method"),
+            WebhookSubscriptionDeliveryMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13640,10 +13640,10 @@ pub enum WebhookSubscriptionFilterTypeEnum {
 impl ::std::fmt::Display for WebhookSubscriptionFilterTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "{}", "account_reference"),
-            WebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            WebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
-            WebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "account_reference"),
+            WebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            WebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "team_reference"),
+            WebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13726,10 +13726,10 @@ pub enum WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
 impl ::std::fmt::Display for WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "{}", "account_reference"),
-            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "{}", "service_reference"),
-            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "{}", "team_reference"),
-            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::ACCOUNT_REFERENCE => write!(f, "account_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::TEAM_REFERENCE => write!(f, "team_reference"),
+            WebhookSubscriptionUpdateWebhookSubscriptionFilterTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13851,10 +13851,10 @@ pub enum WebhooksV1IncidentDataStatusEnum {
 impl ::std::fmt::Display for WebhooksV1IncidentDataStatusEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhooksV1IncidentDataStatusEnum::TRIGGERED => write!(f, "{}", "triggered"),
-            WebhooksV1IncidentDataStatusEnum::ACKNOWLEDGED => write!(f, "{}", "acknowledged"),
-            WebhooksV1IncidentDataStatusEnum::RESOLVED => write!(f, "{}", "resolved"),
-            WebhooksV1IncidentDataStatusEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhooksV1IncidentDataStatusEnum::TRIGGERED => write!(f, "triggered"),
+            WebhooksV1IncidentDataStatusEnum::ACKNOWLEDGED => write!(f, "acknowledged"),
+            WebhooksV1IncidentDataStatusEnum::RESOLVED => write!(f, "resolved"),
+            WebhooksV1IncidentDataStatusEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13904,9 +13904,9 @@ pub enum WebhooksV1IncidentDataUrgencyEnum {
 impl ::std::fmt::Display for WebhooksV1IncidentDataUrgencyEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhooksV1IncidentDataUrgencyEnum::HIGH => write!(f, "{}", "high"),
-            WebhooksV1IncidentDataUrgencyEnum::LOW => write!(f, "{}", "low"),
-            WebhooksV1IncidentDataUrgencyEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhooksV1IncidentDataUrgencyEnum::HIGH => write!(f, "high"),
+            WebhooksV1IncidentDataUrgencyEnum::LOW => write!(f, "low"),
+            WebhooksV1IncidentDataUrgencyEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -13986,14 +13986,14 @@ pub enum WebhooksV1MessageTypeEnum {
 impl ::std::fmt::Display for WebhooksV1MessageTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WebhooksV1MessageTypeEnum::TRIGGER => write!(f, "{}", "incident.trigger"),
-            WebhooksV1MessageTypeEnum::ACKNOWLEDGE => write!(f, "{}", "incident.acknowledge"),
-            WebhooksV1MessageTypeEnum::UNACKNOWLEDGE => write!(f, "{}", "incident.unacknowledge"),
-            WebhooksV1MessageTypeEnum::RESOLVE => write!(f, "{}", "incident.resolve"),
-            WebhooksV1MessageTypeEnum::ASSIGN => write!(f, "{}", "incident.assign"),
-            WebhooksV1MessageTypeEnum::ESCALATE => write!(f, "{}", "incident.escalate"),
-            WebhooksV1MessageTypeEnum::DELEGATE => write!(f, "{}", "incident.delegate"),
-            WebhooksV1MessageTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WebhooksV1MessageTypeEnum::TRIGGER => write!(f, "incident.trigger"),
+            WebhooksV1MessageTypeEnum::ACKNOWLEDGE => write!(f, "incident.acknowledge"),
+            WebhooksV1MessageTypeEnum::UNACKNOWLEDGE => write!(f, "incident.unacknowledge"),
+            WebhooksV1MessageTypeEnum::RESOLVE => write!(f, "incident.resolve"),
+            WebhooksV1MessageTypeEnum::ASSIGN => write!(f, "incident.assign"),
+            WebhooksV1MessageTypeEnum::ESCALATE => write!(f, "incident.escalate"),
+            WebhooksV1MessageTypeEnum::DELEGATE => write!(f, "incident.delegate"),
+            WebhooksV1MessageTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
@@ -14089,9 +14089,9 @@ pub enum WeeklyRestrictionTypeEnum {
 impl ::std::fmt::Display for WeeklyRestrictionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { 
-            WeeklyRestrictionTypeEnum::DAILY_RESTRICTION => write!(f, "{}", "daily_restriction"),
-            WeeklyRestrictionTypeEnum::WEEKLY_RESTRICTION => write!(f, "{}", "weekly_restriction"),
-            WeeklyRestrictionTypeEnum::UNKNOWN => write!(f, "{}", "unknown"),
+            WeeklyRestrictionTypeEnum::DAILY_RESTRICTION => write!(f, "daily_restriction"),
+            WeeklyRestrictionTypeEnum::WEEKLY_RESTRICTION => write!(f, "weekly_restriction"),
+            WeeklyRestrictionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
 }

@@ -41,6 +41,7 @@ macro_rules! plural_response_type {
 }
 
 //#[macro_export]
+#[allow(unused_macros)]
 macro_rules! plural_request_type {
     ( $base:ident, $key:ident ) => {
         paste::paste! {
@@ -85,7 +86,7 @@ macro_rules! list_response_type {
                     self.offset.is_some() && self.limit.is_some() && self.more.unwrap_or(false)
                 }
 
-                fn into_cursor(&self) -> crate::praiya::PaginatedLegacyPosition {
+                fn to_cursor(&self) -> crate::praiya::PaginatedLegacyPosition {
                     crate::praiya::PaginatedLegacyPosition {
                         offset: self.get_pos(),
                         has_more: self.has_more(),

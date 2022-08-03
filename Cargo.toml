@@ -5,6 +5,10 @@ authors = ["Praiya contributors"]
 edition = "2021"
 
 [workspace]
+members = [
+  "praiya-macro",
+  "."
+]
 
 [dependencies]
 arrayvec = "0.7"
@@ -21,7 +25,7 @@ hyper-rustls = "0.23"
 log = "0.4.8"
 paste = "1.0"
 pin-project = "1.0"
-praiya-macro = { path = "praiya-macro" }
+praiya-macro = { path = "./praiya-macro" }
 rustls = "0.20"
 rustls-native-certs = "0.6"
 serde = "1.0"

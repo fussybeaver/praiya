@@ -32,7 +32,7 @@ pub enum {{classname}} { {{#allowableValues}}{{#enumVars}}
 impl Display for {{classname}} {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self { {{#allowableValues}}{{#enumVars}}
-            {{classname}}::{{name}}(value) => write!(f, "{}", value),{{/enumVars}}{{/allowableValues}}
+            {{classname}}::{{name}}(value) => write!(f, value),{{/enumVars}}{{/allowableValues}}
         }
     }
 }
@@ -46,7 +46,7 @@ pub enum {{classname}} { {{#allowableValues}}{{#enumVars}}
 impl Display for {{classname}} {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self { {{#allowableValues}}{{#enumVars}}
-            {{classname}}::{{name}} => write!(f, "{}", {{{value}}}),{{/enumVars}}{{/allowableValues}}
+            {{classname}}::{{name}} => write!(f, {{{value}}}),{{/enumVars}}{{/allowableValues}}
         }
     }
 }
@@ -156,9 +156,9 @@ pub enum {{classname}}{{enumName}} { {{#allowableValues}}{{#enumVars}}
 impl ::std::fmt::Display for {{classname}}{{enumName}} {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self { {{#allowableValues}}{{#enumVars}}
-            {{classname}}{{enumName}}::{{name}} => write!(f, "{}", {{{value}}}),{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
-            {{classname}}{{enumName}}::{{name}} => write!(f, "{}", {{{value}}}),{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
-            {{classname}}{{enumName}}::UNKNOWN => write!(f, "{}", "unknown"),
+            {{classname}}{{enumName}}::{{name}} => write!(f, {{{value}}}),{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
+            {{classname}}{{enumName}}::{{name}} => write!(f, {{{value}}}),{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
+            {{classname}}{{enumName}}::UNKNOWN => write!(f, "unknown"),
         }
     }
 }
