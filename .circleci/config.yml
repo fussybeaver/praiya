@@ -1,0 +1,59 @@
+version: 2.1
+
+jobs:
+  clippy:
+    docker:
+      - image: cimg/rust:1.62.1
+    steps:
+      - checkout
+      - run:
+          name: install clippy
+          command: rustup component add clippy
+      - run:
+          name: lint
+          command: cargo clippy --all-targets --all-features -- -D warnings
+  format:
+    docker:
+      - image: cimg/rust:1.62.1
+    steps:
+      - checkout
+      - run:
+          name: install fmt
+          command: rustup component add rustfmt
+      - run:
+          name: format
+          command: cargo fmt -- --check
+  test:
+    parameters:
+      package:
+        type: string
+    docker:
+      - image: cimg/rust:1.62.1
+    steps:
+      - checkout
+      - run:
+          name: test
+          command: cargo test << parameters.package >>
+
+  slack_prism:
+    docker:
+      - image: stoplight/prism
+        command: sh
+    steps:
+      - run:
+          name: mock
+          command: docker-entrypoint.sh /usr/src/prism/packages/cli/dist/index.js mock https://raw.githubusercontent.com/fussybeaver/pagerduty-api-schema/praiya-master/reference/integration-slack-service/openapiv3.json
+
+workflows:
+  lint:
+    jobs:
+      - clippy
+  format:
+    jobs:
+      - format
+  slack_test:
+    jobs:
+      - slack_prism
+      - test:
+          package: slack
+
