@@ -18,6 +18,7 @@ use chrono::DateTime;
 use chrono::Utc;
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Acknowledgement {     
     /// Time at which the acknowledgement was created.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -26,6 +27,7 @@ pub struct Acknowledgement {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AcknowledgerReference {     
     /// The label of the tag.
     #[serde(default="AcknowledgerReference::label_default")]
@@ -120,6 +122,7 @@ impl std::default::Default for AcknowledgerReferenceTypeEnum {
 
 /// A message containing information about a single PagerDuty action.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Action {     
     /// Uniquely identifies this outgoing webhook message; can be used for idempotency when processing the messages.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -132,6 +135,7 @@ pub struct Action {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Addon {     
     /// The label of the tag.
     #[serde(default="Addon::label_default")]
@@ -234,6 +238,7 @@ impl std::default::Default for AddonTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AddonReference {     
     /// The label of the tag.
     #[serde(default="AddonReference::label_default")]
@@ -335,16 +340,19 @@ impl std::default::Default for AddonReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateAddon {     
     pub addon: Addon,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateAddon {     
     pub addon: Addon,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AgentReference {     
     /// The label of the tag.
     #[serde(default="AgentReference::label_default")]
@@ -443,6 +451,7 @@ impl std::default::Default for AgentReferenceTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Alert {     
     /// The label of the tag.
     #[serde(default="Alert::label_default")]
@@ -677,6 +686,7 @@ impl std::default::Default for AlertSeverityEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AlertCount {     
     /// The count of triggered alerts
     #[serde(skip_serializing_if="Option::is_none")]
@@ -691,6 +701,7 @@ pub struct AlertCount {
 
 /// Defines how alerts on this service will be automatically grouped into incidents. Note that the alert grouping features are available only on certain plans. 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AlertGroupingParameters {     
     /// The type of Alert Grouping. When `type` is `intelligent`, `config` can be omitted.
     #[serde(rename = "type")]
@@ -755,6 +766,7 @@ impl std::default::Default for AlertGroupingParametersTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AlertReference {     
     /// The label of the tag.
     #[serde(default="AlertReference::label_default")]
@@ -843,11 +855,13 @@ impl std::default::Default for AlertReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateIncidentAlert {     
     pub alert: Alert,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfIncidentNoteUser {     
     /// The label of the tag.
     #[serde(default="AllOfIncidentNoteUser::label_default")]
@@ -941,18 +955,22 @@ impl std::default::Default for AllOfIncidentNoteUserTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfOrchestrationUnroutedOrchestrationPathRulesActions {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfServiceOrchestrationOrchestrationPathCatchAllActions {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfServiceOrchestrationOrchestrationPathRulesActions {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfWebhooksV1AssignedToObject {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -1014,6 +1032,7 @@ impl std::default::Default for AllOfWebhooksV1AssignedToObjectTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfinlineResponse20036ChangeEventsItems {     
     /// The time at which the emitting tool detected or generated the event.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1093,6 +1112,7 @@ impl std::default::Default for AllOfinlineResponse20036ChangeEventsItemsTypeEnum
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AllOfrulesetsBodyRuleset {     
     /// ID of the Ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1174,6 +1194,7 @@ impl std::default::Default for AllOfrulesetsBodyRulesetTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AnalyticsIncidentMetrics {     
     /// Mean count of instances where responders were assigned an incident (including through reassignment or escalation) or accepted a responder request.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1235,6 +1256,7 @@ pub struct AnalyticsIncidentMetrics {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct GetAnalyticsMetricsIncidentsTeam {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<AnalyticsModelFilters>,
@@ -1303,6 +1325,7 @@ impl std::default::Default for GetAnalyticsMetricsIncidentsTeamAggregateUnitEnum
 
 /// Accepts a set of filters to apply to the Incidents before aggregating.  Any incidents that do not match the included filters will be omitted from the results
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AnalyticsModelFilters {     
     /// Accepts an ISO8601 DateTime string.  Any incidents with a created_at less than this value will be omitted from the results.  The maximum supported time range in conjunction with created_at_end is one year.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1381,6 +1404,7 @@ impl std::default::Default for AnalyticsModelFiltersUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AnalyticsRawIncident {     
     /// Total count of instances where responders were assigned an incident (including through reassignment or escalation) or accepted a responder request.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1464,6 +1488,7 @@ pub struct AnalyticsRawIncident {
 
 /// Filters the result, only show incidents that match the conditions passed in the filter.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AnalyticsrawincidentsFilters {     
     /// Filters the result, showing only the incidents where the creation timestamp is greater than the filter value.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1492,18 +1517,22 @@ pub struct AnalyticsrawincidentsFilters {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AlertGroupingParametersConfig {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct InlineResponse20037RelationshipsMetadata {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AssignLogEntry {     
     #[serde(rename = "type")]
     pub _type: AssignLogEntryTypeEnum,
@@ -1582,6 +1611,7 @@ impl std::default::Default for AssignLogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Assignment {     
     /// Time at which the assignment was created.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1590,6 +1620,7 @@ pub struct Assignment {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditMetadata {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub messages: Option<Vec<String>>,
@@ -1597,6 +1628,7 @@ pub struct AuditMetadata {
 
 /// An Audit Trail record
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecord {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -1621,6 +1653,7 @@ pub struct AuditRecord {
 
 /// Additional details to provide further information about the action or the resource that has been audited. 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordDetails {     
     pub resource: Reference,
     /// A set of fields that have been affected. The fields that have not been affected MAY be returned. 
@@ -1633,6 +1666,7 @@ pub struct AuditRecordDetails {
 
 /// Information about the affected field. When available, field's before and after values are returned:    #### Resource creation - `value` MAY be returned  #### Resource update - `value` MAY be returned - `before_value` MAY be returned  #### Resource deletion - `before_value` MAY be returned 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordDetailsFields {     
     /// Name of the resource field
     #[serde(skip_serializing_if="String::is_empty")]
@@ -1649,6 +1683,7 @@ pub struct AuditRecordDetailsFields {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordDetailsReferences {     
     /// Name of the reference field
     #[serde(skip_serializing_if="String::is_empty")]
@@ -1664,6 +1699,7 @@ pub struct AuditRecordDetailsReferences {
 
 /// Action execution context
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordExecutionContext {     
     /// Request Id
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1675,6 +1711,7 @@ pub struct AuditRecordExecutionContext {
 
 /// The method information
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordMethod {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
@@ -1703,6 +1740,7 @@ impl AuditRecordMethod {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AuditRecordResponseSchema {     
     /// The minimum of the `limit` parameter used in the request or the maximum request size of the API.
     pub limit: isize,
@@ -1713,6 +1751,7 @@ pub struct AuditRecordResponseSchema {
 
 /// Defines how alerts on this service are automatically suspended for a period of time before triggering, when identified as likely being transient. Note that automatically pausing notifications is only available on certain plans.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AutoPauseNotificationsParameters {     
     /// Indicates whether alerts should be automatically suspended when identified as transient
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1724,6 +1763,7 @@ pub struct AutoPauseNotificationsParameters {
 
 /// A JSON object containing data describing the alert.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Body {     
     /// The type of the body.
     #[serde(rename = "type")]
@@ -1782,6 +1822,7 @@ impl std::default::Default for BodyTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct BusinessService {     
     /// The label of the tag.
     #[serde(default="BusinessService::label_default")]
@@ -1842,6 +1883,7 @@ impl BusinessService {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PutIncidentManualBusinessServiceAssociation {     
     pub relation: PutIncidentManualBusinessServiceAssociationRelationEnum,
 }
@@ -1897,6 +1939,7 @@ impl std::default::Default for PutIncidentManualBusinessServiceAssociationRelati
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct BusinessServiceReference {     
     /// The label of the tag.
     #[serde(default="BusinessServiceReference::label_default")]
@@ -1985,6 +2028,7 @@ impl std::default::Default for BusinessServiceReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateBusinessService {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub business_service: Option<BusinessServicesBusinessService>,
@@ -1992,6 +2036,7 @@ pub struct CreateBusinessService {
 
 /// The Business Service to be created
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct BusinessServicesBusinessService {     
     /// The name of the Business Service.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2007,18 +2052,21 @@ pub struct BusinessServicesBusinessService {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateBusinessService {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub business_service: Option<BusinessServicesidBusinessService>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PutBusinessServicePriorityThresholds {     
     pub global_threshold: BusinessServicespriorityThresholdsGlobalThreshold,
 }
 
 /// The Business Service to be created
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct BusinessServicesidBusinessService {     
     /// The name of the Business Service.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2034,6 +2082,7 @@ pub struct BusinessServicesidBusinessService {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct BusinessServicespriorityThresholdsGlobalThreshold {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -2041,6 +2090,7 @@ pub struct BusinessServicespriorityThresholdsGlobalThreshold {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ChangeEvent {     
     /// The label of the tag.
     #[serde(default="ChangeEvent::label_default")]
@@ -2160,6 +2210,7 @@ impl std::default::Default for ChangeEventTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ChangeEventImages {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub src: Option<String>,
@@ -2170,6 +2221,7 @@ pub struct ChangeEventImages {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ChangeEventLinks {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub href: Option<String>,
@@ -2178,12 +2230,14 @@ pub struct ChangeEventLinks {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateChangeEvent {     
     pub change_event: ChangeEvent,
 }
 
 /// Polymorphic object representation of the means by which the action was channeled. Has different formats depending on type, indicated by channel[type]. Will be one of `auto`, `email`, `api`, `nagios`, or `timeout` if `agent[type]` is `service`. Will be one of `email`, `sms`, `website`, `web_trigger`, or `note` if `agent[type]` is `user`. See [below](https://developer.pagerduty.com/documentation/rest/log_entries/show#channel_types) for detailed information about channel formats.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Channel {     
     /// type
     #[serde(rename = "type")]
@@ -2219,6 +2273,7 @@ impl Channel {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ConferenceBridge {     
     /// The phone number of the conference call for the conference bridge. Phone numbers should be formatted like +1 415-555-1212,,,,1234#, where a comma (,) represents a one-second wait and pound (#) completes access code input.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2229,6 +2284,7 @@ pub struct ConferenceBridge {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ContactMethod {     
     /// a URL at which the entity is uniquely displayed in the Web app
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2337,6 +2393,7 @@ impl std::default::Default for ContactMethodTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ContactMethodReference {     
     /// The label of the tag.
     #[serde(default="ContactMethodReference::label_default")]
@@ -2440,12 +2497,14 @@ impl std::default::Default for ContactMethodReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserContactMethod {     
     pub contact_method: ContactMethodsContactMethodIdBodyContactMethod,
 }
 
 /// The configuration for Content Based Alert Grouping
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ContentBasedAlertGroupingConfiguration {     
     /// Whether Alerts should be grouped if `all` or `any` specified fields match. If `all` is selected, an exact match on every specified field name must occur for Alerts to be grouped. If `any` is selected, Alerts will be grouped when there is an exact match on at least one of the specified fields.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2501,6 +2560,7 @@ impl std::default::Default for ContentBasedAlertGroupingConfigurationAggregateEn
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Context {     
     /// The type of context being attached to the incident.
     #[serde(rename = "type")]
@@ -2567,6 +2627,7 @@ impl std::default::Default for ContextTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CursorPagination {     
     /// The minimum of the `limit` parameter used in the request or the maximum request size of the API.
     pub limit: isize,
@@ -2577,6 +2638,7 @@ pub struct CursorPagination {
 
 /// The Email Contact Method of the User.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EmailContactMethod {     
     #[serde(rename = "type")]
     pub _type: EmailContactMethodTypeEnum,
@@ -2654,6 +2716,7 @@ impl std::default::Default for EmailContactMethodTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EmailParser {     
     pub action: EmailParserActionEnum,
     pub match_predicate: MatchPredicate,
@@ -2713,6 +2776,7 @@ impl std::default::Default for EmailParserActionEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EmailParserValueExtractors {     
     #[serde(rename = "type")]
     pub _type: EmailParserValueExtractorsTypeEnum,
@@ -2839,6 +2903,7 @@ impl std::default::Default for EmailParserValueExtractorsPartEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EntityReference {     
     /// The label of the tag.
     #[serde(default="EntityReference::label_default")]
@@ -2937,6 +3002,7 @@ impl std::default::Default for EntityReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EscalateLogEntry {     
     #[serde(rename = "type")]
     pub _type: EscalateLogEntryTypeEnum,
@@ -3015,16 +3081,19 @@ impl std::default::Default for EscalateLogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateEscalationPolicy {     
     pub escalation_policy: EscalationPolicy,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateEscalationPolicy {     
     pub escalation_policy: EscalationPolicy,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EscalationPolicy {     
     /// The label of the tag.
     #[serde(default="EscalationPolicy::label_default")]
@@ -3189,6 +3258,7 @@ impl std::default::Default for EscalationPolicyOnCallHandoffNotificationsEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EscalationPolicyReference {     
     /// The label of the tag.
     #[serde(default="EscalationPolicyReference::label_default")]
@@ -3277,6 +3347,7 @@ impl std::default::Default for EscalationPolicyReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EscalationRule {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -3287,6 +3358,7 @@ pub struct EscalationRule {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EscalationTargetReference {     
     /// The label of the tag.
     #[serde(default="EscalationTargetReference::label_default")]
@@ -3390,16 +3462,19 @@ impl std::default::Default for EscalationTargetReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchestration {     
     pub orchestration: Orchestration,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PostOrchestration {     
     pub orchestration: Orchestration,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRule {     
     /// Position/index of the Event Rule in the Ruleset.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching rule is found.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3414,6 +3489,7 @@ pub struct EventRule {
 
 /// When an event matches this Event Rule, the actions that will be taken to change the resulting Alert and Incident.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommon {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub annotate: Option<EventRuleActionsCommonAnnotate>,
@@ -3434,6 +3510,7 @@ pub struct EventRuleActionsCommon {
 
 /// Set a note on the resulting incident.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonAnnotate {     
     /// The content of the note.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -3442,6 +3519,7 @@ pub struct EventRuleActionsCommonAnnotate {
 
 /// Set whether the resulting alert status is trigger or resolve.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonEventAction {     
     pub value: EventRuleActionsCommonEventActionValueEnum,
 }
@@ -3498,6 +3576,7 @@ impl std::default::Default for EventRuleActionsCommonEventActionValueEnum {
 
 /// Set the priority ID for the resulting incident. You can find the priority you want by calling the priorities endpoint.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonPriority {     
     /// The priority ID.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -3506,6 +3585,7 @@ pub struct EventRuleActionsCommonPriority {
 
 /// Set the severity of the resulting alert.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonSeverity {     
     pub value: EventRuleActionsCommonSeverityValueEnum,
 }
@@ -3572,6 +3652,7 @@ impl std::default::Default for EventRuleActionsCommonSeverityValueEnum {
 
 /// Set whether the resulting alert is suppressed. Can optionally be used with a threshold where resulting alerts will be suppressed until the threshold is met in a window of time. If using a threshold the rule must also set a route action.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonSuppress {     
     pub value: bool,
     /// The number of occurences needed during the window of time to trigger the theshold.
@@ -3642,6 +3723,7 @@ impl std::default::Default for EventRuleActionsCommonSuppressThresholdTimeUnitEn
 
 /// Set the length of time to suspend the resulting alert before triggering. Rules with a suspend action must also set a route action, and cannot have a suppress with threshold action
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonSuspend {     
     /// The amount of time to suspend the alert in seconds.
     pub value: isize,
@@ -3649,6 +3731,7 @@ pub struct EventRuleActionsCommonSuspend {
 
 /// Conditions evaluated to check if an event matches this Event Rule. Is always empty for the catch_all rule, though.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleConditions {     
     /// Operator to combine sub-conditions.
     pub operator: EventRuleConditionsOperatorEnum,
@@ -3707,6 +3790,7 @@ impl std::default::Default for EventRuleConditionsOperatorEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleConditionsParameters {     
     /// Path to a field in an event, in dot-notation.  For Event Rules on a serivce, this will have to be a PD-CEF field.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -3720,6 +3804,7 @@ pub struct EventRuleConditionsParameters {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleConditionsSubconditions {     
     /// The type of operator to apply.
     pub operator: EventRuleConditionsSubconditionsOperatorEnum,
@@ -3808,6 +3893,7 @@ impl std::default::Default for EventRuleConditionsSubconditionsOperatorEnum {
 
 /// The parameters for performing the operation to populate the
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleParameters {     
     /// The value for the operation. For example, an RE2 regular expression for regex-type variables.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -3819,6 +3905,7 @@ pub struct EventRuleParameters {
 
 /// Time-based conditions for limiting when the rule is active.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleTimeFrame {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub active_between: Option<EventRuleTimeFrameActiveBetween>,
@@ -3828,6 +3915,7 @@ pub struct EventRuleTimeFrame {
 
 /// A fixed window of time during which the rule is active.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleTimeFrameActiveBetween {     
     /// The start time in milliseconds.
     pub start_time: isize,
@@ -3837,6 +3925,7 @@ pub struct EventRuleTimeFrameActiveBetween {
 
 /// A reccuring window of time based on the day of the week, during which the rule is active.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleTimeFrameScheduledWeekly {     
     /// The amount of milliseconds into the day at which the window starts.
     pub start_time: isize,
@@ -3850,6 +3939,7 @@ pub struct EventRuleTimeFrameScheduledWeekly {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleVariables {     
     /// The type of operation to populate the variable.
     #[serde(rename = "type")]
@@ -3906,6 +3996,7 @@ impl std::default::Default for EventRuleVariablesTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Extension {     
     /// The label of the tag.
     #[serde(default="Extension::label_default")]
@@ -4016,6 +4107,7 @@ impl std::default::Default for ExtensionTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ExtensionReference {     
     /// The label of the tag.
     #[serde(default="ExtensionReference::label_default")]
@@ -4104,6 +4196,7 @@ impl std::default::Default for ExtensionReferenceTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ExtensionSchema {     
     /// A small logo, 18-by-18 pixels.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4153,6 +4246,7 @@ impl ExtensionSchema {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ExtensionSchemaReference {     
     /// The label of the tag.
     #[serde(default="ExtensionSchemaReference::label_default")]
@@ -4241,17 +4335,20 @@ impl std::default::Default for ExtensionSchemaReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateExtension {     
     pub extension: Extension,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateExtension {     
     pub extension: Extension,
 }
 
 /// A rule for contacting the user for Handoff Notifications.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct HandoffNotificationRule {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -4319,6 +4416,7 @@ impl std::default::Default for HandoffNotificationRuleHandoffTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateIncidentAlerts {     
     /// An array of alerts, including the parameters to update for each alert.
     pub alerts: Vec<Alert>,
@@ -4326,6 +4424,7 @@ pub struct UpdateIncidentAlerts {
 
 /// Tags to add to or remove from the entity.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateEntityTypeByIdChangeTags {     
     /// Array of tags and/or tag references to add to the entity. For elements with type `tag_reference`, the tag with the corresponding `id` is added to the entity. For elements with type `tag`, if there is an existing tag with the given label that tag is added to the entity. If there is no existing tag with that label and the user has permission to create tags, a new tag is created with that label and assigned to the entity. 
     #[serde(skip_serializing_if="Option::is_none")]
@@ -4336,58 +4435,69 @@ pub struct CreateEntityTypeByIdChangeTags {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateLogEntryChannel {     
     pub channel: LogEntriesidchannelChannel,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserContactMethod {     
     pub contact_method: IdContactMethodsBodyContactMethod,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateServiceIntegration {     
     pub integration: Integration,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct MergeIncidents {     
     /// The source incidents that will be merged into the target incident and resolved.
     pub source_incidents: Vec<IncidentReference>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncidentNote {     
     pub note: IncidentsidnotesNote,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserNotificationRule {     
     pub notification_rule: NotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateTeamNotificationSubscriptions {     
     pub subscribables: Vec<NotificationSubscribable>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserNotificationSubscriptions {     
     pub subscribables: Vec<NotificationSubscribable>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserHandoffNotificationRule {     
     pub oncall_handoff_notification_rule: HandoffNotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateScheduleOverride {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub overrides: Option<Vec<ModelOverride>>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncidentResponderRequest {     
     /// The user id of the requester.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -4400,27 +4510,32 @@ pub struct CreateIncidentResponderRequest {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateRulesetEventRule {     
     pub rule: EventRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateServiceEventRule {     
     pub rule: ServiceEventRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncidentSnooze {     
     /// The number of seconds to snooze the incident for. After this number of seconds has elapsed, the incident will return to the \"triggered\" state.
     pub duration: isize,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserStatusUpdateNotificationRule {     
     pub status_update_notification_rule: StatusUpdateNotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncidentStatusUpdate {     
     /// The message to be posted as a status update.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -4434,16 +4549,19 @@ pub struct CreateIncidentStatusUpdate {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateBusinessServiceNotificationSubscribers {     
     pub subscribers: Vec<NotificationSubscriber>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RemoveBusinessServiceNotificationSubscriber {     
     pub subscribers: Vec<NotificationSubscriber>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Impact {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -4555,6 +4673,7 @@ impl std::default::Default for ImpactStatusEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ImpactAdditionalFields {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub highest_impacting_priority: Option<ImpactAdditionalFieldsHighestImpactingPriority>,
@@ -4562,6 +4681,7 @@ pub struct ImpactAdditionalFields {
 
 /// Priority information for the highest priority level that is affecting the impacted object.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ImpactAdditionalFieldsHighestImpactingPriority {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -4570,6 +4690,7 @@ pub struct ImpactAdditionalFieldsHighestImpactingPriority {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Impactor {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -4624,6 +4745,7 @@ impl std::default::Default for ImpactorTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Incident {     
     /// The label of the tag.
     #[serde(default="Incident::label_default")]
@@ -4909,6 +5031,7 @@ impl std::default::Default for IncidentUrgencyEnum {
 
 /// An incident action is a pending change to an incident that will automatically happen at some future time.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentAction {     
     #[serde(rename = "type")]
     pub _type: IncidentActionTypeEnum,
@@ -4977,6 +5100,7 @@ impl std::default::Default for IncidentActionTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentAddon {     
     /// The type of Add-on.
     #[serde(rename = "type")]
@@ -5043,6 +5167,7 @@ impl std::default::Default for IncidentAddonTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentBody {     
     #[serde(rename = "type")]
     pub _type: IncidentBodyTypeEnum,
@@ -5097,6 +5222,7 @@ impl std::default::Default for IncidentBodyTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentNote {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -5114,6 +5240,7 @@ pub struct IncidentNote {
 
 /// The means by which this Note was created. Has different formats depending on type.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentNoteChannel {     
     /// A string describing the source of the Note.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -5152,6 +5279,7 @@ impl IncidentNoteChannel {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentOccurrence {     
     /// The ID of the Service referenced.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -5231,6 +5359,7 @@ impl std::default::Default for IncidentOccurrenceCategoryEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentReference {     
     /// The label of the tag.
     #[serde(default="IncidentReference::label_default")]
@@ -5319,6 +5448,7 @@ impl std::default::Default for IncidentReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentUrgencyRule {     
     /// The type of incident urgency: whether it's constant, or it's dependent on the support hours.
     #[serde(rename = "type")]
@@ -5438,6 +5568,7 @@ impl std::default::Default for IncidentUrgencyRuleUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentUrgencyType {     
     /// The type of incident urgency: whether it's constant, or it's dependent on the support hours.
     #[serde(rename = "type")]
@@ -5553,29 +5684,34 @@ impl std::default::Default for IncidentUrgencyTypeUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsAssignments {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub assignee: Option<UserReference>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateIncidents {     
     /// An array of incidents, including the parameters to update.
     pub incidents: Vec<IncidentsIncidents>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncident {     
     pub incident: IncidentsIncident,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateIncident {     
     pub incident: IncidentsidIncident,
 }
 
 /// Details of the incident to be created.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsIncident {     
     #[serde(rename = "type")]
     pub _type: IncidentsIncidentTypeEnum,
@@ -5698,6 +5834,7 @@ impl std::default::Default for IncidentsIncidentUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsIncidents {     
     /// The id of the incident to update.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -5829,6 +5966,7 @@ impl std::default::Default for IncidentsIncidentsStatusEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsRespondersReference {     
     /// The status of the responder being added to the incident
     #[serde(skip_serializing_if="Option::is_none")]
@@ -5850,6 +5988,7 @@ pub struct IncidentsRespondersReference {
 
 /// The parameters of the incident to update.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsidIncident {     
     /// The incident type.
     #[serde(rename = "type")]
@@ -6031,6 +6170,7 @@ impl std::default::Default for IncidentsidIncidentUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsidnotesNote {     
     /// The note content
     #[serde(skip_serializing_if="String::is_empty")]
@@ -6038,6 +6178,7 @@ pub struct IncidentsidnotesNote {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Integration {     
     /// The label of the tag.
     #[serde(default="Integration::label_default")]
@@ -6374,6 +6515,7 @@ impl std::default::Default for IntegrationEmailParsingFallbackEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IntegrationEmailFilters {     
     pub subject_mode: IntegrationEmailFiltersSubjectModeEnum,
     /// Specify if subject_mode is set to match or no-match
@@ -6555,6 +6697,7 @@ impl std::default::Default for IntegrationEmailFiltersFromEmailModeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IntegrationReference {     
     /// The label of the tag.
     #[serde(default="IntegrationReference::label_default")]
@@ -6693,11 +6836,13 @@ impl std::default::Default for IntegrationReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateServiceIntegration {     
     pub integration: Integration,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct LiveListResponse {     
     /// Echoes limit pagination property.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -6709,6 +6854,7 @@ pub struct LiveListResponse {
 
 /// The parameters to update.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct LogEntriesidchannelChannel {     
     /// New channel details
     #[serde(skip_serializing_if="String::is_empty")]
@@ -6769,6 +6915,7 @@ impl std::default::Default for LogEntriesidchannelChannelTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct LogEntry {     
     /// The label of the tag.
     #[serde(default="LogEntry::label_default")]
@@ -6946,6 +7093,7 @@ impl std::default::Default for LogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct LogEntryEventDetails {     
     /// Additional details about the event.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -6953,6 +7101,7 @@ pub struct LogEntryEventDetails {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct LogEntryReference {     
     /// The label of the tag.
     #[serde(default="LogEntryReference::label_default")]
@@ -7096,6 +7245,7 @@ impl std::default::Default for LogEntryReferenceTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct MaintenanceWindow {     
     /// The label of the tag.
     #[serde(default="MaintenanceWindow::label_default")]
@@ -7209,6 +7359,7 @@ impl std::default::Default for MaintenanceWindowTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct MaintenanceWindowReference {     
     /// The label of the tag.
     #[serde(default="MaintenanceWindowReference::label_default")]
@@ -7297,16 +7448,19 @@ impl std::default::Default for MaintenanceWindowReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateMaintenanceWindow {     
     pub maintenance_window: MaintenanceWindow,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateMaintenanceWindow {     
     pub maintenance_window: MaintenanceWindow,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct MatchPredicate {     
     #[serde(rename = "type")]
     pub _type: MatchPredicateTypeEnum,
@@ -7445,6 +7599,7 @@ impl std::default::Default for MatchPredicatePartEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ModelOverride {     
     /// The label of the tag.
     #[serde(default="ModelOverride::label_default")]
@@ -7500,6 +7655,7 @@ impl ModelOverride {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Notification {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -7583,6 +7739,7 @@ impl std::default::Default for NotificationTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationRule {     
     /// The label of the tag.
     #[serde(default="NotificationRule::label_default")]
@@ -7730,6 +7887,7 @@ impl std::default::Default for NotificationRuleUrgencyEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationRuleReference {     
     /// The label of the tag.
     #[serde(default="NotificationRuleReference::label_default")]
@@ -7818,12 +7976,14 @@ impl std::default::Default for NotificationRuleReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserNotificationRule {     
     pub notification_rule: NotificationRule,
 }
 
 /// A reference of a subscribable entity.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscribable {     
     /// The ID of the entity to subscribe to
     #[serde(skip_serializing_if="Option::is_none")]
@@ -7885,6 +8045,7 @@ impl std::default::Default for NotificationSubscribableSubscribableTypeEnum {
 
 /// A reference of a subscriber entity.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscriber {     
     /// The ID of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
@@ -7946,6 +8107,7 @@ impl std::default::Default for NotificationSubscriberSubscriberTypeEnum {
 
 /// A reference of a subscriber entity with additional subscription context.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscriberWithContext {     
     /// The ID of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8011,6 +8173,7 @@ impl std::default::Default for NotificationSubscriberWithContextSubscriberTypeEn
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscriberWithContextSubscribedVia {     
     /// The id of the object this subscriber is subscribed via
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8022,6 +8185,7 @@ pub struct NotificationSubscriberWithContextSubscribedVia {
 
 /// An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscription {     
     /// The ID of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8142,6 +8306,7 @@ impl std::default::Default for NotificationSubscriptionSubscribableTypeEnum {
 
 /// An object describing the relationship of a NotificationSubscriber and a NotificationSubscribable with additional context on status of subscription attempt.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotificationSubscriptionWithContext {     
     /// The ID of the entity being subscribed
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8319,16 +8484,19 @@ impl std::default::Default for NotificationSubscriptionWithContextResultEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RemoveTeamNotificationSubscriptions {     
     pub subscribables: Vec<NotificationSubscribable>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UnsubscribeUserNotificationSubscriptions {     
     pub subscribables: Vec<NotificationSubscribable>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct NotifyLogEntry {     
     #[serde(rename = "type")]
     pub _type: NotifyLogEntryTypeEnum,
@@ -8404,6 +8572,7 @@ impl std::default::Default for NotifyLogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Oncall {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub escalation_policy: Option<EscalationPolicyReference>,
@@ -8423,31 +8592,38 @@ pub struct Oncall {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserHandoffNotification {     
     pub oncall_handoff_notification_rule: HandoffNotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EventRuleActionsCommonExtractionsItems {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ContactMethodsContactMethodIdBodyContactMethod {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IdContactMethodsBodyContactMethod {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct InlineResponse20065ContactMethodsItems {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct InlineResponse2018ContactMethod {     
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Orchestration {     
     /// ID of the Orchestration.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8486,6 +8662,7 @@ pub struct Orchestration {
 
 /// Reference to the user that has created the Orchestration.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationCreatedBy {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8516,6 +8693,7 @@ impl OrchestrationCreatedBy {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationIntegrations {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8524,6 +8702,7 @@ pub struct OrchestrationIntegrations {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationParameters {     
     /// Routing key that routes to this Orchestration
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8549,12 +8728,14 @@ impl OrchestrationParameters {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchPathRouter {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub orchestration_path: Option<OrchestrationRouterOrchestrationPath1>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath {     
     #[serde(rename = "type")]
     #[serde(default="OrchestrationRouterOrchestrationPath::_type_default")]
@@ -8604,6 +8785,7 @@ impl OrchestrationRouterOrchestrationPath {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1 {     
     /// Indicates that these are a \"router\" type set of rules.
     #[serde(rename = "type")]
@@ -8636,6 +8818,7 @@ impl OrchestrationRouterOrchestrationPath1 {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1Actions {     
     /// The ID of the target Service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8644,12 +8827,14 @@ pub struct OrchestrationRouterOrchestrationPath1Actions {
 
 /// When none of the rules match an event, the event will be routed according to the catch_all settings.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1CatchAll {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<OrchestrationRouterOrchestrationPath1CatchAllActions>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1CatchAllActions {     
     /// With a value of 'unrouted', all events are sent to the Unrouted Orchestration.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8657,6 +8842,7 @@ pub struct OrchestrationRouterOrchestrationPath1CatchAllActions {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1Parent {     
     /// ID of the Global Event Orchestration this Router belongs to.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8682,12 +8868,14 @@ impl OrchestrationRouterOrchestrationPath1Parent {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1Rules {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<OrchestrationRouterOrchestrationPath1Actions>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPath1Sets {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<OrchestrationRouterOrchestrationPath1Rules>>,
@@ -8695,6 +8883,7 @@ pub struct OrchestrationRouterOrchestrationPath1Sets {
 
 /// When none of the Rules in a set match an event, we apply the catch_all actions to the event.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathCatchAll {     
     /// These are the actions that will be taken to change the resulting alert and incident.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8702,6 +8891,7 @@ pub struct OrchestrationRouterOrchestrationPathCatchAll {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathConditions {     
     /// A PCL condition string
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8710,6 +8900,7 @@ pub struct OrchestrationRouterOrchestrationPathConditions {
 
 /// Reference to the user that created the object.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathCreatedBy {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8740,6 +8931,7 @@ impl OrchestrationRouterOrchestrationPathCreatedBy {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathParent {     
     /// ID of the object these Orchestration Rules belongs to.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8771,6 +8963,7 @@ impl OrchestrationRouterOrchestrationPathParent {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathRules {     
     /// ID of the rule
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8809,6 +9002,7 @@ impl OrchestrationRouterOrchestrationPathRules {
 
 /// A set of rules
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathSets {     
     /// The ID of this set of rules. Rules in other sets can route events into this set using the \"route_to\" properties.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -8819,6 +9013,7 @@ pub struct OrchestrationRouterOrchestrationPathSets {
 
 /// Reference to the user that last updated the object.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationRouterOrchestrationPathUpdatedBy {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8850,6 +9045,7 @@ impl OrchestrationRouterOrchestrationPathUpdatedBy {
 
 /// Reference to the team that owns the Orchestration. If none is specified, only admins have access.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationTeam {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -8880,12 +9076,14 @@ impl OrchestrationTeam {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchPathUnrouted {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub orchestration_path: Option<OrchestrationUnroutedOrchestrationPath>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPath {     
     /// Indicates that these are a \"unrouted\" type set of rules.
     #[serde(rename = "type")]
@@ -8918,12 +9116,14 @@ impl OrchestrationUnroutedOrchestrationPath {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathCatchAll {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<OrchestrationUnroutedOrchestrationPathCatchAllActions>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathCatchAllActions {     
     /// Set the severity of the resulting alert.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9050,6 +9250,7 @@ impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllAct
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsVariables {     
     /// The name of the variable
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9111,6 +9312,7 @@ impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllAct
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathParent {     
     /// ID of the Global Event Orchestration this Unrouted Orchestration belongs to.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9136,12 +9338,14 @@ impl OrchestrationUnroutedOrchestrationPathParent {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathRules {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<AllOfOrchestrationUnroutedOrchestrationPathRulesActions>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathSets {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<OrchestrationUnroutedOrchestrationPathRules>>,
@@ -9149,6 +9353,7 @@ pub struct OrchestrationUnroutedOrchestrationPathSets {
 
 /// Reference to the user that has updated the Orchestration last.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUpdatedBy {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -9179,6 +9384,7 @@ impl OrchestrationUpdatedBy {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OutboundIntegrationReference {     
     /// The label of the tag.
     #[serde(default="OutboundIntegrationReference::label_default")]
@@ -9267,6 +9473,7 @@ impl std::default::Default for OutboundIntegrationReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Pagination {     
     /// Echoes offset pagination property.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9284,6 +9491,7 @@ pub struct Pagination {
 
 /// The Phone Contact Method of the User, used for Voice or SMS.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PhoneContactMethod {     
     #[serde(rename = "type")]
     pub _type: PhoneContactMethodTypeEnum,
@@ -9373,6 +9581,7 @@ impl std::default::Default for PhoneContactMethodTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Priority {     
     /// The label of the tag.
     #[serde(default="Priority::label_default")]
@@ -9426,6 +9635,7 @@ impl Priority {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PriorityReference {     
     /// The label of the tag.
     #[serde(default="PriorityReference::label_default")]
@@ -9515,6 +9725,7 @@ impl std::default::Default for PriorityReferenceTypeEnum {
 
 /// The Push Contact Method of the User.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PushContactMethod {     
     #[serde(rename = "type")]
     pub _type: PushContactMethodTypeEnum,
@@ -9652,6 +9863,7 @@ impl std::default::Default for PushContactMethodDeviceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PushContactMethodSound {     
     /// The type of sound.
     #[serde(rename = "type")]
@@ -9712,6 +9924,7 @@ impl std::default::Default for PushContactMethodSoundTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct GetAnalyticsIncidents {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<AnalyticsrawincidentsFilters>,
@@ -9836,6 +10049,7 @@ impl std::default::Default for GetAnalyticsIncidentsOrderByEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Reference {     
     /// The label of the tag.
     #[serde(default="Reference::label_default")]
@@ -9882,6 +10096,7 @@ impl Reference {
 
 /// The data for a type of relationship where the Incident is related due to our machine learning algorithm. 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RelatedIncidentMachineLearningRelationship {     
     /// The classification for why this Related Incident was grouped into this group. Values can be one of: [similar_contents, prior_feedback], where: similar_contents - The Related Incident was due to similar contents of the Incidents. prior_feedback - The Related Incident was determined to be related, based on User feedback or Incident merge/unmerge actions. 
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9942,6 +10157,7 @@ impl std::default::Default for RelatedIncidentMachineLearningRelationshipGroupin
 
 /// The feedback provided from Users to influence the machine learning algorithm for future Related Incidents.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RelatedIncidentMachineLearningRelationshipUserFeedback {     
     /// The total number of times Users agreed that the Incidents are related.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -9952,6 +10168,7 @@ pub struct RelatedIncidentMachineLearningRelationshipUserFeedback {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RelatedIncidentServiceDependencyBase {     
     /// The ID of the Service referenced.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -10017,6 +10234,7 @@ impl std::default::Default for RelatedIncidentServiceDependencyBaseTypeEnum {
 
 /// The data for a type of relationship where the Incident is related due to Business or Technical Service dependencies.  Both `dependent_services` and `supporting_services` are returned to signify the dependencies between the Services that the Incident and Related Incident belong to.  Each Service reference returned in the list of supporting and dependent Services has a type of: [business_service_reference, technical_service_reference]. 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RelatedIncidentServiceDependencyRelationship {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub dependent_services: Option<Vec<RelatedIncidentServiceDependencyBase>>,
@@ -10025,6 +10243,7 @@ pub struct RelatedIncidentServiceDependencyRelationship {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ResolveReason {     
     /// The reason the incident was resolved. The only reason currently supported is merge.
     #[serde(rename = "type")]
@@ -10079,6 +10298,7 @@ impl std::default::Default for ResolveReasonTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ResponderRequest {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<IncidentReference>,
@@ -10096,6 +10316,7 @@ pub struct ResponderRequest {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ResponderRequestTargetReference {     
     /// The type of target (either a user or an escalation policy)
     #[serde(rename = "type")]
@@ -10129,6 +10350,7 @@ impl ResponderRequestTargetReference {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ResponsePlay {     
     /// The label of the tag.
     #[serde(default="ResponsePlay::label_default")]
@@ -10371,21 +10593,25 @@ impl std::default::Default for ResponsePlayConferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RunResponsePlay {     
     pub incident: IncidentReference,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateResponsePlay {     
     pub response_play: ResponsePlay,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateResponsePlay {     
     pub response_play: ResponsePlay,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Restriction {     
     /// Specify the types of `restriction`.
     #[serde(rename = "type")]
@@ -10451,6 +10677,7 @@ impl std::default::Default for RestrictionTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateRulesetEventRule {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub rule: Option<EventRule>,
@@ -10460,6 +10687,7 @@ pub struct UpdateRulesetEventRule {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateServiceEventRule {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub rule: Option<ServiceEventRule>,
@@ -10469,6 +10697,7 @@ pub struct UpdateServiceEventRule {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Ruleset {     
     /// ID of the Ruleset.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -10551,6 +10780,7 @@ impl std::default::Default for RulesetTypeEnum {
 
 /// Reference to the user that has created the Ruleset.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RulesetCreator {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -10582,6 +10812,7 @@ impl RulesetCreator {
 
 /// Reference to the team that owns the Ruleset. If none is specified, only admins have access.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RulesetTeam {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -10613,6 +10844,7 @@ impl RulesetTeam {
 
 /// Reference to the user that has updated the Ruleset last.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RulesetUpdater {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -10643,16 +10875,19 @@ impl RulesetUpdater {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateRuleset {     
     pub ruleset: AllOfrulesetsBodyRuleset,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateRuleset {     
     pub ruleset: Ruleset,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Schedule {     
     /// The label of the tag.
     #[serde(default="Schedule::label_default")]
@@ -10776,6 +11011,7 @@ impl std::default::Default for ScheduleTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleLayer {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -10807,6 +11043,7 @@ pub struct ScheduleLayer {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleLayerEntry {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<UserReference>,
@@ -10819,11 +11056,13 @@ pub struct ScheduleLayerEntry {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleLayerUser {     
     pub user: UserReference,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleReference {     
     /// The label of the tag.
     #[serde(default="ScheduleReference::label_default")]
@@ -10912,6 +11151,7 @@ impl std::default::Default for ScheduleReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduledAction {     
     /// The type of schedule action. Must be set to urgency_change.
     #[serde(rename = "type")]
@@ -11013,6 +11253,7 @@ impl std::default::Default for ScheduledActionToUrgencyEnum {
 
 /// Represents when scheduled action will occur.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduledActionAt {     
     /// Must be set to named_time.
     #[serde(rename = "type")]
@@ -11117,21 +11358,25 @@ impl std::default::Default for ScheduledActionAtNameEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateSchedule {     
     pub schedule: Schedule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateSchedule {     
     pub schedule: Schedule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateSchedulePreview {     
     pub schedule: Schedule,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Service {     
     /// The label of the tag.
     #[serde(default="Service::label_default")]
@@ -11459,6 +11704,7 @@ impl std::default::Default for ServiceAlertGroupingEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateServiceDependency {     
     /// List of all service dependencies to be created.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -11466,6 +11712,7 @@ pub struct CreateServiceDependency {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct DeleteServiceDependency {     
     /// List of all service dependencies to be deleted.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -11474,6 +11721,7 @@ pub struct DeleteServiceDependency {
 
 /// The reference to the service that is dependent on the supporting service.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceDependenciesassociateDependentService {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -11498,6 +11746,7 @@ impl ServiceDependenciesassociateDependentService {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceDependenciesassociateRelationships {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub supporting_service: Option<ServiceDependenciesassociateSupportingService>,
@@ -11507,6 +11756,7 @@ pub struct ServiceDependenciesassociateRelationships {
 
 /// The reference to the service that supports the dependent service.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceDependenciesassociateSupportingService {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -11531,6 +11781,7 @@ impl ServiceDependenciesassociateSupportingService {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceEventRule {     
     /// Position/index of the Event Rule on the Service.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching Event Rule is found or the end of the list is reached.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -11540,12 +11791,14 @@ pub struct ServiceEventRule {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchPathService {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub orchestration_path: Option<ServiceOrchestrationOrchestrationPath>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPath {     
     /// Indicates that these are sets of rules belonging to a service.
     #[serde(rename = "type")]
@@ -11578,12 +11831,14 @@ impl ServiceOrchestrationOrchestrationPath {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathCatchAll {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<AllOfServiceOrchestrationOrchestrationPathCatchAllActions>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathParent {     
     /// The ID of the Service this Orchestration belongs to.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -11609,18 +11864,21 @@ impl ServiceOrchestrationOrchestrationPathParent {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathRules {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<AllOfServiceOrchestrationOrchestrationPathRulesActions>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathSets {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<Vec<ServiceOrchestrationOrchestrationPathRules>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceReference {     
     /// The label of the tag.
     #[serde(default="ServiceReference::label_default")]
@@ -11709,16 +11967,19 @@ impl std::default::Default for ServiceReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateService {     
     pub service: Service,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateService {     
     pub service: Service,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SnoozeLogEntry {     
     #[serde(rename = "type")]
     pub _type: SnoozeLogEntryTypeEnum,
@@ -11796,6 +12057,7 @@ impl std::default::Default for SnoozeLogEntryTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct StatusDashboard {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -11806,6 +12068,7 @@ pub struct StatusDashboard {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct StatusUpdate {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -11827,26 +12090,31 @@ pub struct StatusUpdate {
 
 /// A rule for contacting the user for Incident Status Updates.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct StatusUpdateNotificationRule {     
     pub contact_method: ContactMethodReference,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserStatusUpdateNotificationRule {     
     pub status_update_notification_rule: StatusUpdateNotificationRule,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateIncidentNotificationSubscribers {     
     pub subscribers: Vec<NotificationSubscriber>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RemoveIncidentNotificationSubscribers {     
     pub subscribers: Vec<NotificationSubscriber>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SubSchedule {     
     /// The name of the subschedule
     pub name: SubScheduleNameEnum,
@@ -11909,6 +12177,7 @@ impl std::default::Default for SubScheduleNameEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SupportHours {     
     /// The type of support hours
     #[serde(rename = "type")]
@@ -11972,6 +12241,7 @@ impl std::default::Default for SupportHoursTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Tag {     
     /// The type of object being created.
     #[serde(rename = "type")]
@@ -12042,6 +12312,7 @@ impl std::default::Default for TagTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct TagReference {     
     /// The label of the tag.
     #[serde(default="TagReference::label_default")]
@@ -12130,11 +12401,13 @@ impl std::default::Default for TagReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateTags {     
     pub tag: Tag,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct TagsToAdd {     
     #[serde(rename = "type")]
     pub _type: TagsToAddTypeEnum,
@@ -12213,6 +12486,7 @@ impl std::default::Default for TagsToAddTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct TagsToRemove_ {     
     #[serde(rename = "type")]
     pub _type: TagsToRemove_TypeEnum,
@@ -12267,6 +12541,7 @@ impl std::default::Default for TagsToRemove_TypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Team {     
     /// The label of the tag.
     #[serde(default="Team::label_default")]
@@ -12368,6 +12643,7 @@ impl std::default::Default for TeamTypeEnum {
 
 /// Reference to the team that owns the Business Service.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Team1 {     
     /// The Team ID
     #[serde(skip_serializing_if="Option::is_none")]
@@ -12376,6 +12652,7 @@ pub struct Team1 {
 
 /// Reference to the team that owns the Business Service.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Team2 {     
     /// The team ID
     #[serde(skip_serializing_if="Option::is_none")]
@@ -12384,6 +12661,7 @@ pub struct Team2 {
 
 /// Reference to the team that owns the business service.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Team3 {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -12414,6 +12692,7 @@ impl Team3 {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct TeamReference {     
     /// The label of the tag.
     #[serde(default="TeamReference::label_default")]
@@ -12502,17 +12781,20 @@ impl std::default::Default for TeamReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateTeam {     
     pub team: Team,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateTeam {     
     pub team: Team,
 }
 
 /// The configuration for Time Based Alert Grouping
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct TimeBasedAlertGroupingConfiguration {     
     /// The duration in minutes within which to automatically group incoming Alerts.  To continue grouping Alerts until the Incident is resolved, set this value to 0.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -12520,6 +12802,7 @@ pub struct TimeBasedAlertGroupingConfiguration {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct User {     
     /// The label of the tag.
     #[serde(default="User::label_default")]
@@ -12737,6 +13020,7 @@ impl std::default::Default for UserRoleEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UserReference {     
     /// The label of the tag.
     #[serde(default="UserReference::label_default")]
@@ -12825,6 +13109,7 @@ impl std::default::Default for UserReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UserRole {     
     /// The role of the user for a set of resources.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -12889,6 +13174,7 @@ impl std::default::Default for UserRoleRoleEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UserSession {     
     #[serde(skip_serializing_if="String::is_empty")]
     pub id: String,
@@ -12956,16 +13242,19 @@ impl std::default::Default for UserSessionTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUser {     
     pub user: User,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUser {     
     pub user: User,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateTeamUser {     
     /// The role of the user on the team.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13028,6 +13317,7 @@ impl std::default::Default for UpdateTeamUserRoleEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Vendor {     
     /// The label of the tag.
     #[serde(default="Vendor::label_default")]
@@ -13097,6 +13387,7 @@ impl Vendor {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct VendorReference {     
     /// The label of the tag.
     #[serde(default="VendorReference::label_default")]
@@ -13186,6 +13477,7 @@ impl std::default::Default for VendorReferenceTypeEnum {
 
 /// Information about the configured webhook.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Webhook {     
     /// The url endpoint the webhook payload is sent to.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13203,6 +13495,7 @@ pub struct Webhook {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookIncidentAction {     
     /// Uniquely identifies this outgoing webhook message; can be used for idempotency when processing the messages.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13303,6 +13596,7 @@ impl std::default::Default for WebhookIncidentActionTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookObject {     
     /// The label of the tag.
     #[serde(default="WebhookObject::label_default")]
@@ -13396,6 +13690,7 @@ impl std::default::Default for WebhookObjectTypeEnum {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookReference {     
     /// The label of the tag.
     #[serde(default="WebhookReference::label_default")]
@@ -13484,6 +13779,7 @@ impl std::default::Default for WebhookReferenceTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookSubscription {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -13548,6 +13844,7 @@ impl std::default::Default for WebhookSubscriptionTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookSubscriptionDeliveryMethod {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -13614,6 +13911,7 @@ impl std::default::Default for WebhookSubscriptionDeliveryMethodTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookSubscriptionFilter {     
     /// The id of the object being used as the filter.  This field is required for all filter types except account_reference.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13679,12 +13977,14 @@ impl std::default::Default for WebhookSubscriptionFilterTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateWebhookSubscription {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub webhook_subscription: Option<WebhookSubscriptionUpdateWebhookSubscription>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookSubscriptionUpdateWebhookSubscription {     
     /// A short description of the webhook subscription.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13700,6 +14000,7 @@ pub struct WebhookSubscriptionUpdateWebhookSubscription {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhookSubscriptionUpdateWebhookSubscriptionFilter {     
     /// The id of the object being used as the filter.  This field is required for all filter types except account_reference.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13765,11 +14066,13 @@ impl std::default::Default for WebhookSubscriptionUpdateWebhookSubscriptionFilte
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateWebhookSubscription {     
     pub webhook_subscription: WebhookSubscription,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1AssignedTo {     
     /// Time at which the assignment was created.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -13780,6 +14083,7 @@ pub struct WebhooksV1AssignedTo {
 
 /// The user assigned to the incident.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1AssignedToUser {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -13795,6 +14099,7 @@ pub struct WebhooksV1AssignedToUser {
 
 /// The incident details at the time of the state change.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1IncidentData {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -13940,6 +14245,7 @@ impl std::default::Default for WebhooksV1IncidentDataUrgencyEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1IncidentDataTriggerSummaryData {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub subject: Option<String>,
@@ -13947,6 +14253,7 @@ pub struct WebhooksV1IncidentDataTriggerSummaryData {
 
 /// A message containing information about a single PagerDuty action.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1Message {     
     /// Uniquely identifies this outgoing webhook message; can be used for idempotency when processing the messages.
     #[serde(skip_serializing_if="Option::is_none")]
@@ -14037,6 +14344,7 @@ impl std::default::Default for WebhooksV1MessageTypeEnum {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1MessageData {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub incident: Option<WebhooksV1IncidentData>,
@@ -14044,6 +14352,7 @@ pub struct WebhooksV1MessageData {
 
 /// The service on which the incident occurred.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WebhooksV1Service {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -14061,6 +14370,7 @@ pub struct WebhooksV1Service {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct WeeklyRestriction {     
     /// Specify the types of `restriction`.
     #[serde(rename = "type")]

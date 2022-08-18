@@ -497,7 +497,7 @@ pub trait PaginationQueryComponent {
 }
 
 /// Legacy pagination
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct PaginationLegacyQueryComponent {
     pub offset: usize,
     pub limit: usize,
@@ -511,7 +511,7 @@ impl PaginationQueryComponent for PaginationLegacyQueryComponent {
 }
 
 /// Cursor-based pagination
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct PaginationCursorQueryComponent {
     pub cursor: Option<String>,
     pub limit: usize,

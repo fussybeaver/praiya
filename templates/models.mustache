@@ -94,6 +94,7 @@ pub type {{classname}} = DateTime<Utc>;
 pub type {{classname}} = Vec<{{arrayModelType}}>;
 {{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct {{classname}} {     
 {{#vars}}{{^vendorExtensions.x-rustgen-skip-prop}}{{#description}}    /// {{{.}}}
 {{/description}}{{^vendorExtensions.x-rustgen-serde-no-rename}}    #[serde(rename = "{{baseName}}")]

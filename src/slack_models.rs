@@ -18,16 +18,19 @@ use chrono::DateTime;
 use chrono::Utc;
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateConnection {     
     pub slack_connection: SlackConnection,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Error {     
     pub error: ErrorError,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ErrorError {     
     /// Error message string.
     #[serde(skip_serializing_if="String::is_empty")]
@@ -35,6 +38,7 @@ pub struct ErrorError {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Pagination {     
     /// Echoes offset pagination property.
     pub offset: isize,
@@ -47,6 +51,7 @@ pub struct Pagination {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SlackConnection {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
@@ -68,6 +73,7 @@ pub struct SlackConnection {
 
 /// Item of the Slack connection that contains configuration options (filters).
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SlackConnectionConfig {     
     #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<SlackConnectionEvents>,
@@ -190,6 +196,7 @@ impl std::str::FromStr for SlackConnectionUrgency {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateConnection {     
     pub slack_connection: SlackConnection,
 }
