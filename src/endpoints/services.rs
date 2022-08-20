@@ -266,10 +266,7 @@ impl ServicesClient {
     ) -> impl Stream<Item = Result<AuditRecord, Error>> + '_ {
         let mut header_map = std::collections::HashMap::new();
         let audit_early_access: &str = PraiyaCustomHeaders::AuditEarlyAccess.into();
-        header_map.insert(
-            String::from(audit_early_access),
-            String::from("true"),
-        );
+        header_map.insert(String::from(audit_early_access), String::from("true"));
 
         let base_request = BaseRequest {
             host: String::from(&self.api_endpoint),
@@ -619,7 +616,9 @@ mod tests {
                     summary: Some(String::from("My Email-Based Integration")),
                     ..Default::default()
                 }),
-                integration_email: Some(String::from("my-email-based-integration@subdomain.pagerduty.com")),
+                integration_email: Some(String::from(
+                    "my-email-based-integration@subdomain.pagerduty.com",
+                )),
                 vendor: Some(VendorReference {
                     id: Some(String::from("PZD94QK")),
                     ..Default::default()
