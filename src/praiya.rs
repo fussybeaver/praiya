@@ -170,7 +170,7 @@ impl Praiya {
         T: DeserializeOwned,
         P: PaginatedResponse<PC, Inner = Vec<T>> + DeserializeOwned + 'b,
         PC: PaginatedCursor,
-        PQC: PaginationQueryComponent + From<PC> + Sync + Send + 'static
+        PQC: PaginationQueryComponent + From<PC> + Sync + Send + 'static,
     >(
         &'a self,
         base_req: BaseRequest,
@@ -206,10 +206,7 @@ impl Praiya {
                     None if cursor.has_more() => {
                         let pqc: PQC = cursor.into();
                         let res: P = client
-                            .process_request(base_req.build_request(
-                                &client,
-                                Arc::new(pqc),
-                            ))
+                            .process_request(base_req.build_request(&client, Arc::new(pqc)))
                             .and_then(Praiya::decode_response)
                             .await?;
                         let cursor = res.to_cursor();
@@ -497,7 +494,7 @@ pub trait PaginationQueryComponent {
 }
 
 /// Legacy pagination
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct PaginationLegacyQueryComponent {
     pub offset: usize,
     pub limit: usize,
@@ -511,7 +508,7 @@ impl PaginationQueryComponent for PaginationLegacyQueryComponent {
 }
 
 /// Cursor-based pagination
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct PaginationCursorQueryComponent {
     pub cursor: Option<String>,
     pub limit: usize,

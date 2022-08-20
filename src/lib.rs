@@ -23,10 +23,12 @@ mod macros;
 
 use std::collections::HashMap;
 
+#[rustfmt::skip]
 pub mod default_models;
 pub mod endpoints;
 pub mod errors;
 mod praiya;
+#[rustfmt::skip]
 pub mod slack_models;
 
 pub(crate) use crate::praiya::{

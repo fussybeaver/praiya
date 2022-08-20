@@ -1,0 +1,118 @@
+on: [push, pull_request]
+
+name: CI
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Start mock server
+        run: docker-compose up -d
+
+      - name: Run slack tests
+        uses: actions-rs/cargo@v1
+        env:
+          PAGERDUTY_API_ENDPOINT: http://127.0.0.1:8080
+          RUST_LOG: praiya=debug
+        with:
+          command: test
+          args: slack
+
+      - name: Run incident tests
+        uses: actions-rs/cargo@v1
+        env:
+          PAGERDUTY_API_ENDPOINT: http://127.0.0.1:8081
+          RUST_LOG: praiya=debug
+        with:
+          command: test
+          args: incidents
+
+      - name: Run service tests
+        uses: actions-rs/cargo@v1
+        env:
+          PAGERDUTY_API_ENDPOINT: http://127.0.0.1:8081
+          RUST_LOG: praiya=debug
+        with:
+          command: test
+          args: services
+
+      - name: Stop mock server
+        if: always()
+        run: docker-compose down
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Install clippy
+        run: rustup component add clippy
+
+      - name: Run cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-features -- -D warnings
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Install Format
+        run: rustup component add rustfmt
+
+      - name: Run cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check

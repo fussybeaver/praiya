@@ -1,15 +1,15 @@
 #![allow(unused_imports, unused_qualifications, unused_extern_crates)]
 {{>partial_header}}
 
-use serde::ser::Serializer;
 use serde::de::{DeserializeOwned, Deserializer};
+use serde::ser::Serializer;
 use serde::Deserialize;
 use serde_json::value::Value;
 
 use std::cmp::Eq;
 use std::collections::HashMap;
 use std::default::Default;
-use std::fmt::{self, Formatter, Display};
+use std::fmt::{self, Display, Formatter};
 use std::hash::Hash;
 
 use chrono::DateTime;
@@ -25,27 +25,27 @@ use chrono::Utc;
 {{#vendorExtensions.x-rustgen-is-untagged-enum}}
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
 #[serde(untagged)]
-pub enum {{classname}} { {{#allowableValues}}{{#enumVars}}
+pub enum {{classname}} { {{~#allowableValues}}{{#enumVars}}
     {{name}}({{value}}),{{/enumVars}}{{/allowableValues}}
 }
 
 impl Display for {{classname}} {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self { {{#allowableValues}}{{#enumVars}}
+        match self { {{~#allowableValues}}{{#enumVars}}
             {{classname}}::{{name}}(value) => write!(f, value),{{/enumVars}}{{/allowableValues}}
         }
     }
 }
 {{/vendorExtensions.x-rustgen-is-untagged-enum}}{{^vendorExtensions.x-rustgen-is-untagged-enum}}
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
-pub enum {{classname}} { {{#allowableValues}}{{#enumVars}}
+pub enum {{classname}} { {{~#allowableValues}}{{#enumVars}}
     #[serde(rename = {{{value}}})]
     {{name}},{{/enumVars}}{{/allowableValues}}
 }
 
 impl Display for {{classname}} {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match *self { {{#allowableValues}}{{#enumVars}}
+        match *self { {{~#allowableValues}}{{#enumVars}}
             {{classname}}::{{name}} => write!(f, {{{value}}}),{{/enumVars}}{{/allowableValues}}
         }
     }
@@ -63,7 +63,7 @@ impl std::str::FromStr for {{classname}} {
 {{/vendorExtensions.x-rustgen-is-untagged-enum}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-rustgen-enum-one-of}}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum {{classname}} { {{#allowableValues}}{{#values}}
+pub enum {{classname}} { {{~#allowableValues}}{{#values}}
     {{../classname}}Variant{{@index}}({{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}),{{/values}}{{/allowableValues}}
 }
 {{#allowableValues}}{{#values}}
@@ -77,7 +77,7 @@ impl From<{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{
 
 impl Display for {{classname}} {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self { {{#allowableValues}}{{#values}}
+        match self { {{~#allowableValues}}{{#values}}
             {{../classname}}::{{../classname}}Variant{{@index}}(value) => write!(f, "{}", value),{{/values}}{{/allowableValues}}
         }
     }
@@ -94,20 +94,21 @@ pub type {{classname}} = DateTime<Utc>;
 pub type {{classname}} = Vec<{{arrayModelType}}>;
 {{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
-pub struct {{classname}} {     
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct {{classname}} {
 {{#vars}}{{^vendorExtensions.x-rustgen-skip-prop}}{{#description}}    /// {{{.}}}
 {{/description}}{{^vendorExtensions.x-rustgen-serde-no-rename}}    #[serde(rename = "{{baseName}}")]
 {{/vendorExtensions.x-rustgen-serde-no-rename}}
     {{#vendorExtensions.x-rustgen-is-required ~}}
     {{~#vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.is-enum}}
-    #[serde(default="{{classname}}::{{name}}_default")]
+    #[serde(default = "{{classname}}::{{name}}_default")]
     {{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.x-rustgen-has-default-impl}}{{#vendorExtensions.x-rustgen-is-string}}
-    #[serde(skip_serializing_if="String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty")]
     {{/vendorExtensions.x-rustgen-is-string}}{{/vendorExtensions.x-rustgen-has-default-impl}}
     pub {{name}}: {{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}},
     {{/vendorExtensions.x-rustgen-is-required}}
     {{^vendorExtensions.x-rustgen-is-required}}
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub {{name}}: Option<{{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}}>,
     {{/vendorExtensions.x-rustgen-is-required}}
 {{/vendorExtensions.x-rustgen-skip-prop}}{{/vars}}
@@ -140,11 +141,10 @@ impl {{classname}} {
 }
 {{/vendorExtensions.x-rustgen-has-default-impl}}{{#vars}}{{#vendorExtensions.is-enum}}
 
-
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]{{#xmlName}}
 #[serde(rename = "{{xmlName}}")]{{/xmlName}}
-pub enum {{classname}}{{enumName}} { {{#allowableValues}}{{#enumVars}}
+pub enum {{classname}}{{enumName}} { {{~#allowableValues}}{{#enumVars}}
     #[serde(rename = {{{value}}})]
     {{name}},{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
     #[serde(rename = {{{value}}})]
@@ -155,7 +155,7 @@ pub enum {{classname}}{{enumName}} { {{#allowableValues}}{{#enumVars}}
 
 impl ::std::fmt::Display for {{classname}}{{enumName}} {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        match *self { {{#allowableValues}}{{#enumVars}}
+        match *self { {{~#allowableValues}}{{#enumVars}}
             {{classname}}{{enumName}}::{{name}} => write!(f, {{{value}}}),{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
             {{classname}}{{enumName}}::{{name}} => write!(f, {{{value}}}),{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
             {{classname}}{{enumName}}::UNKNOWN => write!(f, "unknown"),
@@ -166,7 +166,7 @@ impl ::std::fmt::Display for {{classname}}{{enumName}} {
 impl ::std::str::FromStr for {{classname}}{{enumName}} {
     type Err = String;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s { 
+        match s {
 {{#allowableValues}}{{#enumVars}}            {{{value}}} => Ok({{classname}}{{enumName}}::{{name}}),
 {{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}            {{{value}}} => Ok({{classname}}{{enumName}}::{{name}}),
 {{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}            x => Err(format!("Invalid enum type: {}", x)),
@@ -176,10 +176,10 @@ impl ::std::str::FromStr for {{classname}}{{enumName}} {
 
 impl ::std::convert::AsRef<str> for {{classname}}{{enumName}} {
     fn as_ref(&self) -> &str {
-        match self { {{#allowableValues}}{{#enumVars}}
+        match self { {{~#allowableValues}}{{#enumVars}}
             {{classname}}{{enumName}}::{{name}} => {{{value}}},{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
             {{classname}}{{enumName}}::{{name}} => {{{value}}},{{/x-rustgen-additional-enum-values}}{{/vendorExtensions}}
-            {{classname}}{{enumName}}::UNKNOWN => "unknown"
+            {{classname}}{{enumName}}::UNKNOWN => "unknown",
         }
     }
 }
