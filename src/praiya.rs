@@ -69,7 +69,7 @@ impl From<PraiyaCustomHeaders> for &'static str {
 }
 
 impl Praiya {
-    pub fn connect(token: &str) -> Result<Praiya, Error> {
+    pub fn new(token: &str) -> Result<Praiya, Error> {
         let https_connector: HttpsConnector<HttpConnector> =
             hyper_rustls::HttpsConnectorBuilder::new()
                 .with_native_roots()
@@ -523,7 +523,7 @@ impl PaginationQueryComponent for PaginationCursorQueryComponent {
     }
 }
 
-pub(crate) trait ParamsBuilder<B: BaseOption> {
+pub trait ParamsBuilder<B: BaseOption> {
     fn build(&mut self) -> B;
 }
 

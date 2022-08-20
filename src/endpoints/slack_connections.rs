@@ -201,7 +201,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test").unwrap();
         let slack_team_id = "slack_workspace_id";
         let create_connection = CreateConnection {
             slack_connection: SlackConnection {
@@ -227,7 +227,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_delete_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test").unwrap();
         let slack_team_id = "slack_workspace_id";
         let unit = pagerduty
             .slack_connections()
@@ -240,7 +240,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test").unwrap();
         let slack_team_id = "slack_workspace_id";
         let connection = pagerduty
             .slack_connections()
@@ -253,7 +253,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_slack_connections() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test").unwrap();
         let slack_team_id = "slack_workspace_id";
 
         let connection: Option<SlackConnection> = pagerduty
@@ -271,7 +271,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test").unwrap();
         let slack_team_id = "slack_workspace_id";
 
         let update_connection = UpdateConnection {
