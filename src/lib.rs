@@ -62,7 +62,7 @@
 //! A new `Praiya` client takes the PagerDuty API token and will build an SSL context:
 //!
 //! ```rust
-//! praiya::Praiya::new("PAGERDUTY_TOKEN").unwrap();
+//! praiya::Praiya::new("PAGERDUTY_TOKEN").expect("Unable to create PagerDuty client");
 //!
 //! ```
 //!
@@ -77,7 +77,7 @@
 //!
 //! use futures_util::TryStreamExt;
 //!
-//! let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN").unwrap();
+//! let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN").expect("Unable to create PagerDuty client");
 //!
 //! let mut opts_builder = praiya::endpoints::incidents::IncidentsListIncidentsParamsBuilder::new();
 //! opts_builder.statuses(vec!["triggered", "acknowledged"]);
@@ -89,7 +89,7 @@
 //!         .list_incidents(opts)
 //!         .try_collect()
 //!         .await
-//!         .unwrap();
+//!         .expect("Unable to list PagerDuty incidents");
 //! };
 //! ```
 //!

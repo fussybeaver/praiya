@@ -302,7 +302,7 @@ impl Praiya {
 
     async fn decode_response<T: DeserializeOwned>(response: Response<Body>) -> Result<T, Error> {
         // Protect against malicious response
-        let response_content_length = match response.body().size_hint().upper() {
+        let response_content_length = match HttpBody::size_hint(response.body()).upper() {
             Some(v) => v,
             None => MAX_ALLOWED_RESPONSE_SIZE + 1,
         };
