@@ -84,10 +84,7 @@ impl SlackConnectionsClient {
     /// Delete an existing Slack Connection.
     ///
     /// ---
-    pub async fn delete_connection(
-        &self,
-        connection_id: &str,
-    ) -> Result<(), Error> {
+    pub async fn delete_connection(&self, connection_id: &str) -> Result<(), Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!(
@@ -113,10 +110,7 @@ impl SlackConnectionsClient {
     /// Get details about an existing Slack Connection.
     ///
     /// ---
-    pub async fn get_connection(
-        &self,
-        connection_id: &str,
-    ) -> Result<SlackConnection, Error> {
+    pub async fn get_connection(&self, connection_id: &str) -> Result<SlackConnection, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!(
@@ -144,9 +138,7 @@ impl SlackConnectionsClient {
     /// Returns a list of Slack Connections.
     ///
     /// ---
-    pub fn get_connections(
-        &self,
-    ) -> impl Stream<Item = Result<SlackConnection, Error>> + '_ {
+    pub fn get_connections(&self) -> impl Stream<Item = Result<SlackConnection, Error>> + '_ {
         self.client.list_request::<_, _, ListConnectionResponse>(
             &self.api_endpoint,
             &format!("./workspaces/{}/connections", &self.slack_workspace_id),

@@ -177,7 +177,7 @@ pub mod slack_models;
 pub(crate) use crate::praiya::{
     BaseOption, BaseRequest, PaginatedResponse, PaginationQueryComponent, SingleResponse, SubSystem,
 };
-pub use crate::praiya::{Praiya, ParamsBuilder, DEFAULT_PAGERDUTY_API_LIMIT};
+pub use crate::praiya::{ParamsBuilder, Praiya, DEFAULT_PAGERDUTY_API_LIMIT};
 
 pub mod auth {
     pub enum Auth {
