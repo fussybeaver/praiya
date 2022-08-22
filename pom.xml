@@ -30,6 +30,7 @@
                   <packageName>pagerduty-models-models</packageName>
                   <packageVersion>0</packageVersion>
                   <targetApiPrefix>default</targetApiPrefix>
+                  <skipSerializingIfNone>true</skipSerializingIfNone>
                 </configOptions>
               </configuration>
             </execution>
@@ -48,6 +49,7 @@
                   <packageName>pagerduty-models-models</packageName>
                   <packageVersion>0</packageVersion>
                   <targetApiPrefix>slack</targetApiPrefix>
+                  <skipSerializingIfNone>false</skipSerializingIfNone>
                 </configOptions>
               </configuration>
             </execution>

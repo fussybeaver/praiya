@@ -75,7 +75,7 @@ macro_rules! list_response_type {
                 }
 
                 fn get_limit(&self) -> usize {
-                    self.limit.unwrap_or(100)
+                    self.limit.unwrap_or(crate::praiya::DEFAULT_PAGERDUTY_API_LIMIT)
                 }
 
                 fn inner(self) -> Self::Inner {
@@ -88,7 +88,7 @@ macro_rules! list_response_type {
 
                 fn to_cursor(&self) -> crate::praiya::PaginatedLegacyPosition {
                     crate::praiya::PaginatedLegacyPosition {
-                        offset: self.get_pos(),
+                        offset: self.get_pos() + self.get_limit(),
                         has_more: self.has_more(),
                         limit: self.get_limit(),
                     }

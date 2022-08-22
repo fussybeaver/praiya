@@ -98,7 +98,7 @@ pub fn builder(input: TokenStream) -> TokenStream {
         }
 
         impl<'req> #builder<'req> {
-            fn new() -> Self {
+            pub fn new() -> Self {
                 Self {
                     qs: url::form_urlencoded::Serializer::new(String::new())
                 }

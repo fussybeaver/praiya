@@ -18,14 +18,16 @@ pub const API_ENDPOINT: &str = "https://app.pagerduty.com/integration-slack/";
 pub struct SlackConnectionsClient {
     pub(crate) api_endpoint: String,
     pub(crate) client: Praiya,
+    pub(crate) slack_workspace_id: String,
 }
 
 impl Praiya {
-    pub fn slack_connections(&self) -> SlackConnectionsClient {
+    pub fn slack_connections(&self, slack_workspace_id: &str) -> SlackConnectionsClient {
         SlackConnectionsClient {
             api_endpoint: std::env::var("PAGERDUTY_API_ENDPOINT")
                 .unwrap_or_else(|_| String::from(API_ENDPOINT)),
             client: self.clone(),
+            slack_workspace_id: String::from(slack_workspace_id),
         }
     }
 }
@@ -56,12 +58,11 @@ impl SlackConnectionsClient {
     /// ---
     pub async fn create_connection(
         &self,
-        slack_team_id: &str,
         body: CreateConnection,
     ) -> Result<SlackConnection, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
-            &format!("./workspaces/{}/connections", &slack_team_id),
+            &format!("./workspaces/{}/connections", &self.slack_workspace_id),
             None,
         )?;
 
@@ -83,16 +84,12 @@ impl SlackConnectionsClient {
     /// Delete an existing Slack Connection.
     ///
     /// ---
-    pub async fn delete_connection(
-        &self,
-        slack_team_id: &str,
-        connection_id: &str,
-    ) -> Result<(), Error> {
+    pub async fn delete_connection(&self, connection_id: &str) -> Result<(), Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!(
                 "./workspaces/{}/connections/{}",
-                &slack_team_id, &connection_id
+                &self.slack_workspace_id, &connection_id
             ),
             None,
         )?;
@@ -113,16 +110,12 @@ impl SlackConnectionsClient {
     /// Get details about an existing Slack Connection.
     ///
     /// ---
-    pub async fn get_connection(
-        &self,
-        slack_team_id: &str,
-        connection_id: &str,
-    ) -> Result<SlackConnection, Error> {
+    pub async fn get_connection(&self, connection_id: &str) -> Result<SlackConnection, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!(
                 "./workspaces/{}/connections/{}",
-                &slack_team_id, &connection_id
+                &self.slack_workspace_id, &connection_id
             ),
             None,
         )?;
@@ -145,13 +138,10 @@ impl SlackConnectionsClient {
     /// Returns a list of Slack Connections.
     ///
     /// ---
-    pub fn get_connections(
-        &self,
-        slack_team_id: &str,
-    ) -> impl Stream<Item = Result<SlackConnection, Error>> + '_ {
+    pub fn get_connections(&self) -> impl Stream<Item = Result<SlackConnection, Error>> + '_ {
         self.client.list_request::<_, _, ListConnectionResponse>(
             &self.api_endpoint,
-            &format!("./workspaces/{}/connections", &slack_team_id),
+            &format!("./workspaces/{}/connections", &self.slack_workspace_id),
             NoopParams {},
             PraiyaCustomHeaders::None,
         )
@@ -166,7 +156,6 @@ impl SlackConnectionsClient {
     /// ---
     pub async fn update_connection(
         &self,
-        slack_team_id: &str,
         connection_id: &str,
         body: UpdateConnection,
     ) -> Result<SlackConnection, Error> {
@@ -174,7 +163,7 @@ impl SlackConnectionsClient {
             &self.api_endpoint,
             &format!(
                 "./workspaces/{}/connections/{}",
-                &slack_team_id, &connection_id
+                &self.slack_workspace_id, &connection_id
             ),
             None,
         )?;
@@ -201,7 +190,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let slack_team_id = "slack_workspace_id";
         let create_connection = CreateConnection {
             slack_connection: SlackConnection {
@@ -217,8 +206,8 @@ mod tests {
             },
         };
         let connection = pagerduty
-            .slack_connections()
-            .create_connection(slack_team_id, create_connection)
+            .slack_connections(slack_team_id)
+            .create_connection(create_connection)
             .await
             .unwrap();
 
@@ -227,11 +216,11 @@ mod tests {
 
     #[tokio::test]
     async fn test_delete_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let slack_team_id = "slack_workspace_id";
         let unit = pagerduty
-            .slack_connections()
-            .delete_connection(slack_team_id, "A12BCDE")
+            .slack_connections(slack_team_id)
+            .delete_connection("A12BCDE")
             .await
             .unwrap();
 
@@ -240,11 +229,11 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let slack_team_id = "slack_workspace_id";
         let connection = pagerduty
-            .slack_connections()
-            .get_connection(slack_team_id, "A12BCDE")
+            .slack_connections(slack_team_id)
+            .get_connection("A12BCDE")
             .await
             .unwrap();
 
@@ -253,12 +242,12 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_slack_connections() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let slack_team_id = "slack_workspace_id";
 
         let connection: Option<SlackConnection> = pagerduty
-            .slack_connections()
-            .get_connections(slack_team_id)
+            .slack_connections(slack_team_id)
+            .get_connections()
             .try_next()
             .await
             .unwrap();
@@ -271,7 +260,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_slack_connection() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let slack_team_id = "slack_workspace_id";
 
         let update_connection = UpdateConnection {
@@ -289,8 +278,8 @@ mod tests {
         };
 
         let connection = pagerduty
-            .slack_connections()
-            .update_connection(slack_team_id, "A12BCDE", update_connection)
+            .slack_connections(slack_team_id)
+            .update_connection("A12BCDE", update_connection)
             .await
             .unwrap();
 

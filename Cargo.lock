@@ -519,7 +519,7 @@ checksum = "eb9f9e6e233e5c4a35559a617bf40a4ec447db2e84c20b55a6f83167b7e57872"
 
 [[package]]
 name = "praiya"
-version = "0.1.0"
+version = "0.1.0-rc1"
 dependencies = [
  "arrayvec",
  "bytes",
@@ -555,7 +555,7 @@ dependencies = [
 
 [[package]]
 name = "praiya-macro"
-version = "0.1.0"
+version = "0.1.0-rc1"
 dependencies = [
  "proc-macro2",
  "quote",

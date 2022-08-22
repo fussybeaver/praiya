@@ -31,12 +31,15 @@ public class PagerDutyCodegen extends RustServerCodegen {
     public PagerDutyCodegen() {
         super();
 
-        // This client does not generate Rust API endpoints from java.
+        // This client does not generate Rust API endpoints from java, it just generates models.
         supportingFiles.remove(new SupportingFile("endpoints.mustache", "src/endpoints", "mod.rs"));
         apiTemplateFiles.remove("api.mustache");
 
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         supportingFiles.remove(new SupportingFile("models.mustache", "src", "models.rs"));
+
+        cliOptions.add(CliOption.newString("skipSerializingIfNone", "whether to serialize None as fields with null javascript values"));
+
     }
 
     @Override
@@ -49,7 +52,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
         if (additionalProperties.get("targetApiPrefix") != null) {
             supportingFiles.add(new SupportingFile("models.mustache", "src", String.format("%s_models.rs", additionalProperties.get("targetApiPrefix"))));
         }
-
     }
 
     private static final HashMap<String, Object> patchOperationBodyNames = new HashMap();
@@ -362,6 +364,11 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     }
                 }
 
+                // Do not pass the skip_serializing_if_none serde proc macro if
+                // property's value is None.
+                if (additionalProperties.get("skipSerializingIfNone").equals("false")) {
+                    prop.vendorExtensions.put("x-rustgen-no-skip-none", true);
+                }
             }
 
             // Required properties should not be wrapped in an Option.

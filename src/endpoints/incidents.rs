@@ -662,7 +662,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident = CreateIncident {
             incident: IncidentsIncident {
                 service: ServiceReference {
@@ -683,7 +683,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_note() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident_note = CreateIncidentNote {
             note: IncidentsidnotesNote {
                 content: String::from("Solved by pouring water on the fire"),
@@ -700,7 +700,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_notification_subscribers() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident_notification_subscriber = NotificationSubscriber {
             subscriber_id: Some(String::from("PD1234")),
             subscriber_type: Some(NotificationSubscriberSubscriberTypeEnum::TEAM),
@@ -723,7 +723,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_responder_request() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident_responder_request = CreateIncidentResponderRequest {
             requester_id: String::from("PL1JMK5"),
             message: String::from("Please help with issue - join bridge at +1(234)-567-8910"),
@@ -748,7 +748,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_snooze() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident_snooze = CreateIncidentSnooze { duration: 1 };
         let incident = pagerduty
             .incidents("from@example.com")
@@ -761,7 +761,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_incident_status_update() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_incident_status_update = CreateIncidentStatusUpdate {
             message: String::from("The server fire is spreading."),
             ..Default::default()
@@ -777,7 +777,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_incident() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let incident = pagerduty
             .incidents("from@example.com")
             .get_incident("PT4KHLK")
@@ -789,7 +789,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_incident_alert() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let alert = pagerduty
             .incidents("from@example.com")
             .get_incident_alert("PWL7QXS", "PT4KHLK")
@@ -801,7 +801,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_incident_notification_subscribers() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let notification_subscription: Option<NotificationSubscription> = pagerduty
             .incidents("from@example.com")
@@ -822,7 +822,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_incident_alerts() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let mut opts_builder = super::IncidentsListIncidentAlertsParamsBuilder::new();
         opts_builder.statuses(vec!["triggered"]);
         opts_builder.alert_key("abc");
@@ -845,7 +845,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_incident_log_entries() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let mut opts_builder = super::IncidentsListIncidentLogEntriesParamsBuilder::new();
         let now = chrono::Utc::now();
         let since = now - chrono::Duration::days(1);
@@ -870,7 +870,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_incident_notes() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let note: Option<IncidentNote> = pagerduty
             .incidents("from@example.com")
             .list_incident_notes("PT4KHLK")
@@ -883,7 +883,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_incidents() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let mut opts_builder = super::IncidentsListIncidentsParamsBuilder::new();
         let now = chrono::Utc::now();
         let since = now - chrono::Duration::days(1);
@@ -908,7 +908,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_merge_incidents() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let mut source_incidents = vec![];
         source_incidents.push(IncidentReference {
             id: Some(String::from("P8JOGX7")),
@@ -931,7 +931,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_remove_incident_notification_subscriber() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let notification_subscribers = super::RemoveIncidentNotificationSubscribers {
             subscribers: vec![NotificationSubscriber {
                 subscriber_id: Some(String::from("PD1234")),
@@ -949,7 +949,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_incident() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let update_incident = UpdateIncident {
             incident: IncidentsidIncident {
                 status: Some(IncidentsidIncidentStatusEnum::ACKNOWLEDGED),
@@ -967,7 +967,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_incident_alerts() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let update_incident_alerts = UpdateIncidentAlerts {
             alerts: vec![
                 Alert {
@@ -996,7 +996,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_incidents() {
-        let pagerduty = crate::Praiya::connect("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let update_incidents = UpdateIncidents {
             incidents: vec![
                 IncidentsIncidents {

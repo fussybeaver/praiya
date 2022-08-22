@@ -21,6 +21,7 @@ use hyper_rustls::HttpsConnector;
 use log::{debug, warn};
 use serde::de::DeserializeOwned;
 use serde::ser;
+use url::form_urlencoded;
 
 use crate::errors::Error::*;
 use crate::errors::{self, Error};
@@ -49,8 +50,8 @@ impl<'a> From<Uri<'a>> for HyperUri {
 /// Default timeout for all requests is 2 minutes.
 const DEFAULT_TIMEOUT: u64 = 120;
 
-/// Protection against malicious actor payload length
-const MAX_ALLOWED_RESPONSE_SIZE: u64 = 32768;
+/// Default PagerDuty limit parameter
+pub const DEFAULT_PAGERDUTY_API_LIMIT: usize = 100;
 
 pub enum PraiyaCustomHeaders {
     None,
@@ -69,7 +70,7 @@ impl From<PraiyaCustomHeaders> for &'static str {
 }
 
 impl Praiya {
-    pub fn connect(token: &str) -> Result<Praiya, Error> {
+    pub fn new(token: &str) -> Praiya {
         let https_connector: HttpsConnector<HttpConnector> =
             hyper_rustls::HttpsConnectorBuilder::new()
                 .with_native_roots()
@@ -77,14 +78,18 @@ impl Praiya {
                 .enable_http1()
                 .build();
 
+        Self::with_connector(https_connector, token)
+    }
+
+    pub fn with_connector(https_connector: HttpsConnector<HttpConnector>, token: &str) -> Praiya {
         let client_builder = hyper::Client::builder();
         let client = Arc::new(client_builder.build(https_connector));
 
-        Ok(Self {
+        Self {
             client,
             client_timeout: DEFAULT_TIMEOUT,
             token: Arc::new(token.to_string()),
-        })
+        }
     }
 
     pub(crate) fn build_request(
@@ -301,35 +306,20 @@ impl Praiya {
     }
 
     async fn decode_response<T: DeserializeOwned>(response: Response<Body>) -> Result<T, Error> {
-        // Protect against malicious response
-        let response_content_length = match response.body().size_hint().upper() {
-            Some(v) => v,
-            None => MAX_ALLOWED_RESPONSE_SIZE + 1,
-        };
+        let bytes = hyper::body::to_bytes(response.into_body()).await?;
 
-        if response_content_length < MAX_ALLOWED_RESPONSE_SIZE {
-            let bytes = hyper::body::to_bytes(response.into_body()).await?;
+        debug!("Decoded into string: {}", &String::from_utf8_lossy(&bytes));
 
-            debug!(
-                "Decoded into string: {}",
-                &string::String::from_utf8_lossy(&bytes)
-            );
-
-            serde_json::from_slice::<T>(&bytes).map_err(|e| {
-                if e.is_data() {
-                    JsonDataError {
-                        message: e.to_string(),
-                        column: e.column(),
-                    }
-                } else {
-                    JsonDeserializeError { err: e }
+        serde_json::from_slice::<T>(&bytes).map_err(|e| {
+            if e.is_data() {
+                JsonDataError {
+                    message: e.to_string(),
+                    column: e.column(),
                 }
-            })
-        } else {
-            Err(OversizedPayloadError {
-                len: response_content_length,
-            })
-        }
+            } else {
+                e.into()
+            }
+        })
     }
 
     pub(crate) fn serialize_payload<S>(body: S) -> Result<Body, Error>
@@ -523,7 +513,7 @@ impl PaginationQueryComponent for PaginationCursorQueryComponent {
     }
 }
 
-pub(crate) trait ParamsBuilder<B: BaseOption> {
+pub trait ParamsBuilder<B: BaseOption> {
     fn build(&mut self) -> B;
 }
 
@@ -533,10 +523,6 @@ pub trait BaseOption: Send + Sync {
         pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
     ) -> String;
 }
-
-use url::form_urlencoded;
-
-pub const DEFAULT_PAGERDUTY_API_LIMIT: usize = 25;
 
 #[derive(Default, Serialize)]
 pub(crate) struct NoopParams {}
