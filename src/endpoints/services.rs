@@ -370,7 +370,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_service() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_service = CreateService {
             service: Service {
                 name: Some(String::from("My Web App")),
@@ -426,7 +426,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_service_integration() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let create_service_integration = CreateServiceIntegration {
             integration: Integration {
                 _type: IntegrationTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION,
@@ -453,7 +453,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_delete_service() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
         let unit = pagerduty
             .services()
             .delete_service("PIJ90N7")
@@ -465,7 +465,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_service() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let mut opts_builder = super::ServicesGetServiceParamsBuilder::new();
         opts_builder.include(vec![]);
@@ -482,7 +482,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_service_integration() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let mut opts_builder = super::ServicesGetServiceIntegrationParamsBuilder::new();
         opts_builder.include(vec![]);
@@ -499,7 +499,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_service_audit_records() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let mut opts_builder = super::ServicesListServiceAuditRecordsParamsBuilder::new();
         let now = chrono::Utc::now();
@@ -523,7 +523,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_list_services() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let mut opts_builder = super::ServicesListServicesParamsBuilder::new();
         opts_builder.include(vec![]);
@@ -547,7 +547,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_service() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let update_service = UpdateService {
             service: Service {
@@ -605,7 +605,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_update_service_integration() {
-        let pagerduty = crate::Praiya::new("test").unwrap();
+        let pagerduty = crate::Praiya::new("test");
 
         let update_service_integration = UpdateServiceIntegration {
             integration: Integration {

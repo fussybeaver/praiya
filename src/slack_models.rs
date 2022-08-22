@@ -53,21 +53,13 @@ pub struct Pagination {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SlackConnection {
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<SlackConnectionSourceType>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_type: Option<SlackConnectionNotifiationType>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<SlackConnectionConfig>,
 }
 
@@ -75,11 +67,8 @@ pub struct SlackConnection {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct SlackConnectionConfig {
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<SlackConnectionEvents>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub urgency: Option<SlackConnectionUrgency>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub priorities: Option<SlackConnectionPriorities>,
 }
 
