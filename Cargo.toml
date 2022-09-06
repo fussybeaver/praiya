@@ -51,4 +51,4 @@ webpki-roots = "0.22"
 [dev-dependencies]
 slugify = "0.1.0"
 env_logger = "0.9"
-tokio = { version = "1", features = ["macros"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

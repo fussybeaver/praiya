@@ -26,7 +26,7 @@ impl Praiya {
         SlackConnectionsClient {
             api_endpoint: std::env::var("PAGERDUTY_API_ENDPOINT")
                 .unwrap_or_else(|_| String::from(API_ENDPOINT)),
-            client: self.clone(),
+            client: Praiya::clone(self),
             slack_workspace_id: String::from(slack_workspace_id),
         }
     }
