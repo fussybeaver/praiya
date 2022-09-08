@@ -2,7 +2,7 @@
 description = "Proc macros for the Praiya API client"
 license = "Apache-2.0"
 name = "praiya-macro"
-version = "0.1.0-rc1"
+version = "0.1.0"
 authors = ["Praiya contributors"]
 homepage = "https://github.com/fussybeaver/praiya"
 repository = "https://github.com/fussybeaver/praiya"
