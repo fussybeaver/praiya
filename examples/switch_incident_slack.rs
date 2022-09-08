@@ -5,9 +5,10 @@ use std::collections::HashSet;
 
 use futures_util::TryStreamExt;
 use praiya::{
-    api::{incidents::IncidentsListIncidentsParamsBuilder},
+    api::incidents::IncidentsListIncidentsParamsBuilder,
     default_models::{Incident, ServiceReference},
-    ParamsBuilder, Praiya, slack_models::SlackConnection,
+    slack_models::SlackConnection,
+    ParamsBuilder, Praiya,
 };
 
 // Replace with appropriate values...
@@ -31,7 +32,8 @@ async fn main() -> Result<(), praiya::errors::Error> {
         .incidents(EMAIL)
         .list_incidents(params)
         .try_collect()
-        .await.expect("failed to fetch incidents");
+        .await
+        .expect("failed to fetch incidents");
 
     if incidents.is_empty() {
         return Ok(());
@@ -44,20 +46,17 @@ async fn main() -> Result<(), praiya::errors::Error> {
         }
     }
 
-    let slack_connection_api = pagerduty
-        .slack_connections(WORKSPACE_TEAM_ID);
+    let slack_connection_api = pagerduty.slack_connections(WORKSPACE_TEAM_ID);
 
     let mut stream = slack_connection_api.get_connections();
 
-    while let Ok(Some(connection)) = stream.try_next().await 
-    {
+    while let Ok(Some(connection)) = stream.try_next().await {
         match &connection {
             slack_connection @ SlackConnection {
                 source_id: Some(source_id),
                 id: Some(slack_connection_id),
                 ..
             } if services.contains(source_id) => {
-
                 println!(
                     "Redirecting service {} to channel {}",
                     source_id, SLACK_CHANNEL_ID
@@ -73,9 +72,10 @@ async fn main() -> Result<(), praiya::errors::Error> {
 
                 slack_connection_api
                     .update_connection(&slack_connection_id, update_connection)
-                    .await.expect("failed to update slack connection");
+                    .await
+                    .expect("failed to update slack connection");
             }
-            _ => ()
+            _ => (),
         }
     }
 
