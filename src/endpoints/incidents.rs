@@ -27,7 +27,7 @@ impl Praiya {
         IncidentsClient {
             api_endpoint: std::env::var("PAGERDUTY_API_ENDPOINT")
                 .unwrap_or_else(|_| String::from(API_ENDPOINT)),
-            client: self.clone(),
+            client: Praiya::clone(self),
             from_email: String::from(from_email),
         }
     }

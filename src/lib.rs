@@ -77,7 +77,7 @@
 //!
 //! use futures_util::TryStreamExt;
 //!
-//! let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN").expect("Unable to create PagerDuty client");
+//! let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN");
 //!
 //! let mut opts_builder = praiya::endpoints::incidents::IncidentsListIncidentsParamsBuilder::new();
 //! opts_builder.statuses(vec!["triggered", "acknowledged"]);

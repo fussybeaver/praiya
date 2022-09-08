@@ -111,7 +111,7 @@ jobs:
       - name: Install Format
         run: rustup component add rustfmt
 
-      - name: Run cargo clippy
+      - name: Run cargo fmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
