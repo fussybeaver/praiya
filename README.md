@@ -20,7 +20,7 @@ Add the following to your `Cargo.toml` file.
 
 ```nocompile
 [dependencies]
-praiya = "0.1.0-rc1"
+praiya = "0.1.0"
 ```
 
 ## API
