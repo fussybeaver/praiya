@@ -142,8 +142,30 @@ impl {{classname}} {
 {{/vendorExtensions.x-rustgen-has-default-impl}}{{#vars}}{{#vendorExtensions.is-enum}}
 
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]{{#xmlName}}
-#[serde(rename = "{{xmlName}}")]{{/xmlName}}
+{{#vendorExtensions.x-rustgen-is-untagged-enum}}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum {{classname}}{{enumName}} { {{~#allowableValues}}{{#untaggedVars}}
+    {{name}}({{value}}),{{/untaggedVars}}{{/allowableValues}}
+}
+
+impl Display for {{classname}}{{enumName}} {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self { {{~#allowableValues}}{{#untaggedVars}}
+            {{classname}}{{enumName}}::{{name}}(value) => write!(f, "{:?}", value),{{/untaggedVars}}{{/allowableValues}}
+        }
+    }
+}
+
+impl std::default::Default for {{classname}}{{enumName}} {
+    fn default() -> Self {
+        {{#allowableValues}}{{#untaggedVars.[0]}}
+        {{classname}}{{enumName}}::{{name}}({{value}}::default())
+        {{/untaggedVars.[0]}}{{/allowableValues}}
+    }
+}
+{{/vendorExtensions.x-rustgen-is-untagged-enum}}{{^vendorExtensions.x-rustgen-is-untagged-enum}}
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
 pub enum {{classname}}{{enumName}} { {{~#allowableValues}}{{#enumVars}}
     #[serde(rename = {{{value}}})]
     {{name}},{{/enumVars}}{{/allowableValues}}{{#vendorExtensions}}{{#x-rustgen-additional-enum-values}}
@@ -192,4 +214,4 @@ impl std::default::Default for {{classname}}{{enumName}} {
         {{/enumVars.[0]}}{{/allowableValues}}
     }
 }
-{{/vendorExtensions.is-enum}}{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-noop}}{{/model}}{{/models}}
+{{/vendorExtensions.x-rustgen-is-untagged-enum}}{{/vendorExtensions.is-enum}}{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-noop}}{{/model}}{{/models}}

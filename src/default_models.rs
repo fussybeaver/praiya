@@ -2477,7 +2477,32 @@ impl std::default::Default for ContactMethodReferenceTypeEnum {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserContactMethod {
-    pub contact_method: ContactMethodsContactMethodIdBodyContactMethod,
+    pub contact_method: UpdateUserContactMethodEnum,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateUserContactMethodEnum {
+    PHONE_CONTACT_METHOD(PhoneContactMethod),
+    PUSH_CONTACT_METHOD(PushContactMethod),
+    EMAIL_CONTACT_METHOD(EmailContactMethod),
+}
+
+impl Display for UpdateUserContactMethodEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            UpdateUserContactMethodEnum::PHONE_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            UpdateUserContactMethodEnum::PUSH_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            UpdateUserContactMethodEnum::EMAIL_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for UpdateUserContactMethodEnum {
+    fn default() -> Self {
+        UpdateUserContactMethodEnum::PHONE_CONTACT_METHOD(PhoneContactMethod::default())
+    }
 }
 
 /// The configuration for Content Based Alert Grouping
@@ -2616,6 +2641,18 @@ pub struct CursorPagination {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EmailContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: EmailContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -2632,6 +2669,10 @@ pub struct EmailContactMethod {
 impl Default for EmailContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("EmailContactMethod"),
             address: Default::default(),
@@ -2643,6 +2684,9 @@ impl Default for EmailContactMethod {
 impl EmailContactMethod {
     fn label_default() -> String {
         String::from("EmailContactMethod")
+    }
+    fn _type_default() -> String {
+        String::from("email_contact_method")
     }
 }
 
@@ -4399,7 +4443,32 @@ pub struct UpdateLogEntryChannel {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserContactMethod {
-    pub contact_method: IdContactMethodsBodyContactMethod,
+    pub contact_method: CreateUserContactMethodEnum,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CreateUserContactMethodEnum {
+    PHONE_CONTACT_METHOD(PhoneContactMethod),
+    PUSH_CONTACT_METHOD(PushContactMethod),
+    EMAIL_CONTACT_METHOD(EmailContactMethod),
+}
+
+impl Display for CreateUserContactMethodEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            CreateUserContactMethodEnum::PHONE_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            CreateUserContactMethodEnum::PUSH_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            CreateUserContactMethodEnum::EMAIL_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for CreateUserContactMethodEnum {
+    fn default() -> Self {
+        CreateUserContactMethodEnum::PHONE_CONTACT_METHOD(PhoneContactMethod::default())
+    }
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -9395,6 +9464,18 @@ pub struct Pagination {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PhoneContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: PhoneContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -9416,6 +9497,10 @@ pub struct PhoneContactMethod {
 impl Default for PhoneContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("PhoneContactMethod"),
             address: Default::default(),
@@ -9429,6 +9514,9 @@ impl Default for PhoneContactMethod {
 impl PhoneContactMethod {
     fn label_default() -> String {
         String::from("PhoneContactMethod")
+    }
+    fn _type_default() -> String {
+        String::from("phone_contact_method")
     }
 }
 
@@ -9627,6 +9715,18 @@ impl std::default::Default for PriorityReferenceTypeEnum {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PushContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: PushContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -9650,6 +9750,10 @@ pub struct PushContactMethod {
 impl Default for PushContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("PushContactMethod"),
             address: Default::default(),
@@ -9664,6 +9768,9 @@ impl Default for PushContactMethod {
 impl PushContactMethod {
     fn label_default() -> String {
         String::from("PushContactMethod")
+    }
+    fn _type_default() -> String {
+        String::from("push_contact_method")
     }
 }
 
@@ -10269,7 +10376,7 @@ pub struct ResponsePlay {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub team: Option<Value>,
+    pub team: Option<ResponsePlayEnum>,
     /// An array containing the users and/or teams to be added as subscribers to any incident on which this response play is run.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribers: Option<Vec<Value>>,
@@ -10370,6 +10477,27 @@ impl ::std::convert::AsRef<str> for ResponsePlayTypeEnum {
 impl std::default::Default for ResponsePlayTypeEnum {
     fn default() -> Self {
         ResponsePlayTypeEnum::RESPONSE_PLAY
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ResponsePlayEnum {
+    TEAM_REFERENCE(TeamReference),
+}
+
+impl Display for ResponsePlayEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            ResponsePlayEnum::TEAM_REFERENCE(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for ResponsePlayEnum {
+    fn default() -> Self {
+        ResponsePlayEnum::TEAM_REFERENCE(TeamReference::default())
     }
 }
 

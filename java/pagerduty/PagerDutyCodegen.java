@@ -13,6 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.swagger.codegen.v3.*;
+import io.swagger.codegen.v3.generators.util.OpenAPIUtil;
+import io.swagger.v3.oas.models.media.ArraySchema;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +114,8 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         CodegenModel mdl = super.fromModel(name, schema, allDefinitions);
 
-        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf'. 
+
+        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf'.
         if (schema instanceof ComposedSchema) {
             ComposedSchema composedSchema = (ComposedSchema) schema;
             if (composedSchema.getAllOf() != null) {
@@ -124,8 +128,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     // type, we manually add properties from the `Tag` Schema,
                     // because of limitations in copying polymorphic models the
                     // swagger code generator.
-
-                    if (type.equals("Tag/allOf/0") || type.equals("Reference")) {
+                    if (type.equals("Tag/allOf/0") || type.equals("Reference") || mdl.name.endsWith("ContactMethod")) {
                         Schema refSchema = null;
                         String ref = io.swagger.codegen.v3.generators.util.OpenAPIUtil.getSimpleRef("Tag");
 
@@ -209,6 +212,40 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
 
         return mdl;
+    }
+
+    @Override
+    public CodegenProperty fromProperty(String name, Schema propertySchema) {
+        CodegenProperty prop = super.fromProperty(name, propertySchema);
+
+        if (propertySchema instanceof ComposedSchema) {
+            ComposedSchema composedSchema = (ComposedSchema) propertySchema;
+            if (composedSchema.getOneOf() != null) {
+                List<Schema> schemas;
+                schemas = composedSchema.getOneOf();
+                HashMap<String, Object> allowableValues = new HashMap();
+                ArrayList<String> values = new ArrayList();
+                ArrayList<HashMap<String, String>> enumVars = new ArrayList();
+                prop.enumName = "Enum";
+                for (Schema subSchema : schemas) {
+                    if (subSchema.get$ref() != null) {
+                        String ref = OpenAPIUtil.getSimpleRef(subSchema.get$ref());
+                        values.add(ref);
+                        HashMap<String, String> enumVarsProp = new HashMap();
+                        enumVarsProp.put("name", StringUtils.upperCase(underscore(ref)));
+                        enumVarsProp.put("value", ref);
+                        enumVars.add(enumVarsProp);
+                        prop.getVendorExtensions().put("is-enum", true);
+                        prop.getVendorExtensions().put("x-rustgen-is-untagged-enum", true);
+                    }
+                }
+                allowableValues.put("values", values);
+                allowableValues.put("untaggedVars", enumVars);
+                prop.allowableValues = allowableValues;
+            }
+        }
+
+        return prop;
     }
 
     @Override
