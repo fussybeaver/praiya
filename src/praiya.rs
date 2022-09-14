@@ -53,16 +53,16 @@ const DEFAULT_TIMEOUT: u64 = 120;
 /// Default PagerDuty limit parameter
 pub const DEFAULT_PAGERDUTY_API_LIMIT: usize = 100;
 
-pub enum PraiyaCustomHeaders {
+pub enum PraiyaCustomHeaders<'req> {
     None,
-    EarlyAccess,
+    EarlyAccess(Option<&'req str>),
     AuditEarlyAccess,
 }
 
-impl From<PraiyaCustomHeaders> for &'static str {
-    fn from(headers: PraiyaCustomHeaders) -> Self {
+impl<'req> From<PraiyaCustomHeaders<'req>> for &'static str {
+    fn from(headers: PraiyaCustomHeaders<'req>) -> Self {
         match headers {
-            PraiyaCustomHeaders::EarlyAccess => "x-early-access",
+            PraiyaCustomHeaders::EarlyAccess(_) => "x-early-access",
             PraiyaCustomHeaders::AuditEarlyAccess => "x-audit-early-access",
             PraiyaCustomHeaders::None => panic!("no key for this header"),
         }
@@ -343,6 +343,10 @@ impl Praiya {
         let mut header_map = HashMap::new();
         match headers {
             PraiyaCustomHeaders::None => (),
+            PraiyaCustomHeaders::EarlyAccess(Some(value)) => {
+                let key: &str = headers.into();
+                header_map.insert(String::from(key), String::from(value));
+            }
             _ => {
                 let key: &str = headers.into();
                 header_map.insert(String::from(key), String::from("true"));
@@ -510,6 +514,42 @@ impl PaginationQueryComponent for PaginationCursorQueryComponent {
             query.append_pair("cursor", cursor);
         }
         query.append_pair("limit", &self.limit.to_string());
+    }
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct PaginatedCursorResponse {
+    pub next_cursor: Option<String>,
+    pub limit: Option<usize>,
+    pub records: Vec<AuditRecord>,
+}
+
+impl PaginatedResponse<crate::praiya::PaginatedCursorPosition> for PaginatedCursorResponse {
+    type Inner = Vec<AuditRecord>;
+    type Cursor = Option<String>;
+
+    fn get_pos(&self) -> Self::Cursor {
+        Option::clone(&self.next_cursor)
+    }
+
+    fn get_limit(&self) -> usize {
+        self.limit.unwrap_or(100)
+    }
+
+    fn inner(self) -> Self::Inner {
+        self.records
+    }
+
+    fn has_more(&self) -> bool {
+        self.next_cursor.is_some()
+    }
+
+    fn to_cursor(&self) -> crate::praiya::PaginatedCursorPosition {
+        crate::praiya::PaginatedCursorPosition {
+            cursor: self.get_pos(),
+            has_more: self.has_more(),
+            limit: self.get_limit(),
+        }
     }
 }
 

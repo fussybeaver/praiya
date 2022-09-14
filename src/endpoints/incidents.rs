@@ -202,7 +202,7 @@ impl IncidentsClient {
 
         let mut builder = http::request::Builder::new();
         builder = builder.header(FROM, &self.from_email);
-        let early_access: &str = PraiyaCustomHeaders::EarlyAccess.into();
+        let early_access: &str = PraiyaCustomHeaders::EarlyAccess(None).into();
         builder = builder.header(early_access, "true");
 
         let req = self.client.build_request(
@@ -379,7 +379,7 @@ impl IncidentsClient {
                 &self.api_endpoint,
                 &format!("/incidents/{}/status_updates/subscribers", &id),
                 NoopParams {},
-                PraiyaCustomHeaders::EarlyAccess,
+                PraiyaCustomHeaders::EarlyAccess(None),
             )
     }
 

@@ -69,42 +69,6 @@ struct ServicesListServiceAuditRecords {
     until: chrono::DateTime<chrono::Utc>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct PaginatedCursorResponse {
-    pub next_cursor: Option<String>,
-    pub limit: Option<usize>,
-    pub records: Vec<AuditRecord>,
-}
-
-impl PaginatedResponse<crate::praiya::PaginatedCursorPosition> for PaginatedCursorResponse {
-    type Inner = Vec<AuditRecord>;
-    type Cursor = Option<String>;
-
-    fn get_pos(&self) -> Self::Cursor {
-        Option::clone(&self.next_cursor)
-    }
-
-    fn get_limit(&self) -> usize {
-        self.limit.unwrap_or(100)
-    }
-
-    fn inner(self) -> Self::Inner {
-        self.records
-    }
-
-    fn has_more(&self) -> bool {
-        self.next_cursor.is_some()
-    }
-
-    fn to_cursor(&self) -> crate::praiya::PaginatedCursorPosition {
-        crate::praiya::PaginatedCursorPosition {
-            cursor: self.get_pos(),
-            has_more: self.has_more(),
-            limit: self.get_limit(),
-        }
-    }
-}
-
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::list_services]"]
 #[allow(dead_code)]
@@ -276,7 +240,7 @@ impl ServicesClient {
             headers: header_map,
         };
 
-        self.client.process_into_paginated_stream::<AuditRecord, PaginatedCursorResponse, crate::praiya::PaginatedCursorPosition, crate::praiya::PaginationCursorQueryComponent>(
+        self.client.process_into_paginated_stream::<AuditRecord, crate::praiya::PaginatedCursorResponse, crate::praiya::PaginatedCursorPosition, crate::praiya::PaginationCursorQueryComponent>(
             base_request,
             std::sync::Arc::new(crate::praiya::PaginationCursorQueryComponent {
                 cursor: None,
