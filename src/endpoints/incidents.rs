@@ -58,19 +58,18 @@ single_response_type!(Incident, incident, GetIncident);
 single_response_type!(Alert, alert, GetIncidentAlert);
 
 list_response_type!(
-    Incident,
     ListIncidentNotificationSubscription,
     subscribers,
     NotificationSubscription
 );
 
-list_response_type!(Incident, ListIncidentAlerts, alerts, Alert);
+list_response_type!(ListIncidentAlerts, alerts, Alert);
 
-list_response_type!(Incident, ListIncidentLogEntries, log_entries, LogEntry);
+list_response_type!(ListIncidentLogEntries, log_entries, LogEntry);
 
-list_response_type!(Incident, ListIncidentNote, notes, IncidentNote);
+list_response_type!(ListIncidentNote, notes, IncidentNote);
 
-list_response_type!(Incident, ListIncident, incidents, Incident);
+list_response_type!(ListIncident, incidents, Incident);
 
 single_response_type!(IncidentReference, incident, MergeIncident);
 
@@ -85,7 +84,7 @@ plural_response_type!(Incident, incidents, UpdateIncidents);
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[IncidentsClient::list_incident_alerts]"]
 #[allow(dead_code)]
-struct IncidentsListIncidentAlerts {
+struct ListIncidentAlerts {
     statuses: Vec<String>,
     alert_key: String,
     sort_by: Vec<String>,
@@ -95,7 +94,7 @@ struct IncidentsListIncidentAlerts {
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[IncidentsClient::list_incident_log_entries]"]
 #[allow(dead_code)]
-struct IncidentsListIncidentLogEntries {
+struct ListIncidentLogEntries {
     until: chrono::DateTime<chrono::Utc>,
     since: chrono::DateTime<chrono::Utc>,
     time_zone: chrono_tz::Tz,
@@ -105,7 +104,7 @@ struct IncidentsListIncidentLogEntries {
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[IncidentsClient::list_incidents]"]
 #[allow(dead_code)]
-struct IncidentsListIncidents {
+struct ListIncidents {
     date_range: String,
     incident_key: String,
     include: Vec<String>,
@@ -394,7 +393,7 @@ impl IncidentsClient {
     pub fn list_incident_alerts(
         &self,
         id: &str,
-        query_params: IncidentsListIncidentAlertsParams,
+        query_params: ListIncidentAlertsParams,
     ) -> impl Stream<Item = Result<Alert, Error>> + '_ {
         self.client
             .list_request::<_, _, ListIncidentAlertsResponse>(
@@ -418,7 +417,7 @@ impl IncidentsClient {
     pub fn list_incident_log_entries(
         &self,
         id: &str,
-        query_params: IncidentsListIncidentLogEntriesParams,
+        query_params: ListIncidentLogEntriesParams,
     ) -> impl Stream<Item = Result<LogEntry, Error>> + '_ {
         self.client
             .list_request::<_, _, ListIncidentLogEntriesResponse>(
@@ -459,7 +458,7 @@ impl IncidentsClient {
     /// ---
     pub fn list_incidents(
         &self,
-        query_params: IncidentsListIncidentsParams,
+        query_params: ListIncidentsParams,
     ) -> impl Stream<Item = Result<Incident, Error>> + '_ {
         self.client.list_request::<_, _, ListIncidentResponse>(
             &self.api_endpoint,
@@ -823,7 +822,7 @@ mod tests {
     #[tokio::test]
     async fn test_list_incident_alerts() {
         let pagerduty = crate::Praiya::new("test");
-        let mut opts_builder = super::IncidentsListIncidentAlertsParamsBuilder::new();
+        let mut opts_builder = super::ListIncidentAlertsParamsBuilder::new();
         opts_builder.statuses(vec!["triggered"]);
         opts_builder.alert_key("abc");
         opts_builder.sort_by(vec!["id"]);
@@ -846,7 +845,7 @@ mod tests {
     #[tokio::test]
     async fn test_list_incident_log_entries() {
         let pagerduty = crate::Praiya::new("test");
-        let mut opts_builder = super::IncidentsListIncidentLogEntriesParamsBuilder::new();
+        let mut opts_builder = super::ListIncidentLogEntriesParamsBuilder::new();
         let now = chrono::Utc::now();
         let since = now - chrono::Duration::days(1);
         opts_builder.until(&now);
@@ -884,7 +883,7 @@ mod tests {
     #[tokio::test]
     async fn test_list_incidents() {
         let pagerduty = crate::Praiya::new("test");
-        let mut opts_builder = super::IncidentsListIncidentsParamsBuilder::new();
+        let mut opts_builder = super::ListIncidentsParamsBuilder::new();
         let now = chrono::Utc::now();
         let since = now - chrono::Duration::days(1);
         opts_builder.until(&now);

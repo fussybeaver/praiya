@@ -55,7 +55,7 @@ macro_rules! plural_request_type {
 
 //#[macro_export]
 macro_rules! list_response_type {
-    ( $base:ident, $name:ident, $key:ident, $return:ident ) => {
+    ( $name:ident, $key:ident, $return:ident ) => {
         paste::paste! {
             #[derive(Debug, PartialEq, Serialize, Deserialize)]
             pub struct [< $name Response >] {

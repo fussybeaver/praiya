@@ -39,9 +39,9 @@ single_response_type!(Service, service, GetService);
 
 single_response_type!(Integration, integration, GetServiceIntegration);
 
-list_response_type!(Service, ListServiceIntegration, integrations, Integration);
+list_response_type!(ListServiceIntegration, integrations, Integration);
 
-list_response_type!(Service, ListService, services, Service);
+list_response_type!(ListService, services, Service);
 
 single_response_type!(Service, service, UpdateService);
 
@@ -50,21 +50,21 @@ single_response_type!(Integration, integration, UpdateServiceIntegration);
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::get_service]"]
 #[allow(dead_code)]
-struct ServicesGetService {
+struct GetService {
     include: Vec<String>,
 }
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::get_service_integration]"]
 #[allow(dead_code)]
-struct ServicesGetServiceIntegration {
+struct GetServiceIntegration {
     include: Vec<String>,
 }
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::list_service_audit_records]"]
 #[allow(dead_code)]
-struct ServicesListServiceAuditRecords {
+struct ListServiceAuditRecords {
     since: chrono::DateTime<chrono::Utc>,
     until: chrono::DateTime<chrono::Utc>,
 }
@@ -72,7 +72,7 @@ struct ServicesListServiceAuditRecords {
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::list_services]"]
 #[allow(dead_code)]
-struct ServicesListServices {
+struct ListServices {
     statuses: Vec<String>,
     time_zone: chrono_tz::Tz,
     team_ids: Vec<String>,
@@ -165,7 +165,7 @@ impl ServicesClient {
     pub async fn get_service(
         &self,
         id: &str,
-        query_params: ServicesGetServiceParams,
+        query_params: GetServiceParams,
     ) -> Result<Service, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
@@ -196,7 +196,7 @@ impl ServicesClient {
         &self,
         id: &str,
         integration_id: &str,
-        query_params: ServicesGetServiceIntegrationParams,
+        query_params: GetServiceIntegrationParams,
     ) -> Result<Integration, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
@@ -226,7 +226,7 @@ impl ServicesClient {
     pub fn list_service_audit_records(
         &self,
         id: &str,
-        query_params: ServicesListServiceAuditRecordsParams,
+        query_params: ListServiceAuditRecordsParams,
     ) -> impl Stream<Item = Result<AuditRecord, Error>> + '_ {
         let mut header_map = std::collections::HashMap::new();
         let audit_early_access: &str = PraiyaCustomHeaders::AuditEarlyAccess.into();
@@ -260,7 +260,7 @@ impl ServicesClient {
     /// ---
     pub fn list_services(
         &self,
-        query_params: ServicesListServicesParams,
+        query_params: ListServicesParams,
     ) -> impl Stream<Item = Result<Service, Error>> + '_ {
         self.client.list_request::<_, _, ListServiceResponse>(
             &self.api_endpoint,
@@ -431,7 +431,7 @@ mod tests {
     async fn test_get_service() {
         let pagerduty = crate::Praiya::new("test");
 
-        let mut opts_builder = super::ServicesGetServiceParamsBuilder::new();
+        let mut opts_builder = super::GetServiceParamsBuilder::new();
         opts_builder.include(vec![]);
         let opts = opts_builder.build();
 
@@ -448,7 +448,7 @@ mod tests {
     async fn test_get_service_integration() {
         let pagerduty = crate::Praiya::new("test");
 
-        let mut opts_builder = super::ServicesGetServiceIntegrationParamsBuilder::new();
+        let mut opts_builder = super::GetServiceIntegrationParamsBuilder::new();
         opts_builder.include(vec![]);
         let opts = opts_builder.build();
 
@@ -465,7 +465,7 @@ mod tests {
     async fn test_list_service_audit_records() {
         let pagerduty = crate::Praiya::new("test");
 
-        let mut opts_builder = super::ServicesListServiceAuditRecordsParamsBuilder::new();
+        let mut opts_builder = super::ListServiceAuditRecordsParamsBuilder::new();
         let now = chrono::Utc::now();
         let since = now - chrono::Duration::days(1);
         opts_builder.since(&since);
@@ -489,7 +489,7 @@ mod tests {
     async fn test_list_services() {
         let pagerduty = crate::Praiya::new("test");
 
-        let mut opts_builder = super::ServicesListServicesParamsBuilder::new();
+        let mut opts_builder = super::ListServicesParamsBuilder::new();
         opts_builder.include(vec![]);
         opts_builder.team_ids(vec![]);
         opts_builder.statuses(vec!["triggered", "acknowledged"]);

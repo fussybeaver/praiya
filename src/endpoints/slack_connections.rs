@@ -38,12 +38,7 @@ single_response_type!(SlackConnection, slack_connection, DeleteConnection);
 
 single_response_type!(SlackConnection, slack_connection, GetConnection);
 
-list_response_type!(
-    SlackConnection,
-    ListConnection,
-    slack_connections,
-    SlackConnection
-);
+list_response_type!(ListConnection, slack_connections, SlackConnection);
 
 single_response_type!(SlackConnection, slack_connection, UpdateConnection);
 

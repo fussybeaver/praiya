@@ -88,7 +88,6 @@ single_response_type!(
 );
 
 list_response_type!(
-    User,
     ListUserContactMethods,
     contact_methods,
     GetUserContactMethodEnum
@@ -111,7 +110,6 @@ struct GetUserNotificationRules {
 }
 
 list_response_type!(
-    User,
     ListUserNotificationRules,
     notification_rules,
     NotificationRule
@@ -138,7 +136,6 @@ struct GetUserStatusUpdateNotificationRules {
 }
 
 list_response_type!(
-    User,
     ListUserStatusUpdateNotificationRules,
     status_update_notification_rules,
     StatusUpdateNotificationRule
@@ -153,7 +150,7 @@ struct ListUsers {
     team_ids: Vec<String>,
 }
 
-list_response_type!(Users, ListUsers, users, User);
+list_response_type!(ListUsers, users, User);
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::list_users_audit_records]"]
