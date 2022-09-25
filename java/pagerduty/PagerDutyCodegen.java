@@ -119,16 +119,22 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 for (Schema subSchema : schemas) {
                     String type = getTypeDeclaration(subSchema);
 
-                    // For types that indicate they inherit the `Reference`
-                    // type, we manually add properties from the `Tag` Schema,
-                    // because of limitations in copying polymorphic models the
-                    // swagger code generator.
+                    // Address swagger generator's limitation in generating
+                    // polymorphic models with a deep reference into a composed
+                    // openaPI schema.
+                    //
+                    // For some specific types we manually add properties from
+                    // the `Tag` Schema. In other cases, we infer the parent
+                    // schema and copy properties from there.
+                    //
                     if (type.endsWith("/allOf/0") || type.equals("Reference") || mdl.name.endsWith("ContactMethod")) {
                         Schema refSchema = null;
                         String ref = null;
                         if (type.endsWith("/allOf/0")) {
+                            // Copy properties from the parent model of a composed schema deep link
                             String prefix = type.substring(0, type.length() - 8);
                             String parentModel;
+                            // In some cases we have an absolute reference, in others we don't
                             if (prefix.indexOf("/") >= 0) {
                                 parentModel = prefix.substring(0, prefix.lastIndexOf("/"));
                             } else {
@@ -226,6 +232,21 @@ public class PagerDutyCodegen extends RustServerCodegen {
     public CodegenProperty fromProperty(String name, Schema propertySchema) {
         CodegenProperty prop = super.fromProperty(name, propertySchema);
 
+        // Address models that seem to be missing in the swagger generator
+        // 'fromModel' pass. These are mostly composed schemas. We check properties,
+        // fill appropriate vendor extensions and deal with these exceptions at
+        // the template level.
+        //
+        // In some cases, these are enums, of which we handle in three ways
+        // (only the latter two are handled in this part of the code):
+        //   - An enumeration of constant strings;
+        //   - An enumeration of models, if the swagger generator can handle
+        //   the reference;
+        //   - An enumeration of anonymous structs, for openAPI references that
+        //   the swagger generator doesn't handle.
+        //
+        // In other cases, we generate an inline model and pass it in vendor
+        // extensions. 
         if (propertySchema instanceof ComposedSchema) {
             ComposedSchema composedSchema = (ComposedSchema) propertySchema;
             if (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null) {
@@ -287,7 +308,9 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     if (subSchema.get$ref() != null) {
                         String ref = OpenAPIUtil.getSimpleRef(subSchema.get$ref());
                         if (!ref.equals(camelize(ref)) || ref.matches("^[0-9]*$")) {
-                            // Handle deep references that the swagger generator cannot link. e.g. #/components/schemas/OrchestrationUnrouted/allOf/1/properties/orchestration_path/properties/catch_all/properties/actions
+                            // Handle deep references that the swagger
+                            // generator cannot link. e.g.
+                            // #/components/schemas/OrchestrationUnrouted/allOf/1/properties/orchestration_path/properties/catch_all/properties/actions
                             if (subSchema.get$ref().contains("OrchestrationUnrouted")) {
                                 openApiRefs.add("OrchestrationUnroutedOrchestrationPathCatchAllActions");
                             } else if (subSchema.get$ref().contains("ServiceOrchestration")) {
@@ -358,6 +381,14 @@ public class PagerDutyCodegen extends RustServerCodegen {
             if (model.getIsEnum()) {
                 model.vendorExtensions.put("is-enum", true);
             } else if (model.vars.isEmpty() && !model.getIsArrayModel()) {
+                // Do not generate 'empty' structs.
+                //
+                // Generally, these will be structs that the swagger generator
+                // decided to include but failed to populate due to the model
+                // being a composed schema.
+                //
+                // We now handle these by generating them through property
+                // vendor extensions and templating.
                 model.vendorExtensions.put("x-rustgen-noop", true);
             }
 
@@ -369,6 +400,8 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 if (model.classname.replace("InlineResponse", "").matches("^[0-9]*$")) {
                     model.vendorExtensions.put("x-rustgen-noop", true);
                 } else {
+                    // We do want to generate nested Inline Response schemas,
+                    // where they are missing.
                     String classname = model.classname.replaceFirst("^InlineResponse[0-9]*", "");
                     if (!inlineResponses.contains(classname) && !allModels.keySet().contains(classname)) {
                         model.classname = classname;
@@ -427,10 +460,17 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     }
                 }
 
+                // For array types containing enums, where the swagger
+                // generator failed to find a valid datatype, we set the type
+                // to a standardised `classname`+`propertyname`+`Enum` 
                 if (prop.getItems() != null && prop.getItems().getVendorExtensions() != null && getBooleanValue(prop.getItems(), "is-enum") && prop.getItems().datatype.equals("Value")) {
                     prop.getItems().datatype = camelize(model.classname) + prop.getItems().enumName;
                 }
 
+                // Sanitise some datatypes, remove the composed prefix and
+                // inline response from property datatypes, since we generate
+                // these now with better names.
+                
                 if (prop.datatype.startsWith("AllOf")) {
                     if (!allModels.keySet().contains(prop.datatype) || allModels.get(prop.datatype).vars.isEmpty()) {
                         prop.datatype = prop.datatype.replace("AllOf", "");
