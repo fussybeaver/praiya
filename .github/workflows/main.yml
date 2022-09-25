@@ -22,7 +22,6 @@ jobs:
         with:
           command: check
 
-
   test:
     name: Test Suite
     runs-on: ubuntu-latest
@@ -66,6 +65,10 @@ jobs:
         with:
           command: test
           args: services
+
+      - name: Emit logs of mock server
+        if: always()
+        run: docker-compose logs
 
       - name: Stop mock server
         if: always()
