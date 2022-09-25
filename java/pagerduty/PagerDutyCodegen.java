@@ -13,12 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.swagger.codegen.v3.*;
+import io.swagger.codegen.v3.generators.util.OpenAPIUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.ComposedSchema;
 import io.swagger.v3.oas.models.media.Schema;
@@ -34,7 +34,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
         // This client does not generate Rust API endpoints from java, it just generates models.
         supportingFiles.remove(new SupportingFile("endpoints.mustache", "src/endpoints", "mod.rs"));
         apiTemplateFiles.remove("api.mustache");
-
         cliOptions.add(CliOption.newString("targetApiPrefix", "target model prefix"));
         supportingFiles.remove(new SupportingFile("models.mustache", "src", "models.rs"));
 
@@ -111,7 +110,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
         CodegenModel mdl = super.fromModel(name, schema, allDefinitions);
 
-        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf'. 
+        // Partially deal with inline object polymorphism: 'anyOf' and 'oneOf'.
         if (schema instanceof ComposedSchema) {
             ComposedSchema composedSchema = (ComposedSchema) schema;
             if (composedSchema.getAllOf() != null) {
@@ -120,14 +119,32 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 for (Schema subSchema : schemas) {
                     String type = getTypeDeclaration(subSchema);
 
-                    // For types that indicate they inherit the `Reference`
-                    // type, we manually add properties from the `Tag` Schema,
-                    // because of limitations in copying polymorphic models the
-                    // swagger code generator.
-
-                    if (type.equals("Tag/allOf/0") || type.equals("Reference")) {
+                    // Address swagger generator's limitation in generating
+                    // polymorphic models with a deep reference into a composed
+                    // openaPI schema.
+                    //
+                    // For some specific types we manually add properties from
+                    // the `Tag` Schema. In other cases, we infer the parent
+                    // schema and copy properties from there.
+                    //
+                    if (type.endsWith("/allOf/0") || type.equals("Reference") || mdl.name.endsWith("ContactMethod")) {
                         Schema refSchema = null;
-                        String ref = io.swagger.codegen.v3.generators.util.OpenAPIUtil.getSimpleRef("Tag");
+                        String ref = null;
+                        if (type.endsWith("/allOf/0")) {
+                            // Copy properties from the parent model of a composed schema deep link
+                            String prefix = type.substring(0, type.length() - 8);
+                            String parentModel;
+                            // In some cases we have an absolute reference, in others we don't
+                            if (prefix.indexOf("/") >= 0) {
+                                parentModel = prefix.substring(0, prefix.lastIndexOf("/"));
+                            } else {
+                                parentModel = prefix;
+                            }
+                            ref = io.swagger.codegen.v3.generators.util.OpenAPIUtil.getSimpleRef(parentModel);
+
+                        } else {
+                            ref = io.swagger.codegen.v3.generators.util.OpenAPIUtil.getSimpleRef("Tag");
+                        }
 
                         // Some fields on a `Reference` are required and can be
                         // auto-filled. These are special-cased in the handlebars template.
@@ -212,6 +229,112 @@ public class PagerDutyCodegen extends RustServerCodegen {
     }
 
     @Override
+    public CodegenProperty fromProperty(String name, Schema propertySchema) {
+        CodegenProperty prop = super.fromProperty(name, propertySchema);
+
+        // Address models that seem to be missing in the swagger generator
+        // 'fromModel' pass. These are mostly composed schemas. We check properties,
+        // fill appropriate vendor extensions and deal with these exceptions at
+        // the template level.
+        //
+        // In some cases, these are enums, of which we handle in three ways
+        // (only the latter two are handled in this part of the code):
+        //   - An enumeration of constant strings;
+        //   - An enumeration of models, if the swagger generator can handle
+        //   the reference;
+        //   - An enumeration of anonymous structs, for openAPI references that
+        //   the swagger generator doesn't handle.
+        //
+        // In other cases, we generate an inline model and pass it in vendor
+        // extensions. 
+        if (propertySchema instanceof ComposedSchema) {
+            ComposedSchema composedSchema = (ComposedSchema) propertySchema;
+            if (composedSchema.getOneOf() != null || composedSchema.getAnyOf() != null) {
+                List<Schema> schemas;
+                if (composedSchema.getAnyOf() != null) {
+                    schemas = composedSchema.getAnyOf();
+                } else {
+                    schemas = composedSchema.getOneOf();
+                }
+                HashMap<String, Object> allowableValues = new HashMap();
+                ArrayList<String> values = new ArrayList();
+                ArrayList<HashMap<String, String>> enumVars = new ArrayList();
+                ArrayList<HashMap<String, CodegenModel>> enumComplex = new ArrayList();
+
+                prop.enumName = "Enum";
+                for (Schema subSchema : schemas) {
+                    if (subSchema.get$ref() != null) {
+                        String ref = OpenAPIUtil.getSimpleRef(subSchema.get$ref());
+                        values.add(ref);
+                        HashMap<String, String> enumVarsProp = new HashMap();
+                        enumVarsProp.put("name", StringUtils.upperCase(underscore(ref)));
+                        enumVarsProp.put("value", ref);
+                        enumVars.add(enumVarsProp);
+                        prop.getVendorExtensions().put("is-enum", true);
+                        prop.getVendorExtensions().put("x-rustgen-is-untagged-enum", true);
+                        prop.enumName = camelize(name) + "Enum";
+                    } else {
+                        if (subSchema.getProperties() != null) {
+                            CodegenModel mdl = fromModel(name, subSchema);
+                            HashMap<String, CodegenModel> enumVarsProp = new HashMap();
+                            enumVarsProp.put("value", mdl);
+                            enumComplex.add(enumVarsProp);
+                            prop.getVendorExtensions().put("is-enum", true);
+                            prop.getVendorExtensions().put("x-rustgen-is-untagged-enum", true);
+                            prop.getVendorExtensions().put("x-rustgen-is-complex-enum", true);
+                            prop.enumName = camelize(name) + "Items";
+                        }
+                    }
+                }
+                allowableValues.put("values", values);
+                allowableValues.put("untaggedVars", enumVars);
+                allowableValues.put("complexVars", enumComplex);
+                prop.allowableValues = allowableValues;
+            } else if (composedSchema.getAllOf() != null) {
+                List<Schema> schemas;
+                schemas = composedSchema.getAllOf();
+
+                final CodegenModel codegenModel = CodegenModelFactory.newInstance(CodegenModelType.MODEL);
+                if (reservedWords.contains(name)) {
+                    codegenModel.name = escapeReservedWord(name);
+                } else {
+                    codegenModel.name = name;
+                }
+                codegenModel.classname = toModelName(name);
+                codegenModel.classVarName = toVarName(name);
+                codegenModel.classFilename = toModelFilename(name);
+                List<String> openApiRefs = new ArrayList();
+                for (Schema subSchema : schemas) {
+                    if (subSchema.get$ref() != null) {
+                        String ref = OpenAPIUtil.getSimpleRef(subSchema.get$ref());
+                        if (!ref.equals(camelize(ref)) || ref.matches("^[0-9]*$")) {
+                            // Handle deep references that the swagger
+                            // generator cannot link. e.g.
+                            // #/components/schemas/OrchestrationUnrouted/allOf/1/properties/orchestration_path/properties/catch_all/properties/actions
+                            if (subSchema.get$ref().contains("OrchestrationUnrouted")) {
+                                openApiRefs.add("OrchestrationUnroutedOrchestrationPathCatchAllActions");
+                            } else if (subSchema.get$ref().contains("ServiceOrchestration")) {
+                                openApiRefs.add("ServiceOrchestrationOrchestrationPathCatchAllActions");
+                            }
+                        } else {
+                            openApiRefs.add(ref);
+                        }
+                    } else {
+                        CodegenModel subMdl = fromModel("tmp", subSchema);
+                        for (CodegenProperty subProp : subMdl.vars) {
+                            codegenModel.vars.add(subProp);
+                        }
+                    }
+                }
+                codegenModel.getVendorExtensions().put("x-rustgen-additional-var-refs", openApiRefs);
+                prop.getVendorExtensions().put("x-rustgen-additional-model", codegenModel);
+            }
+        }
+
+        return prop;
+    }
+
+    @Override
     public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
         Map<String, Object> newObjs = super.postProcessAllModels(objs);
 
@@ -224,10 +347,11 @@ public class PagerDutyCodegen extends RustServerCodegen {
             
             for (Map<String, Object> mo : models) {
                 CodegenModel cm = (CodegenModel) mo.get("model");
-                allModels.put(modelName, cm);
+                allModels.put(cm.classname, cm);
             }
         }
 
+        List<String> inlineResponses = new ArrayList();
         for (Entry<String, CodegenModel> entry : allModels.entrySet()) {
             CodegenModel model = entry.getValue();
 
@@ -256,14 +380,36 @@ public class PagerDutyCodegen extends RustServerCodegen {
             }
             if (model.getIsEnum()) {
                 model.vendorExtensions.put("is-enum", true);
+            } else if (model.vars.isEmpty() && !model.getIsArrayModel()) {
+                // Do not generate 'empty' structs.
+                //
+                // Generally, these will be structs that the swagger generator
+                // decided to include but failed to populate due to the model
+                // being a composed schema.
+                //
+                // We now handle these by generating them through property
+                // vendor extensions and templating.
+                model.vendorExtensions.put("x-rustgen-noop", true);
             }
 
             // We remove all inline generated types, as these are now encoded
             // into proc-macros and associated with individual endpoints. So,
             // for example, a response type for a 'get incident' API will have
             // an associated macro generated response struct.
-            if (model.name.startsWith("inline_response")) {
-                model.vendorExtensions.put("x-rustgen-noop", true);
+            if (model.classname.startsWith("InlineResponse")) {
+                if (model.classname.replace("InlineResponse", "").matches("^[0-9]*$")) {
+                    model.vendorExtensions.put("x-rustgen-noop", true);
+                } else {
+                    // We do want to generate nested Inline Response schemas,
+                    // where they are missing.
+                    String classname = model.classname.replaceFirst("^InlineResponse[0-9]*", "");
+                    if (!inlineResponses.contains(classname) && !allModels.keySet().contains(classname)) {
+                        model.classname = classname;
+                        inlineResponses.add(classname);
+                    } else {
+                        model.vendorExtensions.put("x-rustgen-noop", true);
+                    }
+                }
             }
 
             for (CodegenProperty prop : model.vars) {
@@ -293,6 +439,10 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     prop.datatype = "f32";
                 }
 
+                if (prop.datatype != null && prop.datatype.contains("_")) {
+                    prop.datatype = camelize(prop.datatype);
+                }
+
                 // Skip properties that exist but are empty strings
                 if (prop.baseName != null && prop.baseName.isEmpty()) {
                     prop.vendorExtensions.put("x-rustgen-skip-prop", true);
@@ -308,6 +458,31 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     if (vars != null && vars.size() > 0) {
                         prop.vendorExtensions.put("is-enum", true);
                     }
+                }
+
+                // For array types containing enums, where the swagger
+                // generator failed to find a valid datatype, we set the type
+                // to a standardised `classname`+`propertyname`+`Enum` 
+                if (prop.getItems() != null && prop.getItems().getVendorExtensions() != null && getBooleanValue(prop.getItems(), "is-enum") && prop.getItems().datatype.equals("Value")) {
+                    prop.getItems().datatype = camelize(model.classname) + prop.getItems().enumName;
+                }
+
+                // Sanitise some datatypes, remove the composed prefix and
+                // inline response from property datatypes, since we generate
+                // these now with better names.
+                
+                if (prop.datatype.startsWith("AllOf")) {
+                    if (!allModels.keySet().contains(prop.datatype) || allModels.get(prop.datatype).vars.isEmpty()) {
+                        prop.datatype = prop.datatype.replace("AllOf", "");
+                    }
+                }
+
+                if (prop.datatype.startsWith("InlineResponse")) {
+                    prop.datatype = prop.datatype.replaceFirst("^InlineResponse[0-9]*", "");
+                }
+
+                if (prop.getItems() != null && prop.getItems().datatype.startsWith("InlineResponse")) {
+                    prop.getItems().datatype = prop.getItems().datatype.replaceFirst("^InlineResponse[0-9]*", "");
                 }
 
                 if (prop.datatype != null && prop.datatype.equals("String") && prop.allowableValues == null) {

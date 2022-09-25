@@ -20,7 +20,7 @@
 //!
 //! ```nocompile
 //! [dependencies]
-//! praiya = "0.1.0"
+//! praiya = "0.2.0"
 //! ```
 //!
 //! # API
@@ -52,7 +52,7 @@
 //! - [X] slack_connections
 //! - [ ] tags
 //! - [ ] teams
-//! - [ ] users
+//! - [X] users
 //! - [ ] vendors
 //!
 //! # Usage
@@ -62,7 +62,7 @@
 //! A new `Praiya` client takes the PagerDuty API token and will build an SSL context:
 //!
 //! ```rust
-//! praiya::Praiya::new("PAGERDUTY_TOKEN").expect("Unable to create PagerDuty client");
+//! praiya::Praiya::new("PAGERDUTY_TOKEN");
 //!
 //! ```
 //!

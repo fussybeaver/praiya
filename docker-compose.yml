@@ -2,12 +2,16 @@
 version: '3.9'
 services:
   slack:
-    image: stoplight/prism:4
+    image: stoplight/prism:4.10.3
     command: 'mock -h 0.0.0.0 https://raw.githubusercontent.com/fussybeaver/pagerduty-api-schema/praiya-master/reference/integration-slack-service/openapiv3.json'
     ports:
       - '8080:4010'
+    healthcheck: 
+        test: ["CMD", "/usr/bin/nc", "-z", "127.0.0.1", "4010"]
   default:
-    image: stoplight/prism:4
+    image: stoplight/prism:4.10.3
     command: 'mock -h 0.0.0.0 https://raw.githubusercontent.com/fussybeaver/pagerduty-api-schema/praiya-master/reference/REST/openapiv3.json'
     ports:
       - '8081:4010'
+    healthcheck: 
+        test: ["CMD", "/usr/bin/nc", "-z", "127.0.0.1", "4010"]

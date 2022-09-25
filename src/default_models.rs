@@ -48,6 +48,7 @@ pub struct AcknowledgerReference {
     pub _type: AcknowledgerReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AcknowledgerReference {
     fn default() -> Self {
         Self {
@@ -62,9 +63,11 @@ impl Default for AcknowledgerReference {
 }
 
 impl AcknowledgerReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("AcknowledgerReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("acknowledger_reference")
     }
@@ -162,6 +165,7 @@ pub struct Addon {
     pub src: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Addon {
     fn default() -> Self {
         Self {
@@ -178,9 +182,11 @@ impl Default for Addon {
 }
 
 impl Addon {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Addon")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("addon")
     }
@@ -263,6 +269,7 @@ pub struct AddonReference {
     pub _type: AddonReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AddonReference {
     fn default() -> Self {
         Self {
@@ -279,9 +286,11 @@ impl Default for AddonReference {
 }
 
 impl AddonReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("AddonReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("addon_reference")
     }
@@ -370,6 +379,7 @@ pub struct AgentReference {
     pub _type: AgentReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AgentReference {
     fn default() -> Self {
         Self {
@@ -384,9 +394,11 @@ impl Default for AgentReference {
 }
 
 impl AgentReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("AgentReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("agent_reference")
     }
@@ -494,6 +506,7 @@ pub struct Alert {
     pub body: Option<Body>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Alert {
     fn default() -> Self {
         Self {
@@ -518,9 +531,11 @@ impl Default for Alert {
 }
 
 impl Alert {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Alert")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("alert")
     }
@@ -700,7 +715,7 @@ pub struct AlertGroupingParameters {
     #[serde(rename = "type")]
     pub _type: AlertGroupingParametersTypeEnum,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config: Option<AlertGroupingParametersConfig>,
+    pub config: Option<AlertGroupingParametersConfigEnum>,
 }
 
 #[allow(non_camel_case_types)]
@@ -757,6 +772,29 @@ impl std::default::Default for AlertGroupingParametersTypeEnum {
     }
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum AlertGroupingParametersConfigEnum {
+    TIME_BASED_ALERT_GROUPING_CONFIGURATION(TimeBasedAlertGroupingConfiguration),
+    CONTENT_BASED_ALERT_GROUPING_CONFIGURATION(ContentBasedAlertGroupingConfiguration),
+}
+
+impl Display for AlertGroupingParametersConfigEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            AlertGroupingParametersConfigEnum::TIME_BASED_ALERT_GROUPING_CONFIGURATION(value) => write!(f, "{:?}", value),
+            AlertGroupingParametersConfigEnum::CONTENT_BASED_ALERT_GROUPING_CONFIGURATION(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for AlertGroupingParametersConfigEnum {
+    fn default() -> Self {
+        AlertGroupingParametersConfigEnum::TIME_BASED_ALERT_GROUPING_CONFIGURATION(TimeBasedAlertGroupingConfiguration::default())
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AlertReference {
@@ -779,6 +817,7 @@ pub struct AlertReference {
     pub _type: AlertReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AlertReference {
     fn default() -> Self {
         Self {
@@ -793,9 +832,11 @@ impl Default for AlertReference {
 }
 
 impl AlertReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("AlertReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("alert_reference")
     }
@@ -873,6 +914,7 @@ pub struct AllOfIncidentNoteUser {
     pub _type: AllOfIncidentNoteUserTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AllOfIncidentNoteUser {
     fn default() -> Self {
         Self {
@@ -887,9 +929,11 @@ impl Default for AllOfIncidentNoteUser {
 }
 
 impl AllOfIncidentNoteUser {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("AllOfIncidentNoteUser")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("all_of_incident_note_user")
     }
@@ -942,21 +986,6 @@ impl std::default::Default for AllOfIncidentNoteUserTypeEnum {
     fn default() -> Self {
         AllOfIncidentNoteUserTypeEnum::USER_REFERENCE
     }
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct AllOfOrchestrationUnroutedOrchestrationPathRulesActions {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct AllOfServiceOrchestrationOrchestrationPathCatchAllActions {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct AllOfServiceOrchestrationOrchestrationPathRulesActions {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -1097,6 +1126,10 @@ impl std::default::Default for AllOfinlineResponse20036ChangeEventsItemsTypeEnum
     fn default() -> Self {
         AllOfinlineResponse20036ChangeEventsItemsTypeEnum::CHANGE_EVENT
     }
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct AllOfinlineResponse20036ChangeEventsItemsIntegration {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -1503,21 +1536,6 @@ pub struct AnalyticsrawincidentsFilters {
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
-pub struct AlertGroupingParametersConfig {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct InlineResponse20037RelationshipsMetadata {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct AssignLogEntry {
     #[serde(rename = "type")]
     pub _type: AssignLogEntryTypeEnum,
@@ -1707,6 +1725,7 @@ pub struct AuditRecordMethod {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for AuditRecordMethod {
     fn default() -> Self {
         Self {
@@ -1718,6 +1737,7 @@ impl Default for AuditRecordMethod {
 }
 
 impl AuditRecordMethod {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("audit_record_method")
     }
@@ -1839,6 +1859,7 @@ pub struct BusinessService {
     pub team: Option<Team3>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for BusinessService {
     fn default() -> Self {
         Self {
@@ -1857,9 +1878,11 @@ impl Default for BusinessService {
 }
 
 impl BusinessService {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("BusinessService")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("business_service")
     }
@@ -1942,6 +1965,7 @@ pub struct BusinessServiceReference {
     pub _type: BusinessServiceReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for BusinessServiceReference {
     fn default() -> Self {
         Self {
@@ -1956,9 +1980,11 @@ impl Default for BusinessServiceReference {
 }
 
 impl BusinessServiceReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("BusinessServiceReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("business_service_reference")
     }
@@ -2115,6 +2141,7 @@ pub struct ChangeEvent {
     pub custom_details: Option<HashMap<String, Value>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ChangeEvent {
     fn default() -> Self {
         Self {
@@ -2137,9 +2164,11 @@ impl Default for ChangeEvent {
 }
 
 impl ChangeEvent {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ChangeEvent")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("change_event")
     }
@@ -2188,6 +2217,10 @@ impl std::default::Default for ChangeEventTypeEnum {
         ChangeEventTypeEnum::CHANGE_EVENT
     }
 }
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct ChangeEventIntegration {
+}
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -2234,6 +2267,7 @@ pub struct Channel {
     pub channel: Option<HashMap<String, Value>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Channel {
     fn default() -> Self {
         Self {
@@ -2247,6 +2281,7 @@ impl Default for Channel {
 }
 
 impl Channel {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("channel")
     }
@@ -2289,6 +2324,7 @@ pub struct ContactMethod {
     pub address: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ContactMethod {
     fn default() -> Self {
         Self {
@@ -2304,9 +2340,11 @@ impl Default for ContactMethod {
 }
 
 impl ContactMethod {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ContactMethod")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("contact_method")
     }
@@ -2393,6 +2431,7 @@ pub struct ContactMethodReference {
     pub _type: ContactMethodReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ContactMethodReference {
     fn default() -> Self {
         Self {
@@ -2407,9 +2446,11 @@ impl Default for ContactMethodReference {
 }
 
 impl ContactMethodReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ContactMethodReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("contact_method_reference")
     }
@@ -2477,7 +2518,32 @@ impl std::default::Default for ContactMethodReferenceTypeEnum {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateUserContactMethod {
-    pub contact_method: ContactMethodsContactMethodIdBodyContactMethod,
+    pub contact_method: UpdateUserContactMethodContactMethodEnum,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateUserContactMethodContactMethodEnum {
+    PHONE_CONTACT_METHOD(PhoneContactMethod),
+    PUSH_CONTACT_METHOD(PushContactMethod),
+    EMAIL_CONTACT_METHOD(EmailContactMethod),
+}
+
+impl Display for UpdateUserContactMethodContactMethodEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            UpdateUserContactMethodContactMethodEnum::PHONE_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            UpdateUserContactMethodContactMethodEnum::PUSH_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            UpdateUserContactMethodContactMethodEnum::EMAIL_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for UpdateUserContactMethodContactMethodEnum {
+    fn default() -> Self {
+        UpdateUserContactMethodContactMethodEnum::PHONE_CONTACT_METHOD(PhoneContactMethod::default())
+    }
 }
 
 /// The configuration for Content Based Alert Grouping
@@ -2616,6 +2682,18 @@ pub struct CursorPagination {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct EmailContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: EmailContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -2629,9 +2707,14 @@ pub struct EmailContactMethod {
     pub send_short_email: Option<bool>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for EmailContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("EmailContactMethod"),
             address: Default::default(),
@@ -2641,8 +2724,13 @@ impl Default for EmailContactMethod {
 }
 
 impl EmailContactMethod {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("EmailContactMethod")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("email_contact_method")
     }
 }
 
@@ -2896,6 +2984,7 @@ pub struct EntityReference {
     pub _type: EntityReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for EntityReference {
     fn default() -> Self {
         Self {
@@ -2910,9 +2999,11 @@ impl Default for EntityReference {
 }
 
 impl EntityReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("EntityReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("entity_reference")
     }
@@ -3103,6 +3194,7 @@ pub struct EscalationPolicy {
     pub teams: Option<Vec<TeamReference>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for EscalationPolicy {
     fn default() -> Self {
         Self {
@@ -3124,9 +3216,11 @@ impl Default for EscalationPolicy {
 }
 
 impl EscalationPolicy {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("EscalationPolicy")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("escalation_policy")
     }
@@ -3247,6 +3341,7 @@ pub struct EscalationPolicyReference {
     pub _type: EscalationPolicyReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for EscalationPolicyReference {
     fn default() -> Self {
         Self {
@@ -3261,9 +3356,11 @@ impl Default for EscalationPolicyReference {
 }
 
 impl EscalationPolicyReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("EscalationPolicyReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("escalation_policy_reference")
     }
@@ -3346,6 +3443,7 @@ pub struct EscalationTargetReference {
     pub _type: EscalationTargetReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for EscalationTargetReference {
     fn default() -> Self {
         Self {
@@ -3360,9 +3458,11 @@ impl Default for EscalationTargetReference {
 }
 
 impl EscalationTargetReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("EscalationTargetReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("escalation_target_reference")
     }
@@ -3452,6 +3552,14 @@ pub struct EventRule {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Value>,
 }
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct EventRuleActions {
+    /// Set the service ID of the target service for the resulting alert. You can find the service you want to route to by calling the services endpoint.
+    #[serde(rename = "route")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route: Option<HashMap<String, Value>>,
+}
 
 /// When an event matches this Event Rule, the actions that will be taken to change the resulting Alert and Incident.
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -3472,6 +3580,29 @@ pub struct EventRuleActionsCommon {
     pub suppress: Option<EventRuleActionsCommonSuppress>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suspend: Option<EventRuleActionsCommonSuspend>,
+}
+
+#[allow(non_camel_case_types, clippy::derive_partial_eq_without_eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EventRuleActionsCommonExtractionsItems {
+    ExtractionsItems0 { target: String, source: String, regex: String },
+    ExtractionsItems1 { target: String, template: String },
+}
+
+impl Display for EventRuleActionsCommonExtractionsItems {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            EventRuleActionsCommonExtractionsItems::ExtractionsItems0 { target, source, regex } => write!(f, "ExtractionsItems0{{ {:?}, {:?}, {:?} }}", target, source, regex),
+            EventRuleActionsCommonExtractionsItems::ExtractionsItems1 { target, template } => write!(f, "ExtractionsItems1{{ {:?}, {:?} }}", target, template),
+        }
+    }
+}
+
+impl std::default::Default for EventRuleActionsCommonExtractionsItems {
+    fn default() -> Self {
+        EventRuleActionsCommonExtractionsItems::ExtractionsItems0 { target: String::default(), source: String::default(), regex: String::default() }
+    }
 }
 
 /// Set a note on the resulting incident.
@@ -3993,6 +4124,7 @@ pub struct Extension {
     pub config: Option<HashMap<String, Value>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Extension {
     fn default() -> Self {
         Self {
@@ -4013,9 +4145,11 @@ impl Default for Extension {
 }
 
 impl Extension {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Extension")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("extension")
     }
@@ -4087,6 +4221,7 @@ pub struct ExtensionReference {
     pub _type: ExtensionReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ExtensionReference {
     fn default() -> Self {
         Self {
@@ -4101,9 +4236,11 @@ impl Default for ExtensionReference {
 }
 
 impl ExtensionReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ExtensionReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("extension_reference")
     }
@@ -4182,6 +4319,7 @@ pub struct ExtensionSchema {
     pub url: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ExtensionSchema {
     fn default() -> Self {
         Self {
@@ -4198,6 +4336,7 @@ impl Default for ExtensionSchema {
 }
 
 impl ExtensionSchema {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ExtensionSchema")
     }
@@ -4225,6 +4364,7 @@ pub struct ExtensionSchemaReference {
     pub _type: ExtensionSchemaReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ExtensionSchemaReference {
     fn default() -> Self {
         Self {
@@ -4239,9 +4379,11 @@ impl Default for ExtensionSchemaReference {
 }
 
 impl ExtensionSchemaReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ExtensionSchemaReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("extension_schema_reference")
     }
@@ -4399,7 +4541,32 @@ pub struct UpdateLogEntryChannel {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateUserContactMethod {
-    pub contact_method: IdContactMethodsBodyContactMethod,
+    pub contact_method: CreateUserContactMethodContactMethodEnum,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CreateUserContactMethodContactMethodEnum {
+    PHONE_CONTACT_METHOD(PhoneContactMethod),
+    PUSH_CONTACT_METHOD(PushContactMethod),
+    EMAIL_CONTACT_METHOD(EmailContactMethod),
+}
+
+impl Display for CreateUserContactMethodContactMethodEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            CreateUserContactMethodContactMethodEnum::PHONE_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            CreateUserContactMethodContactMethodEnum::PUSH_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+            CreateUserContactMethodContactMethodEnum::EMAIL_CONTACT_METHOD(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for CreateUserContactMethodContactMethodEnum {
+    fn default() -> Self {
+        CreateUserContactMethodContactMethodEnum::PHONE_CONTACT_METHOD(PhoneContactMethod::default())
+    }
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -4781,6 +4948,7 @@ pub struct Incident {
     pub responder_requests: Option<Vec<ResponderRequest>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Incident {
     fn default() -> Self {
         Self {
@@ -4819,9 +4987,11 @@ impl Default for Incident {
 }
 
 impl Incident {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Incident")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("incident")
     }
@@ -5184,6 +5354,13 @@ pub struct IncidentNote {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
 }
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct IncidentNoteUser {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _type: Option<String>,
+}
 
 /// The means by which this Note was created. Has different formats depending on type.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -5207,6 +5384,7 @@ pub struct IncidentNoteChannel {
     pub html_url: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for IncidentNoteChannel {
     fn default() -> Self {
         Self {
@@ -5220,6 +5398,7 @@ impl Default for IncidentNoteChannel {
 }
 
 impl IncidentNoteChannel {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("incident_note_channel")
     }
@@ -5326,6 +5505,7 @@ pub struct IncidentReference {
     pub _type: IncidentReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for IncidentReference {
     fn default() -> Self {
         Self {
@@ -5340,9 +5520,11 @@ impl Default for IncidentReference {
 }
 
 impl IncidentReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("IncidentReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("incident_reference")
     }
@@ -6111,6 +6293,366 @@ pub struct IncidentsidnotesNote {
     pub content: String,
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct AdditionalFields {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_impacted_count: Option<isize>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct GlobalThreshold {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order: Option<isize>,
+}
+
+/// Outlier Incident information calculated over the same Service as the given Incident.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct OutlierIncident {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub incident: Option<Incident>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub incident_template: Option<OutlierIncidentIncidentTemplate>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct OutlierIncidentIncidentTemplate {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The cluster the Incident Template pattern belongs to
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_id: Option<String>,
+    /// The Incident Template mined pattern text
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mined_text: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct PastIncidents {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub incident: Option<Incident>,
+    /// The computed similarity score associated with the incident and parent incident 
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct RelatedIncidents {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub incident: Option<Incident>,
+    /// A list of reasons for why the Incident is considered related.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationships: Option<Vec<Relationships>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct Relationships {
+    /// The type of relationship. A relationship outlines the reason why two Incidents are considered related.
+    #[serde(rename = "type")]
+    pub _type: RelationshipsTypeEnum,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<RelationshipsMetadataEnum>,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum RelationshipsTypeEnum {
+    #[serde(rename = "machine_learning_inferred")]
+    MACHINE_LEARNING_INFERRED,
+    #[serde(rename = "service_dependency")]
+    SERVICE_DEPENDENCY,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for RelationshipsTypeEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self {
+            RelationshipsTypeEnum::MACHINE_LEARNING_INFERRED => write!(f, "machine_learning_inferred"),
+            RelationshipsTypeEnum::SERVICE_DEPENDENCY => write!(f, "service_dependency"),
+            RelationshipsTypeEnum::UNKNOWN => write!(f, "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationshipsTypeEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "machine_learning_inferred" => Ok(RelationshipsTypeEnum::MACHINE_LEARNING_INFERRED),
+            "service_dependency" => Ok(RelationshipsTypeEnum::SERVICE_DEPENDENCY),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for RelationshipsTypeEnum {
+    fn as_ref(&self) -> &str {
+        match self {
+            RelationshipsTypeEnum::MACHINE_LEARNING_INFERRED => "machine_learning_inferred",
+            RelationshipsTypeEnum::SERVICE_DEPENDENCY => "service_dependency",
+            RelationshipsTypeEnum::UNKNOWN => "unknown",
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for RelationshipsTypeEnum {
+    fn default() -> Self {
+        RelationshipsTypeEnum::MACHINE_LEARNING_INFERRED
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum RelationshipsMetadataEnum {
+    RELATED_INCIDENT_MACHINE_LEARNING_RELATIONSHIP(RelatedIncidentMachineLearningRelationship),
+    RELATED_INCIDENT_SERVICE_DEPENDENCY_RELATIONSHIP(RelatedIncidentServiceDependencyRelationship),
+}
+
+impl Display for RelationshipsMetadataEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            RelationshipsMetadataEnum::RELATED_INCIDENT_MACHINE_LEARNING_RELATIONSHIP(value) => write!(f, "{:?}", value),
+            RelationshipsMetadataEnum::RELATED_INCIDENT_SERVICE_DEPENDENCY_RELATIONSHIP(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for RelationshipsMetadataEnum {
+    fn default() -> Self {
+        RelationshipsMetadataEnum::RELATED_INCIDENT_MACHINE_LEARNING_RELATIONSHIP(RelatedIncidentMachineLearningRelationship::default())
+    }
+}
+
+/// A list of the 5 most recent paused Alerts that weere triggered and 5 most recent Alerts that were reesolved before being triggerd.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct PausedIncidentReportingAlerts {
+    /// The start of the date range over which the report data is represented.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub since: Option<String>,
+    /// The end of the date range over which the report data is represented.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub until: Option<String>,
+    /// An array of Alerts that were triggered after being paused.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggered_after_pause_alerts: Option<Vec<PausedIncidentReportingAlertsTriggeredAfterPauseAlerts>>,
+    /// An array of Alerts that were resolved after being paused.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_after_pause_alerts: Option<Vec<PausedIncidentReportingAlertsTriggeredAfterPauseAlerts>>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct PausedIncidentReportingAlertsTriggeredAfterPauseAlerts {
+    /// The Alert ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The Alert's Service ID
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_id: Option<String>,
+    /// The date/time the Alert was created
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+}
+
+/// A representation of Alerts that were paused, triggered after pause, and resolved after pause.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct PausedIncidentReportingCounts {
+    /// The start of the date range over which the report data is represented.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub since: Option<String>,
+    /// The end of the date range over which the report data is represented.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub until: Option<String>,
+    /// The total number of paused Alerts for the Account or Servce.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paused_count: Option<f64>,
+    /// The total number of paused Alerts for the Account or Service that were triggerd after being paused (non-transient Alerts).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggered_after_pause_count: Option<f64>,
+    /// The total number of paused Alerts for the Account or Service that were resolved after being paused and not triggered (transient Alerts).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_after_pause_count: Option<f64>,
+}
+
+/// A collection of filters that were applied to the results.
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct Filters {
+    /// The lower boundary for the created_at range filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at_start: Option<String>,
+    /// The upper boundary for the created_at range filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at_end: Option<String>,
+    /// The urgency filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub urgency: Option<FiltersUrgencyEnum>,
+    /// The [major incident](https://support.pagerduty.com/docs/operational-reviews#major-incidents) filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub major: Option<bool>,
+    /// The team_ids filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub team_ids: Option<Vec<String>>,
+    /// The service_ids filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_ids: Option<Vec<String>>,
+    /// The priority_ids filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority_ids: Option<Vec<String>>,
+    /// The priority_names filter applied to the results.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority_names: Option<Vec<String>>,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize, Eq, Ord)]
+pub enum FiltersUrgencyEnum {
+    #[serde(rename = "high")]
+    HIGH,
+    #[serde(rename = "low")]
+    LOW,
+    #[serde(other)]
+    UNKNOWN,
+}
+
+impl ::std::fmt::Display for FiltersUrgencyEnum {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self {
+            FiltersUrgencyEnum::HIGH => write!(f, "high"),
+            FiltersUrgencyEnum::LOW => write!(f, "low"),
+            FiltersUrgencyEnum::UNKNOWN => write!(f, "unknown"),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FiltersUrgencyEnum {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "high" => Ok(FiltersUrgencyEnum::HIGH),
+            "low" => Ok(FiltersUrgencyEnum::LOW),
+            x => Err(format!("Invalid enum type: {}", x)),
+        }
+    }
+}
+
+impl ::std::convert::AsRef<str> for FiltersUrgencyEnum {
+    fn as_ref(&self) -> &str {
+        match self {
+            FiltersUrgencyEnum::HIGH => "high",
+            FiltersUrgencyEnum::LOW => "low",
+            FiltersUrgencyEnum::UNKNOWN => "unknown",
+        }
+    }
+}
+
+// Pick the first enum var as default. Please report this as a bug if it's not correct.
+impl std::default::Default for FiltersUrgencyEnum {
+    fn default() -> Self {
+        FiltersUrgencyEnum::HIGH
+    }
+}
+
+/// The reference to the service that is dependent on the technical service.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct DependentService {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "type")]
+    #[serde(default = "DependentService::_type_default")]
+    pub _type: String,
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for DependentService {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("inline_response_200_54_dependent_service"),
+        }
+    }
+}
+
+impl DependentService {
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("inline_response_200_54_dependent_service")
+    }
+}
+
+/// The reference to the service that supports the Business Service.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct SupportingService {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "type")]
+    #[serde(default = "SupportingService::_type_default")]
+    pub _type: String,
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for SupportingService {
+    fn default() -> Self {
+        Self {
+            id: Default::default(),
+            _type: String::from("inline_response_200_55_supporting_service"),
+        }
+    }
+}
+
+impl SupportingService {
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("inline_response_200_55_supporting_service")
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct Members {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<UserReference>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct Subscriptions {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription: Option<NotificationSubscription>,
+    /// The name of the subscribable
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscribable_name: Option<String>,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct Error {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<isize>,
+    /// Error message string
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<String>>,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Integration {
@@ -6161,6 +6703,7 @@ pub struct Integration {
     pub email_filters: Option<Vec<IntegrationEmailFilters>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Integration {
     fn default() -> Self {
         Self {
@@ -6185,9 +6728,11 @@ impl Default for Integration {
 }
 
 impl Integration {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Integration")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("integration")
     }
@@ -6645,6 +7190,7 @@ pub struct IntegrationReference {
     pub _type: IntegrationReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for IntegrationReference {
     fn default() -> Self {
         Self {
@@ -6659,9 +7205,11 @@ impl Default for IntegrationReference {
 }
 
 impl IntegrationReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("IntegrationReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("integration_reference")
     }
@@ -6885,6 +7433,7 @@ pub struct LogEntry {
     pub event_details: Option<LogEntryEventDetails>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for LogEntry {
     fn default() -> Self {
         Self {
@@ -6909,9 +7458,11 @@ impl Default for LogEntry {
 }
 
 impl LogEntry {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("LogEntry")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("log_entry")
     }
@@ -7046,6 +7597,7 @@ pub struct LogEntryReference {
     pub _type: LogEntryReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for LogEntryReference {
     fn default() -> Self {
         Self {
@@ -7060,9 +7612,11 @@ impl Default for LogEntryReference {
 }
 
 impl LogEntryReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("LogEntryReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("log_entry_reference")
     }
@@ -7207,6 +7761,7 @@ pub struct MaintenanceWindow {
     pub teams: Option<Vec<TeamReference>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for MaintenanceWindow {
     fn default() -> Self {
         Self {
@@ -7228,9 +7783,11 @@ impl Default for MaintenanceWindow {
 }
 
 impl MaintenanceWindow {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("MaintenanceWindow")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("maintenance_window")
     }
@@ -7302,6 +7859,7 @@ pub struct MaintenanceWindowReference {
     pub _type: MaintenanceWindowReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for MaintenanceWindowReference {
     fn default() -> Self {
         Self {
@@ -7316,9 +7874,11 @@ impl Default for MaintenanceWindowReference {
 }
 
 impl MaintenanceWindowReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("MaintenanceWindowReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("maintenance_window_reference")
     }
@@ -7548,6 +8108,7 @@ pub struct ModelOverride {
     pub user: UserReference,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ModelOverride {
     fn default() -> Self {
         Self {
@@ -7565,9 +8126,11 @@ impl Default for ModelOverride {
 }
 
 impl ModelOverride {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Override")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("override")
     }
@@ -7684,6 +8247,7 @@ pub struct NotificationRule {
     pub urgency: NotificationRuleUrgencyEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for NotificationRule {
     fn default() -> Self {
         Self {
@@ -7701,9 +8265,11 @@ impl Default for NotificationRule {
 }
 
 impl NotificationRule {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("NotificationRule")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("notification_rule")
     }
@@ -7824,6 +8390,7 @@ pub struct NotificationRuleReference {
     pub _type: NotificationRuleReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for NotificationRuleReference {
     fn default() -> Self {
         Self {
@@ -7838,9 +8405,11 @@ impl Default for NotificationRuleReference {
 }
 
 impl NotificationRuleReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("NotificationRuleReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("notification_rule_reference")
     }
@@ -8505,31 +9074,6 @@ pub struct UpdateUserHandoffNotification {
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
-pub struct EventRuleActionsCommonExtractionsItems {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct ContactMethodsContactMethodIdBodyContactMethod {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct IdContactMethodsBodyContactMethod {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct InlineResponse20065ContactMethodsItems {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-pub struct InlineResponse2018ContactMethod {
-}
-
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
-#[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Orchestration {
     /// ID of the Orchestration.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8582,6 +9126,7 @@ pub struct OrchestrationCreatedBy {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationCreatedBy {
     fn default() -> Self {
         Self {
@@ -8593,6 +9138,7 @@ impl Default for OrchestrationCreatedBy {
 }
 
 impl OrchestrationCreatedBy {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_created_by")
     }
@@ -8618,6 +9164,7 @@ pub struct OrchestrationParameters {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationParameters {
     fn default() -> Self {
         Self {
@@ -8628,6 +9175,7 @@ impl Default for OrchestrationParameters {
 }
 
 impl OrchestrationParameters {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_parameters")
     }
@@ -8668,6 +9216,7 @@ pub struct OrchestrationRouterOrchestrationPath {
     pub version: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPath {
     fn default() -> Self {
         Self {
@@ -8685,6 +9234,7 @@ impl Default for OrchestrationRouterOrchestrationPath {
 }
 
 impl OrchestrationRouterOrchestrationPath {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path")
     }
@@ -8706,6 +9256,7 @@ pub struct OrchestrationRouterOrchestrationPath1 {
     pub catch_all: Option<OrchestrationRouterOrchestrationPath1CatchAll>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPath1 {
     fn default() -> Self {
         Self {
@@ -8718,6 +9269,7 @@ impl Default for OrchestrationRouterOrchestrationPath1 {
 }
 
 impl OrchestrationRouterOrchestrationPath1 {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path_1")
     }
@@ -8758,6 +9310,7 @@ pub struct OrchestrationRouterOrchestrationPath1Parent {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPath1Parent {
     fn default() -> Self {
         Self {
@@ -8768,6 +9321,7 @@ impl Default for OrchestrationRouterOrchestrationPath1Parent {
 }
 
 impl OrchestrationRouterOrchestrationPath1Parent {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path_1_parent")
     }
@@ -8820,6 +9374,7 @@ pub struct OrchestrationRouterOrchestrationPathCreatedBy {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPathCreatedBy {
     fn default() -> Self {
         Self {
@@ -8831,6 +9386,7 @@ impl Default for OrchestrationRouterOrchestrationPathCreatedBy {
 }
 
 impl OrchestrationRouterOrchestrationPathCreatedBy {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path_created_by")
     }
@@ -8852,6 +9408,7 @@ pub struct OrchestrationRouterOrchestrationPathParent {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPathParent {
     fn default() -> Self {
         Self {
@@ -8863,6 +9420,7 @@ impl Default for OrchestrationRouterOrchestrationPathParent {
 }
 
 impl OrchestrationRouterOrchestrationPathParent {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path_parent")
     }
@@ -8888,6 +9446,7 @@ pub struct OrchestrationRouterOrchestrationPathRules {
     pub disabled: Option<bool>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPathRules {
     fn default() -> Self {
         Self {
@@ -8901,6 +9460,7 @@ impl Default for OrchestrationRouterOrchestrationPathRules {
 }
 
 impl OrchestrationRouterOrchestrationPathRules {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("OrchestrationRouter_orchestration_path_rules")
     }
@@ -8933,6 +9493,7 @@ pub struct OrchestrationRouterOrchestrationPathUpdatedBy {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationRouterOrchestrationPathUpdatedBy {
     fn default() -> Self {
         Self {
@@ -8944,6 +9505,7 @@ impl Default for OrchestrationRouterOrchestrationPathUpdatedBy {
 }
 
 impl OrchestrationRouterOrchestrationPathUpdatedBy {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_router_orchestration_path_updated_by")
     }
@@ -8965,6 +9527,7 @@ pub struct OrchestrationTeam {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationTeam {
     fn default() -> Self {
         Self {
@@ -8976,16 +9539,37 @@ impl Default for OrchestrationTeam {
 }
 
 impl OrchestrationTeam {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_team")
     }
 }
 
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchPathUnrouted {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orchestration_path: Option<OrchestrationUnroutedOrchestrationPath>,
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for UpdateOrchPathUnrouted {
+    fn default() -> Self {
+        Self {
+            orchestration_path: Default::default(),
+        }
+    }
+}
+
+impl UpdateOrchPathUnrouted {
+    #[allow(dead_code)]
+    fn label_default() -> String {
+        String::from("OrchestrationUnrouted")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("orchestration_unrouted")
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -9004,6 +9588,7 @@ pub struct OrchestrationUnroutedOrchestrationPath {
     pub catch_all: Option<OrchestrationUnroutedOrchestrationPathCatchAll>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationUnroutedOrchestrationPath {
     fn default() -> Self {
         Self {
@@ -9016,6 +9601,7 @@ impl Default for OrchestrationUnroutedOrchestrationPath {
 }
 
 impl OrchestrationUnroutedOrchestrationPath {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_unrouted_orchestration_path")
     }
@@ -9153,6 +9739,29 @@ impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllAct
     }
 }
 
+#[allow(non_camel_case_types, clippy::derive_partial_eq_without_eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {
+    ExtractionsItems0 { target: String, template: String },
+    ExtractionsItems1 { target: String, regex: String, source: String },
+}
+
+impl Display for OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems::ExtractionsItems0 { target, template } => write!(f, "ExtractionsItems0{{ {:?}, {:?} }}", target, template),
+            OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems::ExtractionsItems1 { target, regex, source } => write!(f, "ExtractionsItems1{{ {:?}, {:?}, {:?} }}", target, regex, source),
+        }
+    }
+}
+
+impl std::default::Default for OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems {
+    fn default() -> Self {
+        OrchestrationUnroutedOrchestrationPathCatchAllActionsExtractionsItems::ExtractionsItems0 { target: String::default(), template: String::default() }
+    }
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathCatchAllActionsVariables {
@@ -9225,6 +9834,7 @@ pub struct OrchestrationUnroutedOrchestrationPathParent {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationUnroutedOrchestrationPathParent {
     fn default() -> Self {
         Self {
@@ -9235,6 +9845,7 @@ impl Default for OrchestrationUnroutedOrchestrationPathParent {
 }
 
 impl OrchestrationUnroutedOrchestrationPathParent {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_unrouted_orchestration_path_parent")
     }
@@ -9244,7 +9855,15 @@ impl OrchestrationUnroutedOrchestrationPathParent {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct OrchestrationUnroutedOrchestrationPathRules {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<AllOfOrchestrationUnroutedOrchestrationPathRulesActions>,
+    pub actions: Option<OrchestrationUnroutedOrchestrationPathRulesActions>,
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct OrchestrationUnroutedOrchestrationPathRulesActions {
+    /// The ID of a Set from this Unrouted Orchestration whose rules you also want to use with event that match this rule.
+    #[serde(rename = "route_to")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_to: Option<String>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -9270,6 +9889,7 @@ pub struct OrchestrationUpdatedBy {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OrchestrationUpdatedBy {
     fn default() -> Self {
         Self {
@@ -9281,6 +9901,7 @@ impl Default for OrchestrationUpdatedBy {
 }
 
 impl OrchestrationUpdatedBy {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("orchestration_updated_by")
     }
@@ -9308,6 +9929,7 @@ pub struct OutboundIntegrationReference {
     pub _type: OutboundIntegrationReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for OutboundIntegrationReference {
     fn default() -> Self {
         Self {
@@ -9322,9 +9944,11 @@ impl Default for OutboundIntegrationReference {
 }
 
 impl OutboundIntegrationReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("OutboundIntegrationReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("outbound_integration_reference")
     }
@@ -9395,6 +10019,18 @@ pub struct Pagination {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PhoneContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: PhoneContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -9413,9 +10049,14 @@ pub struct PhoneContactMethod {
     pub blacklisted: Option<bool>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for PhoneContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("PhoneContactMethod"),
             address: Default::default(),
@@ -9427,8 +10068,13 @@ impl Default for PhoneContactMethod {
 }
 
 impl PhoneContactMethod {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("PhoneContactMethod")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("phone_contact_method")
     }
 }
 
@@ -9511,6 +10157,7 @@ pub struct Priority {
     pub description: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Priority {
     fn default() -> Self {
         Self {
@@ -9527,9 +10174,11 @@ impl Default for Priority {
 }
 
 impl Priority {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Priority")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("priority")
     }
@@ -9557,6 +10206,7 @@ pub struct PriorityReference {
     pub _type: PriorityReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for PriorityReference {
     fn default() -> Self {
         Self {
@@ -9571,9 +10221,11 @@ impl Default for PriorityReference {
 }
 
 impl PriorityReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("PriorityReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("priority_reference")
     }
@@ -9627,6 +10279,18 @@ impl std::default::Default for PriorityReferenceTypeEnum {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct PushContactMethod {
+    /// a URL at which the entity is uniquely displayed in the Web app
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_url: Option<String>,
+    /// the API show URL at which the object is accessible
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// A short-form, server-generated string that provides succinct, important information about an object suitable for primary labeling of an entity in a client. In many cases, this will be identical to `name`, though it is not intended to be an identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     #[serde(rename = "type")]
     pub _type: PushContactMethodTypeEnum,
     /// The label (e.g., \"Work\", \"Mobile\", etc.).
@@ -9647,9 +10311,14 @@ pub struct PushContactMethod {
     pub blacklisted: Option<bool>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for PushContactMethod {
     fn default() -> Self {
         Self {
+            html_url: Default::default(),
+            _self: Default::default(),
+            summary: Default::default(),
+            id: Default::default(),
             _type: Default::default(),
             label: String::from("PushContactMethod"),
             address: Default::default(),
@@ -9662,8 +10331,13 @@ impl Default for PushContactMethod {
 }
 
 impl PushContactMethod {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("PushContactMethod")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("push_contact_method")
     }
 }
 
@@ -9967,6 +10641,7 @@ pub struct Reference {
     pub id: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Reference {
     fn default() -> Self {
         Self {
@@ -9981,9 +10656,11 @@ impl Default for Reference {
 }
 
 impl Reference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Reference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("reference")
     }
@@ -10224,6 +10901,7 @@ pub struct ResponderRequestTargetReference {
     pub incident_responders: Option<Vec<IncidentsRespondersReference>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ResponderRequestTargetReference {
     fn default() -> Self {
         Self {
@@ -10236,6 +10914,7 @@ impl Default for ResponderRequestTargetReference {
 }
 
 impl ResponderRequestTargetReference {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("responder_request_target_reference")
     }
@@ -10269,16 +10948,16 @@ pub struct ResponsePlay {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub team: Option<Value>,
+    pub team: Option<ResponsePlayTeamEnum>,
     /// An array containing the users and/or teams to be added as subscribers to any incident on which this response play is run.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subscribers: Option<Vec<Value>>,
+    pub subscribers: Option<Vec<ResponsePlaySubscribersEnum>>,
     /// The content of the notification that will be sent to all incident subscribers upon the running of this response play. Note that this includes any users who may have already been subscribed to the incident prior to the running of this response play. If empty, no notifications will be sent.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribers_message: Option<String>,
     /// An array containing the users and/or escalation policies to be requested as responders to any incident on which this response play is run.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub responders: Option<Vec<Value>>,
+    pub responders: Option<Vec<ResponsePlayRespondersEnum>>,
     /// The message body of the notification that will be sent to this response play's set of responders. If empty, a default response request notification will be sent.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub responders_message: Option<String>,
@@ -10296,6 +10975,7 @@ pub struct ResponsePlay {
     pub conference_type: Option<ResponsePlayConferenceTypeEnum>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ResponsePlay {
     fn default() -> Self {
         Self {
@@ -10321,9 +11001,11 @@ impl Default for ResponsePlay {
 }
 
 impl ResponsePlay {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ResponsePlay")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("response_play")
     }
@@ -10370,6 +11052,73 @@ impl ::std::convert::AsRef<str> for ResponsePlayTypeEnum {
 impl std::default::Default for ResponsePlayTypeEnum {
     fn default() -> Self {
         ResponsePlayTypeEnum::RESPONSE_PLAY
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ResponsePlayTeamEnum {
+    TEAM_REFERENCE(TeamReference),
+}
+
+impl Display for ResponsePlayTeamEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            ResponsePlayTeamEnum::TEAM_REFERENCE(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for ResponsePlayTeamEnum {
+    fn default() -> Self {
+        ResponsePlayTeamEnum::TEAM_REFERENCE(TeamReference::default())
+    }
+}
+
+#[allow(non_camel_case_types, clippy::derive_partial_eq_without_eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ResponsePlaySubscribersEnum {
+    USER_REFERENCE(UserReference),
+    TEAM_REFERENCE(TeamReference),
+}
+
+impl Display for ResponsePlaySubscribersEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            ResponsePlaySubscribersEnum::USER_REFERENCE(value) => write!(f, "{:?}", value),
+            ResponsePlaySubscribersEnum::TEAM_REFERENCE(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for ResponsePlaySubscribersEnum {
+    fn default() -> Self {
+        ResponsePlaySubscribersEnum::USER_REFERENCE(UserReference::default())
+    }
+}
+
+#[allow(non_camel_case_types, clippy::derive_partial_eq_without_eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ResponsePlayRespondersEnum {
+    USER_REFERENCE(UserReference),
+    ESCALATION_POLICY_REFERENCE(EscalationPolicyReference),
+}
+
+impl Display for ResponsePlayRespondersEnum {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            ResponsePlayRespondersEnum::USER_REFERENCE(value) => write!(f, "{:?}", value),
+            ResponsePlayRespondersEnum::ESCALATION_POLICY_REFERENCE(value) => write!(f, "{:?}", value),
+        }
+    }
+}
+
+impl std::default::Default for ResponsePlayRespondersEnum {
+    fn default() -> Self {
+        ResponsePlayRespondersEnum::USER_REFERENCE(UserReference::default())
     }
 }
 
@@ -10681,6 +11430,7 @@ pub struct RulesetCreator {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for RulesetCreator {
     fn default() -> Self {
         Self {
@@ -10692,6 +11442,7 @@ impl Default for RulesetCreator {
 }
 
 impl RulesetCreator {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("ruleset_creator")
     }
@@ -10713,6 +11464,7 @@ pub struct RulesetTeam {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for RulesetTeam {
     fn default() -> Self {
         Self {
@@ -10724,6 +11476,7 @@ impl Default for RulesetTeam {
 }
 
 impl RulesetTeam {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("ruleset_team")
     }
@@ -10745,6 +11498,7 @@ pub struct RulesetUpdater {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for RulesetUpdater {
     fn default() -> Self {
         Self {
@@ -10756,6 +11510,7 @@ impl Default for RulesetUpdater {
 }
 
 impl RulesetUpdater {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("ruleset_updater")
     }
@@ -10765,6 +11520,10 @@ impl RulesetUpdater {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct CreateRuleset {
     pub ruleset: AllOfrulesetsBodyRuleset,
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct CreateRulesetRuleset {
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -10821,6 +11580,7 @@ pub struct Schedule {
     pub teams: Option<Vec<TeamReference>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Schedule {
     fn default() -> Self {
         Self {
@@ -10844,9 +11604,11 @@ impl Default for Schedule {
 }
 
 impl Schedule {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Schedule")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("schedule")
     }
@@ -10969,6 +11731,7 @@ pub struct ScheduleReference {
     pub _type: ScheduleReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ScheduleReference {
     fn default() -> Self {
         Self {
@@ -10983,9 +11746,11 @@ impl Default for ScheduleReference {
 }
 
 impl ScheduleReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ScheduleReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("schedule_reference")
     }
@@ -11332,6 +12097,7 @@ pub struct Service {
     pub auto_pause_notifications_parameters: Option<AutoPauseNotificationsParameters>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Service {
     fn default() -> Self {
         Self {
@@ -11366,9 +12132,11 @@ impl Default for Service {
 }
 
 impl Service {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Service")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service")
     }
@@ -11480,6 +12248,13 @@ impl std::default::Default for ServiceStatusEnum {
     fn default() -> Self {
         ServiceStatusEnum::ACTIVE
     }
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct ServiceResponsePlay {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _type: Option<String>,
 }
 
 #[allow(non_camel_case_types)]
@@ -11607,6 +12382,7 @@ pub struct ServiceDependenciesassociateDependentService {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ServiceDependenciesassociateDependentService {
     fn default() -> Self {
         Self {
@@ -11617,6 +12393,7 @@ impl Default for ServiceDependenciesassociateDependentService {
 }
 
 impl ServiceDependenciesassociateDependentService {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service_dependenciesassociate_dependent_service")
     }
@@ -11642,6 +12419,7 @@ pub struct ServiceDependenciesassociateSupportingService {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ServiceDependenciesassociateSupportingService {
     fn default() -> Self {
         Self {
@@ -11652,14 +12430,35 @@ impl Default for ServiceDependenciesassociateSupportingService {
 }
 
 impl ServiceDependenciesassociateSupportingService {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service_dependenciesassociate_supporting_service")
     }
 }
 
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceEventRule {
+    /// Indicates whether the Event Rule is the last Event Rule of the Ruleset that serves as a catch-all. It has limited functionality compared to other rules and always matches.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catch_all: Option<bool>,
+    /// [Early Access] Populate variables from event payloads and use those variables in other event actions.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<Vec<EventRuleVariables>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_frame: Option<EventRuleTimeFrame>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<EventRuleConditions>,
+    /// Indicates whether the Event Rule is disabled and would therefore not be evaluated.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// the API show URL at which the object is accessible.
+    #[serde(rename = "self")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _self: Option<String>,
+    /// ID of the Event Rule.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// Position/index of the Event Rule on the Service.  Starting from position 0 (the first rule), rules are evaluated one-by-one until a matching Event Rule is found or the end of the list is reached.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<isize>,
@@ -11667,11 +12466,59 @@ pub struct ServiceEventRule {
     pub actions: Option<EventRuleActionsCommon>,
 }
 
-#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derivable_impls)]
+impl Default for ServiceEventRule {
+    fn default() -> Self {
+        Self {
+            catch_all: Default::default(),
+            variables: Default::default(),
+            time_frame: Default::default(),
+            conditions: Default::default(),
+            disabled: Default::default(),
+            _self: Default::default(),
+            id: Default::default(),
+            position: Default::default(),
+            actions: Default::default(),
+        }
+    }
+}
+
+impl ServiceEventRule {
+    #[allow(dead_code)]
+    fn label_default() -> String {
+        String::from("ServiceEventRule")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("service_event_rule")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct UpdateOrchPathService {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub orchestration_path: Option<ServiceOrchestrationOrchestrationPath>,
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for UpdateOrchPathService {
+    fn default() -> Self {
+        Self {
+            orchestration_path: Default::default(),
+        }
+    }
+}
+
+impl UpdateOrchPathService {
+    #[allow(dead_code)]
+    fn label_default() -> String {
+        String::from("ServiceOrchestration")
+    }
+    #[allow(dead_code)]
+    fn _type_default() -> String {
+        String::from("service_orchestration")
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -11690,6 +12537,7 @@ pub struct ServiceOrchestrationOrchestrationPath {
     pub catch_all: Option<ServiceOrchestrationOrchestrationPathCatchAll>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ServiceOrchestrationOrchestrationPath {
     fn default() -> Self {
         Self {
@@ -11702,6 +12550,7 @@ impl Default for ServiceOrchestrationOrchestrationPath {
 }
 
 impl ServiceOrchestrationOrchestrationPath {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service_orchestration_orchestration_path")
     }
@@ -11711,7 +12560,35 @@ impl ServiceOrchestrationOrchestrationPath {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathCatchAll {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<AllOfServiceOrchestrationOrchestrationPathCatchAllActions>,
+    pub actions: Option<ServiceOrchestrationOrchestrationPathCatchAllActions>,
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct ServiceOrchestrationOrchestrationPathCatchAllActions {
+    /// Set whether the resulting alert is suppressed. Suppressed alerts will not trigger an incident.
+    #[serde(rename = "suppress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suppress: Option<bool>,
+    /// The number of seconds to suspend the resulting alert before triggering. This effectively pauses incident notifications. If a resolve event arrives before the alert triggers then PagerDuty won't create an incident for this the resulting alert.
+    #[serde(rename = "suspend")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suspend: Option<isize>,
+    /// The ID of the priority you want to set on resulting incident. You can find the list of priority IDs for your account by calling the priorities endpoint.
+    #[serde(rename = "priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<String>,
+    /// Add this text as a note on the resulting incident.
+    #[serde(rename = "annotate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub annotate: Option<String>,
+    /// Configure an Automation Action associated with the resulting incident.
+    #[serde(rename = "pagerduty_automation_actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pagerduty_automation_actions: Option<Vec<Value>>,
+    /// Create a Webhoook associated with the resulting incident.
+    #[serde(rename = "automation_actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_actions: Option<Vec<Value>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -11725,6 +12602,7 @@ pub struct ServiceOrchestrationOrchestrationPathParent {
     pub _type: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ServiceOrchestrationOrchestrationPathParent {
     fn default() -> Self {
         Self {
@@ -11735,6 +12613,7 @@ impl Default for ServiceOrchestrationOrchestrationPathParent {
 }
 
 impl ServiceOrchestrationOrchestrationPathParent {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service_orchestration_orchestration_path_parent")
     }
@@ -11744,7 +12623,15 @@ impl ServiceOrchestrationOrchestrationPathParent {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ServiceOrchestrationOrchestrationPathRules {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<AllOfServiceOrchestrationOrchestrationPathRulesActions>,
+    pub actions: Option<ServiceOrchestrationOrchestrationPathRulesActions>,
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct ServiceOrchestrationOrchestrationPathRulesActions {
+    /// The ID of a Set from this Service Orchestration whose rules you also want to use with event that match this rule.
+    #[serde(rename = "route_to")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_to: Option<String>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -11776,6 +12663,7 @@ pub struct ServiceReference {
     pub _type: ServiceReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ServiceReference {
     fn default() -> Self {
         Self {
@@ -11790,9 +12678,11 @@ impl Default for ServiceReference {
 }
 
 impl ServiceReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("ServiceReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("service_reference")
     }
@@ -12124,6 +13014,7 @@ pub struct Tag {
     pub label: String,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Tag {
     fn default() -> Self {
         Self {
@@ -12134,6 +13025,7 @@ impl Default for Tag {
 }
 
 impl Tag {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Tag")
     }
@@ -12205,6 +13097,7 @@ pub struct TagReference {
     pub _type: TagReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for TagReference {
     fn default() -> Self {
         Self {
@@ -12219,9 +13112,11 @@ impl Default for TagReference {
 }
 
 impl TagReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("TagReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("tag_reference")
     }
@@ -12290,6 +13185,7 @@ pub struct TagsToAdd {
     pub id: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for TagsToAdd {
     fn default() -> Self {
         Self {
@@ -12301,6 +13197,7 @@ impl Default for TagsToAdd {
 }
 
 impl TagsToAdd {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Tags to add")
     }
@@ -12440,6 +13337,7 @@ pub struct Team {
     pub parent: Option<TeamReference>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Team {
     fn default() -> Self {
         Self {
@@ -12457,9 +13355,11 @@ impl Default for Team {
 }
 
 impl Team {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Team")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("team")
     }
@@ -12543,6 +13443,7 @@ pub struct Team3 {
     pub _self: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Team3 {
     fn default() -> Self {
         Self {
@@ -12554,6 +13455,7 @@ impl Default for Team3 {
 }
 
 impl Team3 {
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("team_3")
     }
@@ -12581,6 +13483,7 @@ pub struct TeamReference {
     pub _type: TeamReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for TeamReference {
     fn default() -> Self {
         Self {
@@ -12595,9 +13498,11 @@ impl Default for TeamReference {
 }
 
 impl TeamReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("TeamReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("team_reference")
     }
@@ -12727,6 +13632,7 @@ pub struct User {
     pub notification_rules: Option<Vec<NotificationRuleReference>>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for User {
     fn default() -> Self {
         Self {
@@ -12753,9 +13659,11 @@ impl Default for User {
 }
 
 impl User {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("User")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("user")
     }
@@ -12906,6 +13814,7 @@ pub struct UserReference {
     pub _type: UserReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for UserReference {
     fn default() -> Self {
         Self {
@@ -12920,9 +13829,11 @@ impl Default for UserReference {
 }
 
 impl UserReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("UserReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("user_reference")
     }
@@ -13219,6 +14130,7 @@ pub struct Vendor {
     pub integration_guide_url: Option<String>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for Vendor {
     fn default() -> Self {
         Self {
@@ -13239,9 +14151,11 @@ impl Default for Vendor {
 }
 
 impl Vendor {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("Vendor")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("vendor")
     }
@@ -13269,6 +14183,7 @@ pub struct VendorReference {
     pub _type: VendorReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for VendorReference {
     fn default() -> Self {
         Self {
@@ -13283,9 +14198,11 @@ impl Default for VendorReference {
 }
 
 impl VendorReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("VendorReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("vendor_reference")
     }
@@ -13476,6 +14393,7 @@ pub struct WebhookObject {
     pub _type: WebhookObjectTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for WebhookObject {
     fn default() -> Self {
         Self {
@@ -13490,9 +14408,11 @@ impl Default for WebhookObject {
 }
 
 impl WebhookObject {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("WebhookObject")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("webhook_object")
     }
@@ -13569,6 +14489,7 @@ pub struct WebhookReference {
     pub _type: WebhookReferenceTypeEnum,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for WebhookReference {
     fn default() -> Self {
         Self {
@@ -13583,9 +14504,11 @@ impl Default for WebhookReference {
 }
 
 impl WebhookReference {
+    #[allow(dead_code)]
     fn label_default() -> String {
         String::from("WebhookReference")
     }
+    #[allow(dead_code)]
     fn _type_default() -> String {
         String::from("webhook_reference")
     }
@@ -13932,6 +14855,13 @@ pub struct WebhooksV1AssignedTo {
     pub at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object: Option<AllOfWebhooksV1AssignedToObject>,
+}
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct WebhooksV1AssignedToObject {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub _type: Option<String>,
 }
 
 /// The user assigned to the incident.
