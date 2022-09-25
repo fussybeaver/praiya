@@ -4,6 +4,6 @@
  */
 
 pub mod incidents;
-pub mod users;
 pub mod services;
 pub mod slack_connections;
+pub mod users;

@@ -115,6 +115,7 @@ pub struct {{classname}} {
 }
 {{#vendorExtensions.x-rustgen-has-default-impl}}
 
+#[allow(clippy::derivable_impls)]
 impl Default for {{classname}} {
     fn default() -> Self {
         Self {
@@ -134,6 +135,7 @@ impl Default for {{classname}} {
 
 impl {{classname}} {
     {{#vendorExtensions.x-rustgen-default-impl}}
+    #[allow(dead_code)]
     fn {{key}}_default() -> String {
         String::from("{{value}}")
     }
@@ -146,7 +148,8 @@ impl {{classname}} {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum {{classname}}{{enumName}} { {{~#allowableValues}}{{#untaggedVars}}
-    {{name}}({{value}}),{{/untaggedVars}}{{/allowableValues}}
+    {{name}}({{value}}),{{/untaggedVars}}{{#complexVars}}
+    {{#value}}{{classname}} { {{#vars}}{{name}}: {{datatype}}, {{/vars}} },{{/value}}{{/complexVars}}{{/allowableValues}}
 }
 
 impl Display for {{classname}}{{enumName}} {
@@ -214,4 +217,57 @@ impl std::default::Default for {{classname}}{{enumName}} {
         {{/enumVars.[0]}}{{/allowableValues}}
     }
 }
-{{/vendorExtensions.x-rustgen-is-untagged-enum}}{{/vendorExtensions.is-enum}}{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-noop}}{{/model}}{{/models}}
+{{/vendorExtensions.x-rustgen-is-untagged-enum}}{{/vendorExtensions.is-enum}}
+{{#vendorExtensions.x-is-container}}{{#items}}{{#vendorExtensions.is-enum}}
+
+#[allow(non_camel_case_types, clippy::derive_partial_eq_without_eq)]
+{{#vendorExtensions.x-rustgen-is-untagged-enum}}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum {{classname}}{{enumName}} { {{~#allowableValues}}{{#untaggedVars}}
+    {{name}}({{value}}),{{/untaggedVars}}{{#complexVars}}
+    {{enumName}}{{@index}}{{#value}} { {{#vars}}{{name}}: {{datatype}}{{#hasMore}}, {{/hasMore}}{{/vars}} },{{/value}}{{/complexVars}}{{/allowableValues}}
+}
+
+impl Display for {{classname}}{{enumName}} {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self { {{~#allowableValues}}{{#untaggedVars}}
+            {{classname}}{{enumName}}::{{name}}(value) => write!(f, "{:?}", value),{{/untaggedVars}}{{#complexVars}}
+            {{classname}}{{enumName}}::{{enumName}}{{@index}}{{#value}} { {{#vars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/vars}} }{{/value}} => write!(f, "{{enumName}}{{@index}}{{#value}}{ {{~noop}}{ {{#vars}}{:?}{{#hasMore}}, {{/hasMore}}{{/vars}} }{{noop~}} }{{/value}}", {{#value.vars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/value.vars}}),{{/complexVars}}{{/allowableValues}}
+        }
+    }
+}
+
+impl std::default::Default for {{classname}}{{enumName}} {
+    fn default() -> Self {
+        {{#allowableValues}}{{#untaggedVars.[0]}}
+        {{classname}}{{enumName}}::{{name}}({{value}}::default())
+        {{/untaggedVars.[0]}}{{#complexVars.[0]}}
+        {{classname}}{{enumName}}::{{enumName}}0{{#value}} { {{#vars}}{{name}}: {{datatype}}::default(){{#hasMore}}, {{/hasMore}}{{/vars}} }{{/value}}
+        {{/complexVars.[0]}}{{/allowableValues}}
+    }
+}
+{{/vendorExtensions.x-rustgen-is-untagged-enum}}{{/vendorExtensions.is-enum}}{{/items}}{{/vendorExtensions.x-is-container}}
+{{#vendorExtensions.x-rustgen-additional-model}}
+#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+pub struct {{../classname}}{{classname}} {
+{{#vars}}{{^vendorExtensions.x-rustgen-skip-prop}}{{#description}}    /// {{{.}}}
+{{/description}}{{^vendorExtensions.x-rustgen-serde-no-rename}}    #[serde(rename = "{{baseName}}")]
+{{/vendorExtensions.x-rustgen-serde-no-rename}}
+    {{#vendorExtensions.x-rustgen-is-required ~}}
+    {{~#vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.is-enum}}
+    #[serde(default = "{{classname}}::{{name}}_default")]
+    {{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-has-default-impl}}{{^vendorExtensions.x-rustgen-has-default-impl}}{{#vendorExtensions.x-rustgen-is-string}}
+    #[serde(skip_serializing_if = "String::is_empty")]
+    {{/vendorExtensions.x-rustgen-is-string}}{{/vendorExtensions.x-rustgen-has-default-impl}}
+    pub {{name}}: {{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}},
+    {{/vendorExtensions.x-rustgen-is-required}}
+    {{^vendorExtensions.x-rustgen-is-required}}{{^vendorExtensions.x-rustgen-no-skip-none}}
+    #[serde(skip_serializing_if = "Option::is_none")]
+{{/vendorExtensions.x-rustgen-no-skip-none}}    pub {{name}}: Option<{{#vendorExtensions.is-enum}}{{classname}}{{enumName}}{{/vendorExtensions.is-enum}}{{^vendorExtensions.is-enum}}{{#vendorExtensions.x-is-list-container}}Vec<{{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-list-container}}{{#vendorExtensions.x-is-map-container}}HashMap<String, {{#items}}{{{datatype}}}{{/items}}>{{/vendorExtensions.x-is-map-container}}{{^vendorExtensions.x-is-container}}{{{datatype}}}{{/vendorExtensions.x-is-container}}{{/vendorExtensions.is-enum}}>,
+    {{/vendorExtensions.x-rustgen-is-required}}
+{{/vendorExtensions.x-rustgen-skip-prop}}{{/vars}}
+}
+{{/vendorExtensions.x-rustgen-additional-model}}
+{{/vars}}{{/vendorExtensions.has-vars}}{{/vendorExtensions.x-rustgen-enum-one-of}}{{/vendorExtensions.is-enum}}{{/vendorExtensions.x-rustgen-noop}}{{/model}}{{/models}}

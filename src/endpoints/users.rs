@@ -38,6 +38,12 @@ single_response_type!(User, user, CreateUser);
 
 single_response_type!(ContactMethod, contact_method, CreateContactMethod);
 
+single_response_type!(
+    HandoffNotificationRule,
+    oncall_handoff_notification_rule,
+    CreateUserHandoffNotificationRule
+);
+
 single_response_type!(NotificationRule, notification_rule, CreateNotificationRule);
 
 plural_response_type!(
@@ -87,6 +93,18 @@ single_response_type!(
     GetUserContactMethod
 );
 
+single_response_type!(
+    HandoffNotificationRule,
+    oncall_handoff_notification_rule,
+    GetUserHandoffNotificationRule
+);
+
+list_response_type!(
+    ListUserHandoffNotificationRules,
+    oncall_handoff_notification_rules,
+    HandoffNotificationRule
+);
+
 list_response_type!(
     ListUserContactMethods,
     contact_methods,
@@ -103,7 +121,7 @@ struct GetUserNotificationRule {
 single_response_type!(NotificationRule, notification_rule, GetUserNotificationRule);
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
-#[doc = "[UsersClient::get_user_notification_rules]"]
+#[doc = "[UsersClient::list_user_notification_rules]"]
 #[allow(dead_code)]
 struct GetUserNotificationRules {
     include: Vec<String>,
@@ -127,6 +145,10 @@ single_response_type!(
     notification_rule,
     GetUserStatusUpdateNotificationRule
 );
+
+single_response_type!(UserSession, user_session, GetUserSession);
+
+plural_response_type!(UserSession, user_sessions, GetUserSessions);
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[UsersClient::get_user_status_update_notification_rules]"]
@@ -163,9 +185,15 @@ struct ListUsersAuditRecords {
 single_response_type!(User, user, UpdateUser);
 
 single_response_type!(
-    UpdateUserContactMethodEnum,
+    UpdateUserContactMethodContactMethodEnum,
     contact_method,
     UpdateUserContactMethod
+);
+
+single_response_type!(
+    HandoffNotificationRule,
+    oncall_handoff_notification_rule,
+    UpdateUserHandoffNotificationRule
 );
 
 single_response_type!(
@@ -232,6 +260,36 @@ impl UsersClient {
 
         self.client
             .process_into_value::<_, CreateContactMethodResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Create a User Handoff Notification Rule
+    ///
+    /// Create a new Handoff Notification Rule.
+    ///
+    ///
+    /// ---
+    pub async fn create_user_handoff_notification_rule(
+        &self,
+        id: &str,
+        body: CreateUserHandoffNotificationRule,
+    ) -> Result<HandoffNotificationRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/users/{}/oncall_handoff_notification_rules", &id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::POST),
+            Praiya::serialize_payload(body)?,
+        );
+
+        self.client
+            .process_into_value::<_, CreateUserHandoffNotificationRuleResponse>(req)
             .await
     }
 
@@ -371,6 +429,37 @@ impl UsersClient {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/users/{}/contact_methods/{}", &id, &contact_method_id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::DELETE),
+            hyper::Body::empty(),
+        );
+
+        self.client.process_into_unit(req).await
+    }
+
+    /// ---
+    ///
+    /// # Delete a User&#x27;s Handoff Notification rule
+    ///
+    /// Remove a User's Handoff Notification Rule.
+    ///
+    ///
+    /// ---
+    pub async fn delete_user_handoff_notification_rule(
+        &self,
+        id: &str,
+        oncall_handoff_notification_rule_id: &str,
+    ) -> Result<(), Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!(
+                "/users/{}/oncall_handoff_notification_rules/{}",
+                &id, &oncall_handoff_notification_rule_id
+            ),
             None,
         )?;
 
@@ -585,13 +674,67 @@ impl UsersClient {
 
     /// ---
     ///
+    /// # Get a user&#x27;s handoff notification rule
+    ///
+    /// Get details about a User's Handoff Notification Rule.
+    ///
+    ///
+    /// ---
+    pub async fn get_user_handoff_notification_rule(
+        &self,
+        id: &str,
+        oncall_handoff_notification_rule_id: &str,
+    ) -> Result<HandoffNotificationRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!(
+                "/users/{}/oncall_handoff_notification_rules/{}",
+                &id, &oncall_handoff_notification_rule_id
+            ),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetUserHandoffNotificationRuleResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # List a User&#x27;s Handoff Notification Rules
+    ///
+    /// List Handoff Notification Rules of your PagerDuty User.
+    ///
+    ///
+    /// ---
+    pub fn list_user_handoff_notification_rules(
+        &self,
+        id: &str,
+    ) -> impl Stream<Item = Result<HandoffNotificationRule, Error>> + '_ {
+        self.client
+            .list_request::<_, _, ListUserHandoffNotificationRulesResponse>(
+                &self.api_endpoint,
+                &format!("/users/{}/oncall_handoff_notification_rules", &id),
+                NoopParams {},
+                PraiyaCustomHeaders::None,
+            )
+    }
+
+    /// ---
+    ///
     /// # List a user&#x27;s contact methods
     ///
     /// List contact methods of your PagerDuty user.
     ///
     ///
     /// ---
-    pub fn get_user_contact_methods(
+    pub fn list_user_contact_methods(
         &self,
         id: &str,
     ) -> impl Stream<Item = Result<GetUserContactMethodEnum, Error>> + '_ {
@@ -646,7 +789,7 @@ impl UsersClient {
     ///
     ///
     /// ---
-    pub fn get_user_notification_rules(
+    pub fn list_user_notification_rules(
         &self,
         id: &str,
         query_params: GetUserNotificationRulesParams,
@@ -700,13 +843,70 @@ impl UsersClient {
 
     /// ---
     ///
+    /// # Get a user&#x27;s session
+    ///
+    /// Get details about a user's session.
+    ///
+    ///
+    /// ---
+    pub async fn get_user_session(
+        &self,
+        id: &str,
+        _type: &str,
+        session_id: &str,
+    ) -> Result<UserSession, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/users/{}/sessions/{}/{}", &id, &_type, &session_id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetUserSessionResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # List a user&#x27;s active sessions
+    ///
+    /// List active sessions of a PagerDuty user.
+    ///
+    ///
+    /// ---
+    pub async fn get_user_sessions(&self, id: &str) -> Result<Vec<UserSession>, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/users/{}/sessions", &id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetUserSessionsResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
     /// # List a user&#x27;s status update notification rules
     ///
     /// List status update notification rules of your PagerDuty user.
     ///
     ///
     /// ---
-    pub fn get_user_status_update_notification_rules(
+    pub fn list_user_status_update_notification_rules(
         &self,
         id: &str,
         query_params: GetUserStatusUpdateNotificationRulesParams,
@@ -845,7 +1045,7 @@ impl UsersClient {
         id: &str,
         contact_method_id: &str,
         body: UpdateUserContactMethod,
-    ) -> Result<UpdateUserContactMethodEnum, Error> {
+    ) -> Result<UpdateUserContactMethodContactMethodEnum, Error> {
         let url = Praiya::parse_url(
             &self.api_endpoint,
             &format!("/users/{}/contact_methods/{}", &id, &contact_method_id),
@@ -860,6 +1060,40 @@ impl UsersClient {
 
         self.client
             .process_into_value::<_, UpdateUserContactMethodResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Update a User&#x27;s Handoff Notification Rule
+    ///
+    /// Update a User's Handoff Notification Rule.
+    ///
+    ///
+    /// ---
+    pub async fn update_user_handoff_notification_rule(
+        &self,
+        id: &str,
+        oncall_handoff_notification_rule_id: &str,
+        body: UpdateUserHandoffNotification,
+    ) -> Result<HandoffNotificationRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!(
+                "/users/{}/oncall_handoff_notification_rules/{}",
+                &id, &oncall_handoff_notification_rule_id
+            ),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            Builder::new().method(Method::PUT),
+            Praiya::serialize_payload(body)?,
+        );
+
+        self.client
+            .process_into_value::<_, UpdateUserHandoffNotificationRuleResponse>(req)
             .await
     }
 
@@ -974,13 +1208,15 @@ mod tests {
     async fn test_create_user_contact_method() {
         let pagerduty = crate::Praiya::new("test");
         let create_user_contact_method = CreateUserContactMethod {
-            contact_method: CreateUserContactMethodEnum::EMAIL_CONTACT_METHOD(EmailContactMethod {
-                _type: EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
-                label: String::from("work"),
-                address: String::from("grady.haylie.126@hickle.net"),
-                send_short_email: Some(false),
-                ..Default::default()
-            }),
+            contact_method: CreateUserContactMethodContactMethodEnum::EMAIL_CONTACT_METHOD(
+                EmailContactMethod {
+                    _type: EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
+                    label: String::from("work"),
+                    address: String::from("grady.haylie.126@hickle.net"),
+                    send_short_email: Some(false),
+                    ..Default::default()
+                },
+            ),
         };
 
         let contact_method = pagerduty
@@ -990,6 +1226,31 @@ mod tests {
             .unwrap();
 
         assert_eq!(contact_method.id, Some(String::from("PXPGF42")));
+    }
+
+    #[tokio::test]
+    async fn test_create_user_handoff_notification_rule() {
+        let pagerduty = crate::Praiya::new("test");
+        let create_user_handoff_notification_rule = CreateUserHandoffNotificationRule {
+            oncall_handoff_notification_rule: HandoffNotificationRule {
+                id: String::from("PXPGF43"),
+                handoff_type: HandoffNotificationRuleHandoffTypeEnum::BOTH,
+                notify_advance_in_minutes: Some(180),
+                contact_method: ContactMethodReference {
+                    id: Some(String::from("PXPGF42")),
+                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    ..Default::default()
+                },
+            },
+        };
+
+        let handoff_notification_rule = pagerduty
+            .users()
+            .create_user_handoff_notification_rule("PXPGF42", create_user_handoff_notification_rule)
+            .await
+            .unwrap();
+
+        assert_eq!(handoff_notification_rule.id, String::from("PXPGF42"));
     }
 
     #[tokio::test]
@@ -1103,6 +1364,18 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_delete_user_handoff_notification_rule() {
+        let pagerduty = crate::Praiya::new("test");
+        let unit = pagerduty
+            .users()
+            .delete_user_handoff_notification_rule("PXPGF42", "PXPGF42")
+            .await
+            .unwrap();
+
+        assert_eq!(unit, ());
+    }
+
+    #[tokio::test]
     async fn test_delete_user_notification_rule() {
         let pagerduty = crate::Praiya::new("test");
         let unit = pagerduty
@@ -1197,12 +1470,42 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_get_user_contact_methods() {
+    async fn test_get_user_handoff_notification_rule() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let handoff_notification_rule = pagerduty
+            .users()
+            .get_user_handoff_notification_rule("PXPGF42", "PT4KHLK")
+            .await
+            .unwrap();
+
+        assert_eq!(handoff_notification_rule.id, String::from("PXPGF42"));
+    }
+
+    #[tokio::test]
+    async fn test_list_user_handoff_notification_rule() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let handoff_notification_rule: Option<HandoffNotificationRule> = pagerduty
+            .users()
+            .list_user_handoff_notification_rules("PXPGF42")
+            .try_next()
+            .await
+            .unwrap();
+
+        assert_eq!(
+            handoff_notification_rule.unwrap().id,
+            String::from("PXPGF42")
+        );
+    }
+
+    #[tokio::test]
+    async fn test_list_user_contact_methods() {
         let pagerduty = crate::Praiya::new("test");
 
         let contact_methods: Option<super::GetUserContactMethodEnum> = pagerduty
             .users()
-            .get_user_contact_methods("PXPGF42")
+            .list_user_contact_methods("PXPGF42")
             .try_next()
             .await
             .unwrap();
@@ -1255,7 +1558,33 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_get_user_status_update_notification_rules() {
+    async fn test_get_user_session() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let user_session = pagerduty
+            .users()
+            .get_user_session("PXPGF42", "browser", "PTDVERC")
+            .await
+            .unwrap();
+
+        assert_eq!(user_session.id, String::from("PXPGF42"));
+    }
+
+    #[tokio::test]
+    async fn test_get_user_sessions() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let user_sessions = pagerduty
+            .users()
+            .get_user_sessions("PXPGF42")
+            .await
+            .unwrap();
+
+        assert_eq!(user_sessions[0].id, String::from("PXPGF42"));
+    }
+
+    #[tokio::test]
+    async fn test_list_user_status_update_notification_rules() {
         let pagerduty = crate::Praiya::new("test");
 
         let mut opts_builder = super::GetUserStatusUpdateNotificationRulesParamsBuilder::new();
@@ -1264,7 +1593,7 @@ mod tests {
 
         let status_update_notification_rule: Option<StatusUpdateNotificationRule> = pagerduty
             .users()
-            .get_user_status_update_notification_rules("PXPGF42", opts)
+            .list_user_status_update_notification_rules("PXPGF42", opts)
             .try_next()
             .await
             .unwrap();
@@ -1377,13 +1706,15 @@ mod tests {
     async fn test_update_user_contact_method() {
         let pagerduty = crate::Praiya::new("test");
         let update_user_contact_method = UpdateUserContactMethod {
-            contact_method: UpdateUserContactMethodEnum::EMAIL_CONTACT_METHOD(EmailContactMethod {
-                _type: EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
-                label: String::from("work"),
-                address: String::from("grady.haylie.126@hickle.net"),
-                send_short_email: Some(false),
-                ..Default::default()
-            }),
+            contact_method: UpdateUserContactMethodContactMethodEnum::EMAIL_CONTACT_METHOD(
+                EmailContactMethod {
+                    _type: EmailContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
+                    label: String::from("work"),
+                    address: String::from("grady.haylie.126@hickle.net"),
+                    send_short_email: Some(false),
+                    ..Default::default()
+                },
+            ),
         };
 
         let contact_method = pagerduty
@@ -1393,13 +1724,44 @@ mod tests {
             .unwrap();
 
         match contact_method {
-            super::UpdateUserContactMethodEnum::EMAIL_CONTACT_METHOD(contact_method) => {
+            super::UpdateUserContactMethodContactMethodEnum::EMAIL_CONTACT_METHOD(
+                contact_method,
+            ) => {
                 assert_eq!(contact_method.id, Some(String::from("PXPGF42")));
             }
             _ => {
                 assert!(false)
             }
         }
+    }
+
+    #[tokio::test]
+    async fn test_update_user_handoff_notification_rule() {
+        let pagerduty = crate::Praiya::new("test");
+        let update_user_handoff_notification = UpdateUserHandoffNotification {
+            oncall_handoff_notification_rule: HandoffNotificationRule {
+                id: String::from("PXPGF43"),
+                handoff_type: HandoffNotificationRuleHandoffTypeEnum::BOTH,
+                notify_advance_in_minutes: Some(60),
+                contact_method: ContactMethodReference {
+                    id: Some(String::from("PXPGF42")),
+                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    ..Default::default()
+                },
+            },
+        };
+
+        let handoff_notification_rule = pagerduty
+            .users()
+            .update_user_handoff_notification_rule(
+                "PXPGF42",
+                "PTDVERC",
+                update_user_handoff_notification,
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(handoff_notification_rule.id, String::from("PXPGF42"));
     }
 
     #[tokio::test]

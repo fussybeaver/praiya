@@ -57,11 +57,34 @@ single_response_type!(Incident, incident, GetIncident);
 
 single_response_type!(Alert, alert, GetIncidentAlert);
 
+list_response_type!(ListIncidentBusinessService, services, BusinessService);
+
 list_response_type!(
     ListIncidentNotificationSubscription,
     subscribers,
     NotificationSubscription
 );
+
+#[derive(praiya_macro::PraiyaParamsBuilder)]
+#[doc = "[IncidentsClient::get_outlier_incident]"]
+#[allow(dead_code)]
+struct GetOutlierIncident {
+    additional_details: Vec<String>,
+    since: chrono::DateTime<chrono::Utc>,
+}
+
+single_response_type!(OutlierIncident, outlier_incident, GetOutlierIncident);
+
+list_response_type!(ListPastIncidents, past_incidents, PastIncidents);
+
+#[derive(praiya_macro::PraiyaParamsBuilder)]
+#[doc = "[IncidentsClient::get_related_incidents]"]
+#[allow(dead_code)]
+struct GetRelatedIncidents {
+    additional_details: Vec<String>,
+}
+
+plural_response_type!(RelatedIncidents, related_incidents, GetRelatedIncidents);
 
 list_response_type!(ListIncidentAlerts, alerts, Alert);
 
@@ -72,6 +95,12 @@ list_response_type!(ListIncidentNote, notes, IncidentNote);
 list_response_type!(ListIncident, incidents, Incident);
 
 single_response_type!(IncidentReference, incident, MergeIncident);
+
+single_response_type!(
+    PutIncidentManualBusinessServiceAssociationRelationEnum,
+    relation,
+    PutIncidentManualBusinessServiceAssociation
+);
 
 single_response_type!(Incident, incident, UpdateIncident);
 
@@ -363,6 +392,27 @@ impl IncidentsClient {
 
     /// ---
     ///
+    /// # List Business Services impacted by the given Incident
+    ///
+    /// Retrieve a list of Business Services that are being impacted by the given Incident.
+    ///
+    ///
+    /// ---
+    pub fn list_incident_impacted_business_services(
+        &self,
+        id: &str,
+    ) -> impl Stream<Item = Result<BusinessService, Error>> + '_ {
+        self.client
+            .list_request::<_, _, ListIncidentBusinessServiceResponse>(
+                &self.api_endpoint,
+                &format!("/incidents/{}/business_services/impacts", &id),
+                NoopParams {},
+                PraiyaCustomHeaders::EarlyAccess(None),
+            )
+    }
+
+    /// ---
+    ///
     /// # List notification subscribers
     ///
     /// Retrieve a list of Notification Subscribers on the Incident.
@@ -380,6 +430,86 @@ impl IncidentsClient {
                 NoopParams {},
                 PraiyaCustomHeaders::EarlyAccess(None),
             )
+    }
+
+    /// ---
+    ///
+    /// # Get Outlier Incident
+    ///
+    /// Gets Outlier Incident information for a given Incident on its Service.
+    ///
+    ///
+    /// ---
+    pub async fn get_outlier_incident(
+        &self,
+        id: &str,
+        query_params: GetOutlierIncidentParams,
+    ) -> Result<OutlierIncident, Error> {
+        let uri = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/incidents/{}/outlier_incident", &id),
+            Some(&query_params.qs),
+        )?;
+
+        let req = self.client.build_request(
+            uri,
+            http::request::Builder::new().method(http::Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetOutlierIncidentResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Get Past Incidents
+    ///
+    /// Past Incidents returns Incidents within the past 6 months that have similar metadata and were generated on the same Service as the parent Incident. By default, 5 Past Incidents are returned. Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.
+    ///
+    ///
+    /// ---
+    pub fn list_past_incidents(
+        &self,
+        id: &str,
+    ) -> impl Stream<Item = Result<PastIncidents, Error>> + '_ {
+        self.client.list_request::<_, _, ListPastIncidentsResponse>(
+            &self.api_endpoint,
+            &format!("/incidents/{}/past_incidents", &id),
+            NoopParams {},
+            PraiyaCustomHeaders::None,
+        )
+    }
+
+    /// ---
+    ///
+    /// # Get Related Incidents
+    ///
+    /// Returns the 20 most recent Related Incidents that are impacting other Responders and Services. Note: This feature is currently available as part of the Event Intelligence package or Digital Operations plan only.
+    ///
+    ///
+    /// ---
+    pub async fn get_related_incidents(
+        &self,
+        id: &str,
+        query_params: GetRelatedIncidentsParams,
+    ) -> Result<Vec<RelatedIncidents>, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/incidents/{}/related_incidents", &id),
+            Some(&query_params.qs),
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            http::request::Builder::new().method(http::Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetRelatedIncidentsResponse>(req)
+            .await
     }
 
     /// ---
@@ -497,6 +627,44 @@ impl IncidentsClient {
 
         self.client
             .process_into_value::<_, MergeIncidentResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Manually change an Incident&#x27;s Impact on a Business Service.
+    ///
+    /// Change Impact of an Incident on a Business Service.
+    ///
+    ///
+    /// ---
+    pub async fn put_incident_manual_business_service_association(
+        &self,
+        id: &str,
+        business_service_id: &str,
+        body: PutIncidentManualBusinessServiceAssociation,
+    ) -> Result<PutIncidentManualBusinessServiceAssociationRelationEnum, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!(
+                "/incidents/{}/business_services/{}/impacts",
+                &id, &business_service_id
+            ),
+            None,
+        )?;
+
+        let mut builder = http::request::Builder::new();
+        let early_access: &str = PraiyaCustomHeaders::EarlyAccess(None).into();
+        builder = builder.header(early_access, "true");
+
+        let req = self.client.build_request(
+            url,
+            builder.method(http::Method::PUT),
+            Praiya::serialize_payload(body)?,
+        );
+
+        self.client
+            .process_into_value::<_, PutIncidentManualBusinessServiceAssociationResponse>(req)
             .await
     }
 
@@ -799,6 +967,23 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_list_incident_impacted_business_services() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let business_service: Option<BusinessService> = pagerduty
+            .incidents("from@example.com")
+            .list_incident_impacted_business_services("PT4KHLK")
+            .try_next()
+            .await
+            .unwrap();
+
+        assert_eq!(
+            business_service.unwrap().id.as_ref().unwrap(),
+            &String::from("PD1234")
+        );
+    }
+
+    #[tokio::test]
     async fn test_list_incident_notification_subscribers() {
         let pagerduty = crate::Praiya::new("test");
 
@@ -816,6 +1001,62 @@ mod tests {
                 .as_ref()
                 .unwrap(),
             &String::from("PD1234")
+        );
+    }
+
+    #[tokio::test]
+    async fn test_get_outlier_incident() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let mut opts_builder = super::GetOutlierIncidentParamsBuilder::new();
+        let now = chrono::Utc::now();
+        let since = now - chrono::Duration::days(1);
+        opts_builder.additional_details(vec![""]);
+        opts_builder.since(&since);
+        let opts = opts_builder.build();
+
+        let outlier_incident = pagerduty
+            .incidents("from@example.com")
+            .get_outlier_incident("PT4KHLK", opts)
+            .await
+            .unwrap();
+
+        assert_eq!(
+            outlier_incident.incident.unwrap().id,
+            Some(String::from("PR2P3RW"))
+        );
+    }
+
+    #[tokio::test]
+    async fn test_list_past_incidents() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let past_incident: Option<PastIncidents> = pagerduty
+            .incidents("from@example.com")
+            .list_past_incidents("PT4KHLK")
+            .try_next()
+            .await
+            .unwrap();
+
+        assert_eq!(past_incident.unwrap().score.unwrap(), 46.8249);
+    }
+
+    #[tokio::test]
+    async fn test_get_related_incidents() {
+        let pagerduty = crate::Praiya::new("test");
+        let mut opts_builder = super::GetRelatedIncidentsParamsBuilder::new();
+        opts_builder.additional_details(vec![""]);
+        let opts = opts_builder.build();
+
+        let incident = pagerduty
+            .incidents("from@example.com")
+            .get_related_incidents("PT4KHLK", opts)
+            .await
+            .unwrap();
+
+        assert_eq!(
+            incident[0].incident.as_ref().unwrap().id,
+            Some(String::from("PR2P3RW"))
         );
     }
 
@@ -929,6 +1170,24 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_put_incident_manual_business_service_association() {
+        let pagerduty = crate::Praiya::new("test");
+        let assoc = PutIncidentManualBusinessServiceAssociation {
+            relation: PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED,
+        };
+        let res = pagerduty
+            .incidents("from@example.com")
+            .put_incident_manual_business_service_association("PD1234", "PT4KHLK", assoc)
+            .await
+            .unwrap();
+
+        assert_eq!(
+            res,
+            PutIncidentManualBusinessServiceAssociationRelationEnum::IMPACTED
+        );
+    }
+
+    #[tokio::test]
     async fn test_remove_incident_notification_subscriber() {
         let pagerduty = crate::Praiya::new("test");
         let notification_subscribers = super::RemoveIncidentNotificationSubscribers {
@@ -962,6 +1221,52 @@ mod tests {
             .unwrap();
 
         assert_eq!(incident.id, Some(String::from("PT4KHLK")));
+    }
+
+    #[tokio::test]
+    async fn test_update_incident_alert() {
+        let pagerduty = crate::Praiya::new("test");
+        let update_incident_alert = UpdateIncidentAlert {
+            alert: Alert {
+                status: Some(AlertStatusEnum::RESOLVED),
+                incident: Some(IncidentReference {
+                    id: Some(String::from("PEYSGVF")),
+                    ..Default::default()
+                }),
+                body: Some(Body {
+                    contexts: Some(vec![Context {
+                        _type: ContextTypeEnum::LINK,
+                        ..Default::default()
+                    }]),
+                    details: Some(
+                        vec![
+                            (
+                                String::from("customKey"),
+                                serde_json::Value::String(String::from("Server is on fire!")),
+                            ),
+                            (
+                                String::from("customKey2"),
+                                serde_json::Value::String(String::from("Other struff!")),
+                            ),
+                        ]
+                        .into_iter()
+                        .collect(),
+                    ),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+        };
+        let alert = pagerduty
+            .incidents("from@example.com")
+            .update_incident_alert("PT4KHLK", "PEYSGVF", update_incident_alert)
+            .await
+            .unwrap();
+
+        assert_eq!(
+            alert.incident.as_ref().unwrap().id,
+            Some(String::from("PEYSGVF"))
+        );
     }
 
     #[tokio::test]

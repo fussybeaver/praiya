@@ -33,19 +33,27 @@ impl Praiya {
 
 single_response_type!(Service, service, CreateService);
 
+single_response_type!(ServiceEventRule, ruleset, CreateServiceEventRule);
+
 single_response_type!(Integration, integration, CreateServiceIntegration);
 
 single_response_type!(Service, service, GetService);
 
+single_response_type!(ServiceEventRule, rule, GetServiceEventRule);
+
 single_response_type!(Integration, integration, GetServiceIntegration);
 
 list_response_type!(ListServiceIntegration, integrations, Integration);
+
+list_response_type!(ListServiceEventRules, rules, ServiceEventRule);
 
 list_response_type!(ListService, services, Service);
 
 single_response_type!(Service, service, UpdateService);
 
 single_response_type!(Integration, integration, UpdateServiceIntegration);
+
+single_response_type!(ServiceEventRule, rule, UpdateServiceEventRule);
 
 #[derive(praiya_macro::PraiyaParamsBuilder)]
 #[doc = "[ServicesClient::get_service]"]
@@ -104,6 +112,35 @@ impl ServicesClient {
 
     /// ---
     ///
+    /// # Create an Event Rule on a Service
+    ///
+    /// Create a new Event Rule on a Service.
+    ///
+    ///
+    /// ---
+    pub async fn create_service_event_rule(
+        &self,
+        id: &str,
+        body: CreateServiceEventRule,
+    ) -> Result<ServiceEventRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/services/{}/rules", &id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            http::request::Builder::new().method(http::method::Method::POST),
+            Praiya::serialize_payload(body)?,
+        );
+
+        self.client
+            .process_into_value::<_, CreateServiceEventRuleResponse>(req)
+            .await
+    }
+    /// ---
+    ///
     /// # Create a new integration
     ///
     /// Create a new integration belonging to a Service.
@@ -156,6 +193,30 @@ impl ServicesClient {
 
     /// ---
     ///
+    /// # Delete an Event Rule from a Service
+    ///
+    /// Delete an Event Rule from a Service.
+
+    ///
+    /// ---
+    pub async fn delete_service_event_rule(&self, id: &str, rule_id: &str) -> Result<(), Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/services/{}/rules/{}", &id, &rule_id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            http::request::Builder::new().method(http::Method::DELETE),
+            hyper::Body::empty(),
+        );
+
+        self.client.process_into_unit(req).await
+    }
+
+    /// ---
+    ///
     /// # Get a service
     ///
     /// Get details about an existing service.
@@ -181,6 +242,36 @@ impl ServicesClient {
 
         self.client
             .process_into_value::<_, GetServiceResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Get an Event Rule from a Service
+    ///
+    /// Get an Event Rule from a Service.
+
+    ///
+    /// ---
+    pub async fn get_service_event_rule(
+        &self,
+        id: &str,
+        rule_id: &str,
+    ) -> Result<ServiceEventRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/services/{}/rules/{}", &id, &rule_id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            http::request::Builder::new().method(http::Method::GET),
+            hyper::Body::empty(),
+        );
+
+        self.client
+            .process_into_value::<_, GetServiceEventRuleResponse>(req)
             .await
     }
 
@@ -252,6 +343,27 @@ impl ServicesClient {
 
     /// ---
     ///
+    /// # List Service&#x27;s Event Rules
+    ///
+    /// List Event Rules on a Service.
+
+    ///
+    /// ---
+    pub fn list_service_event_rules(
+        &self,
+        id: &str,
+    ) -> impl Stream<Item = Result<ServiceEventRule, Error>> + '_ {
+        self.client
+            .list_request::<_, _, ListServiceEventRulesResponse>(
+                &self.api_endpoint,
+                &format!("/services/{}/rules", &id),
+                NoopParams {},
+                PraiyaCustomHeaders::None,
+            )
+    }
+
+    /// ---
+    ///
     /// # List services
     ///
     /// List existing Services.
@@ -289,6 +401,37 @@ impl ServicesClient {
 
         self.client
             .process_into_value::<_, UpdateServiceResponse>(req)
+            .await
+    }
+
+    /// ---
+    ///
+    /// # Update an Event Rule on a Service
+    ///
+    /// Update an Event Rule on a Service. Note that the endpoint supports partial updates, so any number of the writable fields can be provided.
+
+    ///
+    /// ---
+    pub async fn update_service_event_rule(
+        &self,
+        id: &str,
+        rule_id: &str,
+        body: UpdateServiceEventRule,
+    ) -> Result<ServiceEventRule, Error> {
+        let url = Praiya::parse_url(
+            &self.api_endpoint,
+            &format!("/services/{}/rules/{}", &id, &rule_id),
+            None,
+        )?;
+
+        let req = self.client.build_request(
+            url,
+            http::request::Builder::new().method(http::Method::PUT),
+            Praiya::serialize_payload(body)?,
+        );
+
+        self.client
+            .process_into_value::<_, UpdateServiceEventRuleResponse>(req)
             .await
     }
 
@@ -389,6 +532,66 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_create_service_event_rule() {
+        let pagerduty = crate::Praiya::new("test");
+        let create_service_event_rule = CreateServiceEventRule {
+            rule: ServiceEventRule {
+                position: Some(0),
+                disabled: Some(false),
+                conditions: Some(EventRuleConditions {
+                    operator: EventRuleConditionsOperatorEnum::AND,
+                    subconditions: vec![EventRuleConditionsSubconditions {
+                        operator: EventRuleConditionsSubconditionsOperatorEnum::CONTAINS,
+                        parameters: EventRuleConditionsParameters {
+                            value: String::from("mysql"),
+                            path: String::from("class"),
+                            ..Default::default()
+                        },
+                    }],
+                }),
+                time_frame: Some(EventRuleTimeFrame {
+                    active_between: Some(EventRuleTimeFrameActiveBetween {
+                        start_time: 1577880000000,
+                        end_time: 1580558400000,
+                    }),
+                    ..Default::default()
+                }),
+                actions: Some(EventRuleActionsCommon {
+                    annotate: Some(EventRuleActionsCommonAnnotate {
+                        value: String::from("This incident was modified by an Event Rule"),
+                    }),
+                    priority: Some(EventRuleActionsCommonPriority {
+                        value: String::from("PCMUB6F"),
+                    }),
+                    severity: Some(EventRuleActionsCommonSeverity {
+                        value: EventRuleActionsCommonSeverityValueEnum::WARNING,
+                    }),
+                    extractions: Some(vec![
+                        EventRuleActionsCommonExtractionsItems::ExtractionsItems0 {
+                            target: String::from("dedup_key"),
+                            source: String::from("custom_details.error_summary"),
+                            regex: String::from("Host (.*) is experiencing errors"),
+                        },
+                    ]),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+        };
+
+        let service_event_rule = pagerduty
+            .services()
+            .create_service_event_rule("PIJ90N7", create_service_event_rule)
+            .await
+            .unwrap();
+
+        assert_eq!(
+            service_event_rule.id,
+            Some(String::from("14e56445-ebab-4dd0-ba9d-fc28a41b7e7b"))
+        );
+    }
+
+    #[tokio::test]
     async fn test_create_service_integration() {
         let pagerduty = crate::Praiya::new("test");
         let create_service_integration = CreateServiceIntegration {
@@ -428,6 +631,18 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_delete_service_event_rule() {
+        let pagerduty = crate::Praiya::new("test");
+        let unit = pagerduty
+            .services()
+            .delete_service_event_rule("PIJ90N7", "14e56445-ebab-4dd0-ba9d-fc28a41b7e7b")
+            .await
+            .unwrap();
+
+        assert_eq!(unit, ());
+    }
+
+    #[tokio::test]
     async fn test_get_service() {
         let pagerduty = crate::Praiya::new("test");
 
@@ -442,6 +657,22 @@ mod tests {
             .unwrap();
 
         assert_eq!(service.id, Some(String::from("PIJ90N7")));
+    }
+
+    #[tokio::test]
+    async fn test_get_service_event_rule() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let rule = pagerduty
+            .services()
+            .get_service_event_rule("PIJ90N7", "14e56445-ebab-4dd0-ba9d-fc28a41b7e7b")
+            .await
+            .unwrap();
+
+        assert_eq!(
+            rule.id,
+            Some(String::from("14e56445-ebab-4dd0-ba9d-fc28a41b7e7b"))
+        );
     }
 
     #[tokio::test]
@@ -482,6 +713,23 @@ mod tests {
         assert_eq!(
             record.unwrap().id,
             String::from("PDRECORDID1_SERVICE_CREATED")
+        );
+    }
+
+    #[tokio::test]
+    async fn test_list_service_event_rules() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let rule: Option<ServiceEventRule> = pagerduty
+            .services()
+            .list_service_event_rules("PIJ90N7")
+            .try_next()
+            .await
+            .unwrap();
+
+        assert_eq!(
+            rule.unwrap().id.unwrap(),
+            String::from("14e56445-ebab-4dd0-ba9d-fc28a41b7e7b")
         );
     }
 
@@ -565,6 +813,72 @@ mod tests {
             .unwrap();
 
         assert_eq!(service.id, Some(String::from("PIJ90N7")));
+    }
+
+    #[tokio::test]
+    async fn test_update_service_event_rule() {
+        let pagerduty = crate::Praiya::new("test");
+
+        let update_service_event_rule = UpdateServiceEventRule {
+            rule_id: String::from("7123bdd1-74e8-4aa7-aa38-4a9ebe123456"),
+            rule: Some(ServiceEventRule {
+                position: Some(0),
+                disabled: Some(false),
+                conditions: Some(EventRuleConditions {
+                    operator: EventRuleConditionsOperatorEnum::AND,
+                    subconditions: vec![EventRuleConditionsSubconditions {
+                        operator: EventRuleConditionsSubconditionsOperatorEnum::CONTAINS,
+                        parameters: EventRuleConditionsParameters {
+                            value: String::from("mysql"),
+                            path: String::from("class"),
+                            ..Default::default()
+                        },
+                    }],
+                }),
+                time_frame: Some(EventRuleTimeFrame {
+                    active_between: Some(EventRuleTimeFrameActiveBetween {
+                        start_time: 1577880000000,
+                        end_time: 1580558400000,
+                    }),
+                    ..Default::default()
+                }),
+                actions: Some(EventRuleActionsCommon {
+                    annotate: Some(EventRuleActionsCommonAnnotate {
+                        value: String::from("This incident was modified by an Event Rule"),
+                    }),
+                    priority: Some(EventRuleActionsCommonPriority {
+                        value: String::from("PCMUB6F"),
+                    }),
+                    severity: Some(EventRuleActionsCommonSeverity {
+                        value: EventRuleActionsCommonSeverityValueEnum::WARNING,
+                    }),
+                    extractions: Some(vec![
+                        EventRuleActionsCommonExtractionsItems::ExtractionsItems0 {
+                            target: String::from("dedup_key"),
+                            source: String::from("custom_details.error_summary"),
+                            regex: String::from("Host (.*) is experiencing errors"),
+                        },
+                    ]),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            }),
+        };
+
+        let rule = pagerduty
+            .services()
+            .update_service_event_rule(
+                "PIJ90N7",
+                "14e56445-ebab-4dd0-ba9d-fc28a41b7e7b",
+                update_service_event_rule,
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(
+            rule.id,
+            Some(String::from("14e56445-ebab-4dd0-ba9d-fc28a41b7e7b"))
+        );
     }
 
     #[tokio::test]

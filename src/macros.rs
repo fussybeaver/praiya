@@ -4,6 +4,7 @@ use paste::paste;
 macro_rules! single_response_type {
     ( $base:ident, $key:ident, $return:ident ) => {
         paste::paste! {
+            #[allow(clippy::derive_partial_eq_without_eq)]
             #[derive(Debug, PartialEq, Serialize, Deserialize)]
             pub struct [< $return Response >] {
                 pub [< $key:lower >]: $base,
@@ -24,6 +25,7 @@ macro_rules! single_response_type {
 macro_rules! plural_response_type {
     ( $base:ident, $key:ident, $return:ident ) => {
         paste::paste! {
+            #[allow(clippy::derive_partial_eq_without_eq)]
             #[derive(Debug, PartialEq, Serialize, Deserialize)]
             pub struct [< $return Response >] {
                 pub [< $key:lower >]: Vec<$base>,
