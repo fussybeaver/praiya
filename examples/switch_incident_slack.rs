@@ -5,7 +5,7 @@ use std::collections::HashSet;
 
 use futures_util::TryStreamExt;
 use praiya::{
-    api::incidents::IncidentsListIncidentsParamsBuilder,
+    api::incidents::ListIncidentsParamsBuilder,
     default_models::{Incident, ServiceReference},
     slack_models::SlackConnection,
     ParamsBuilder, Praiya,
@@ -22,7 +22,7 @@ async fn main() -> Result<(), praiya::errors::Error> {
     let pagerduty = Praiya::new(PAGERDUTY_TOKEN);
 
     let params = {
-        let mut option = IncidentsListIncidentsParamsBuilder::new();
+        let mut option = ListIncidentsParamsBuilder::new();
         let statuses = vec!["triggered", "acknowledged"];
         option.statuses(statuses);
         option.build()
