@@ -22,6 +22,12 @@ jobs:
         with:
           command: check
 
+      - name: Run cargo check --examples
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --examples
+
   test:
     name: Test Suite
     runs-on: ubuntu-latest
@@ -65,6 +71,12 @@ jobs:
         with:
           command: test
           args: services
+
+      - name: Run doc tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --doc
 
       - name: Emit logs of mock server
         if: always()
