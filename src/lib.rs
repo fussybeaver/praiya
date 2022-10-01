@@ -20,7 +20,7 @@
 //!
 //! ```nocompile
 //! [dependencies]
-//! praiya = "0.2.0"
+//! praiya = "*"
 //! ```
 //!
 //! # API
