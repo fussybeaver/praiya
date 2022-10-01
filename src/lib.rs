@@ -79,7 +79,7 @@
 //!
 //! let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN");
 //!
-//! let mut opts_builder = praiya::endpoints::incidents::IncidentsListIncidentsParamsBuilder::new();
+//! let mut opts_builder = praiya::endpoints::incidents::ListIncidentsParamsBuilder::new();
 //! opts_builder.statuses(vec!["triggered", "acknowledged"]);
 //! let opts = opts_builder.build();
 //!
@@ -149,7 +149,7 @@
 //!
 //! This README is generated with [cargo-readme](https://github.com/livioribeiro/cargo-readme)
 //!
-//! ```
+//! ```nocompile
 //! cargo readme --no-title > README.md
 //! ```
 //!

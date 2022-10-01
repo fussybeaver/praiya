@@ -79,7 +79,7 @@ use futures_util::TryStreamExt;
 
 let pagerduty = praiya::Praiya::new("PAGERDUTY_TOKEN");
 
-let mut opts_builder = praiya::endpoints::incidents::IncidentsListIncidentsParamsBuilder::new();
+let mut opts_builder = praiya::endpoints::incidents::ListIncidentsParamsBuilder::new();
 opts_builder.statuses(vec!["triggered", "acknowledged"]);
 let opts = opts_builder.build();
 
@@ -149,7 +149,7 @@ env PAGERDUTY_API_ENDPOINT=http://127.0.0.1:8081 RUST_LOG=praiya=debug cargo tes
 
 This README is generated with [cargo-readme](https://github.com/livioribeiro/cargo-readme)
 
-```rust
+```nocompile
 cargo readme --no-title > README.md
 ```
 
