@@ -485,10 +485,10 @@ mod tests {
                 auto_resolve_timeout: Some(14400),
                 acknowledgement_timeout: Some(600),
                 status: Some(ServiceStatusEnum::ACTIVE),
-                escalation_policy: EscalationPolicyReference {
+                escalation_policy: Some(EscalationPolicy {
                     id: Some(String::from("PWIP6CQ")),
                     ..Default::default()
-                },
+                }),
                 incident_urgency_rule: Some(IncidentUrgencyRule {
                     _type: IncidentUrgencyRuleTypeEnum::USE_SUPPORT_HOURS,
                     during_support_hours: Some(IncidentUrgencyType {
@@ -598,11 +598,11 @@ mod tests {
             integration: Integration {
                 _type: IntegrationTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION,
                 name: Some(String::from("email")),
-                service: Some(ServiceReference {
+                service: Some(Service {
                     id: Some(String::from("PQL78HM")),
                     ..Default::default()
                 }),
-                vendor: Some(VendorReference {
+                vendor: Some(Vendor {
                     id: Some(String::from("PZD94QK")),
                     ..Default::default()
                 }),
@@ -768,10 +768,10 @@ mod tests {
                 auto_resolve_timeout: Some(14400),
                 acknowledgement_timeout: Some(600),
                 status: Some(ServiceStatusEnum::ACTIVE),
-                escalation_policy: EscalationPolicyReference {
+                escalation_policy: Some(EscalationPolicy {
                     id: Some(String::from("PWIP6CQ")),
                     ..Default::default()
-                },
+                }),
                 incident_urgency_rule: Some(IncidentUrgencyRule {
                     _type: IncidentUrgencyRuleTypeEnum::USE_SUPPORT_HOURS,
                     during_support_hours: Some(IncidentUrgencyType {
@@ -889,7 +889,7 @@ mod tests {
             integration: Integration {
                 _type: IntegrationTypeEnum::GENERIC_EMAIL_INBOUND_INTEGRATION,
                 name: Some(String::from("Email")),
-                service: Some(ServiceReference {
+                service: Some(Service {
                     id: Some(String::from("PQL78HM")),
                     summary: Some(String::from("My Email-Based Integration")),
                     ..Default::default()
@@ -897,7 +897,7 @@ mod tests {
                 integration_email: Some(String::from(
                     "my-email-based-integration@subdomain.pagerduty.com",
                 )),
-                vendor: Some(VendorReference {
+                vendor: Some(Vendor {
                     id: Some(String::from("PZD94QK")),
                     ..Default::default()
                 }),
