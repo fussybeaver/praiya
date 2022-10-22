@@ -10,3 +10,4 @@ src/endpoints/*_swagger.rs
 /*.json
 /templates/api.mustache
 /Cargo.lock
+/pagerduty-models-codegen.iml
