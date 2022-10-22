@@ -53,7 +53,15 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
     }
 
-    private static final HashMap<String, Object> patchOperationBodyNames = new HashMap();
+    private static final Map<String, Object> patchOperationBodyNames = new HashMap();
+    private static final Map<String, List<String>> referenceOverrideExceptions = new HashMap();
+    static {
+        referenceOverrideExceptions.put("Incident", Arrays.asList("LogEntry"));
+        referenceOverrideExceptions.put("Team", Arrays.asList("Team"));
+        referenceOverrideExceptions.put("ResolveReason", Arrays.asList("Incident"));
+        // Note: this is really MergeIncidents
+        referenceOverrideExceptions.put("IdMergeBody", Arrays.asList("Incident"));
+    }
 
     @Override
     public void preprocessOpenAPI(OpenAPI openAPI) {
@@ -164,7 +172,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
                         if (allDefinitions != null) {
                             refSchema = allDefinitions.get(ref);
-                             if (refSchema instanceof ComposedSchema) {
+                            if (refSchema instanceof ComposedSchema) {
                                 final ComposedSchema refComposed = (ComposedSchema) refSchema;
                                 final List<Schema> allOf = refComposed.getAllOf();
                                 if (allOf != null && !allOf.isEmpty()) {
@@ -344,7 +352,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
             String modelName = toModelName(entry.getKey());
             Map<String, Object> inner = (Map<String, Object>) entry.getValue();
             List<Map<String, Object>> models = (List<Map<String, Object>>) inner.get("models");
-            
+
             for (Map<String, Object> mo : models) {
                 CodegenModel cm = (CodegenModel) mo.get("model");
                 allModels.put(cm.classname, cm);
@@ -470,7 +478,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
                 // Sanitise some datatypes, remove the composed prefix and
                 // inline response from property datatypes, since we generate
                 // these now with better names.
-                
+
                 if (prop.datatype.startsWith("AllOf")) {
                     if (!allModels.keySet().contains(prop.datatype) || allModels.get(prop.datatype).vars.isEmpty()) {
                         prop.datatype = prop.datatype.replace("AllOf", "");
@@ -483,6 +491,32 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
                 if (prop.getItems() != null && prop.getItems().datatype.startsWith("InlineResponse")) {
                     prop.getItems().datatype = prop.getItems().datatype.replaceFirst("^InlineResponse[0-9]*", "");
+                }
+
+                // Don't use Reference types, if possible, just point to the full model.
+                // This ensures that we can use 'include' parameters in API endpoints.
+                // We make sure required fields are marked optional on the full model to ensure we can deserialize.
+
+                if (prop.datatype.endsWith("Reference")) {
+                    String fullMdlName = prop.datatype.replaceFirst("Reference$", "");
+
+                    if (allModels.keySet().contains(fullMdlName)) {
+                        if (!referenceOverrideExceptions.keySet().contains(model.classname)
+                                || !referenceOverrideExceptions.get(model.classname).contains(fullMdlName)) {
+                            prop.datatype = fullMdlName;
+                        }
+                    }
+                }
+
+                if (prop.getItems() != null && prop.getItems().datatype.endsWith("Reference")) {
+                    String fullMdlName = prop.getItems().datatype.replaceFirst("Reference$", "");
+
+                    if (allModels.keySet().contains(fullMdlName)) {
+                        if (!referenceOverrideExceptions.keySet().contains(model.classname)
+                                || !referenceOverrideExceptions.get(model.classname).contains(fullMdlName)) {
+                            prop.getItems().datatype = fullMdlName;
+                        }
+                    }
                 }
 
                 if (prop.datatype != null && prop.datatype.equals("String") && prop.allowableValues == null) {
@@ -555,7 +589,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
             // required fields, or we will crash on deserialization.
             for (CodegenProperty prop : model.requiredVars) {
                 // chrono does not implement Default
-                if (prop.datatype != null && !(prop.datatype.startsWith("chrono"))) {
+                if (prop.datatype != null && !(prop.datatype.startsWith("chrono")) && !allModels.containsKey(model.classname + "Reference")) {
                     prop.vendorExtensions.put("x-rustgen-is-required", true);
                 }
             }
@@ -612,6 +646,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
         }
         return objs;
     }
+
     @Override
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
@@ -623,7 +658,7 @@ public class PagerDutyCodegen extends RustServerCodegen {
 
     @Override
     public CodegenParameter fromRequestBody(RequestBody body, String name, Schema schema, Map<String, Schema> schemas,
-            Set<String> imports) {
+                                            Set<String> imports) {
         CodegenParameter param = super.fromRequestBody(body, name, schema, schemas, imports);
 
         // patches the Body* Models with better names

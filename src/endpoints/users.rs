@@ -1184,8 +1184,8 @@ mod tests {
         let create_user = CreateUser {
             user: User {
                 _type: UserTypeEnum::USER,
-                name: String::from("Earline Greenholt"),
-                email: String::from("125.greenholt.earline@graham.name"),
+                name: Some(String::from("Earline Greenholt")),
+                email: Some(String::from("125.greenholt.earline@graham.name")),
                 time_zone: Some(String::from("America/Lima")),
                 color: Some(String::from("green")),
                 role: Some(UserRoleEnum::ADMIN),
@@ -1236,9 +1236,9 @@ mod tests {
                 id: String::from("PXPGF43"),
                 handoff_type: HandoffNotificationRuleHandoffTypeEnum::BOTH,
                 notify_advance_in_minutes: Some(180),
-                contact_method: ContactMethodReference {
+                contact_method: ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
                 },
             },
@@ -1259,13 +1259,13 @@ mod tests {
         let create_user_notification_rule = CreateUserNotificationRule {
             notification_rule: NotificationRule {
                 _type: NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE,
-                start_delay_in_minutes: 0,
-                contact_method: ContactMethodReference {
+                start_delay_in_minutes: Some(0),
+                contact_method: Some(ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
-                },
-                urgency: NotificationRuleUrgencyEnum::HIGH,
+                }),
+                urgency: Some(NotificationRuleUrgencyEnum::HIGH),
                 ..Default::default()
             },
         };
@@ -1320,9 +1320,9 @@ mod tests {
         let pagerduty = crate::Praiya::new("test");
         let create_user_status_notification_rule = CreateUserStatusUpdateNotificationRule {
             status_update_notification_rule: StatusUpdateNotificationRule {
-                contact_method: ContactMethodReference {
+                contact_method: ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
                 },
             },
@@ -1682,8 +1682,8 @@ mod tests {
         let update_user = UpdateUser {
             user: User {
                 _type: UserTypeEnum::USER,
-                name: String::from("Earline Greenholt"),
-                email: String::from("125.greenholt.earline@graham.name"),
+                name: Some(String::from("Earline Greenholt")),
+                email: Some(String::from("125.greenholt.earline@graham.name")),
                 time_zone: Some(String::from("America/Lima")),
                 color: Some(String::from("green")),
                 role: Some(UserRoleEnum::ADMIN),
@@ -1743,9 +1743,9 @@ mod tests {
                 id: String::from("PXPGF43"),
                 handoff_type: HandoffNotificationRuleHandoffTypeEnum::BOTH,
                 notify_advance_in_minutes: Some(60),
-                contact_method: ContactMethodReference {
+                contact_method: ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
                 },
             },
@@ -1770,13 +1770,13 @@ mod tests {
         let update_user_notification_rule = UpdateUserNotificationRule {
             notification_rule: NotificationRule {
                 _type: NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE,
-                start_delay_in_minutes: 0,
-                contact_method: ContactMethodReference {
+                start_delay_in_minutes: Some(0),
+                contact_method: Some(ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
-                },
-                urgency: NotificationRuleUrgencyEnum::HIGH,
+                }),
+                urgency: Some(NotificationRuleUrgencyEnum::HIGH),
                 ..Default::default()
             },
         };
@@ -1795,9 +1795,9 @@ mod tests {
         let pagerduty = crate::Praiya::new("test");
         let update_user_status_notification_rule = UpdateUserStatusUpdateNotificationRule {
             status_update_notification_rule: StatusUpdateNotificationRule {
-                contact_method: ContactMethodReference {
+                contact_method: ContactMethod {
                     id: Some(String::from("PXPGF42")),
-                    _type: ContactMethodReferenceTypeEnum::EMAIL_CONTACT_METHOD_REFERENCE,
+                    _type: ContactMethodTypeEnum::EMAIL_CONTACT_METHOD,
                     ..Default::default()
                 },
             },

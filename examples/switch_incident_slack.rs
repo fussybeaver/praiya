@@ -5,10 +5,8 @@ use std::collections::HashSet;
 
 use futures_util::TryStreamExt;
 use praiya::{
-    api::incidents::ListIncidentsParamsBuilder,
-    default_models::{Incident, ServiceReference},
-    slack_models::SlackConnection,
-    ParamsBuilder, Praiya,
+    api::incidents::ListIncidentsParamsBuilder, default_models::Incident, models::Service,
+    slack_models::SlackConnection, ParamsBuilder, Praiya,
 };
 
 // Replace with appropriate values...
@@ -41,7 +39,7 @@ async fn main() -> Result<(), praiya::errors::Error> {
 
     let mut services = HashSet::new();
     for incident in &incidents {
-        if let Some(ServiceReference { id: Some(id), .. }) = &incident.service {
+        if let Some(Service { id: Some(id), .. }) = &incident.service {
             services.insert(String::clone(id));
         }
     }

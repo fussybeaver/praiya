@@ -158,11 +158,11 @@ pub struct Addon {
     #[serde(rename = "type")]
     pub _type: AddonTypeEnum,
     /// The name of the Add-on.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// The source URL to display in a frame in the PagerDuty UI. HTTPS is required.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub src: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub src: Option<String>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -489,11 +489,11 @@ pub struct Alert {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alert_key: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub first_trigger_log_entry: Option<LogEntryReference>,
+    pub first_trigger_log_entry: Option<LogEntry>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Whether or not an alert is suppressed. Suppressed alerts are not created with a parent incident.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suppressed: Option<bool>,
@@ -501,7 +501,7 @@ pub struct Alert {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<AlertSeverityEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration: Option<IntegrationReference>,
+    pub integration: Option<Integration>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub body: Option<Body>,
 }
@@ -1060,7 +1060,7 @@ pub struct AllOfinlineResponse20036ChangeEventsItems {
     pub _type: AllOfinlineResponse20036ChangeEventsItemsTypeEnum,
     /// An array containing Service objects that this change event is associated with.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub services: Option<Vec<ServiceReference>>,
+    pub services: Option<Vec<Service>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration: Option<Value>,
     /// This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
@@ -1553,19 +1553,19 @@ pub struct AssignLogEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<Context>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
     /// An array of assigned Users for this log entry
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignees: Option<Vec<UserReference>>,
+    pub assignees: Option<Vec<User>>,
 }
 
 #[allow(non_camel_case_types)]
@@ -1618,7 +1618,7 @@ pub struct Assignment {
     /// Time at which the assignment was created.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub at: Option<chrono::DateTime<chrono::Utc>>,
-    pub assignee: UserReference,
+    pub assignee: User,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -2119,7 +2119,7 @@ pub struct ChangeEvent {
     pub _type: ChangeEventTypeEnum,
     /// An array containing Service objects that this change event is associated with.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub services: Option<Vec<ServiceReference>>,
+    pub services: Option<Vec<Service>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration: Option<Value>,
     /// This is the 32 character Integration Key for an Integration on a Service. The same Integration Key can be used for both alert and change events.
@@ -2320,8 +2320,8 @@ pub struct ContactMethod {
     #[serde(default = "ContactMethod::label_default")]
     pub label: String,
     /// The \"address\" to deliver to: email, phone number, etc., depending on the type.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub address: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<String>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -3082,19 +3082,19 @@ pub struct EscalateLogEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<Context>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
     /// An array of assigned Users for this log entry
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignees: Option<Vec<UserReference>>,
+    pub assignees: Option<Vec<User>>,
 }
 
 #[allow(non_camel_case_types)]
@@ -3175,8 +3175,8 @@ pub struct EscalationPolicy {
     #[serde(rename = "type")]
     pub _type: EscalationPolicyTypeEnum,
     /// The name of the escalation policy.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// Escalation policy description.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -3186,12 +3186,13 @@ pub struct EscalationPolicy {
     /// Determines how on call handoff notifications will be sent for users on the escalation policy. Defaults to \"if_has_services\".
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_call_handoff_notifications: Option<EscalationPolicyOnCallHandoffNotificationsEnum>,
-    pub escalation_rules: Vec<EscalationRule>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub services: Option<Vec<ServiceReference>>,
+    pub escalation_rules: Option<Vec<EscalationRule>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<Service>>,
     /// Teams associated with the policy. Account must have the `teams` ability to use this parameter.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -4105,8 +4106,8 @@ pub struct Extension {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The name of the extension.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// The type of object being created.
     #[serde(rename = "type")]
     pub _type: ExtensionTypeEnum,
@@ -4114,8 +4115,10 @@ pub struct Extension {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_url: Option<String>,
     /// The objects for which the extension applies
-    pub extension_objects: Vec<ServiceReference>,
-    pub extension_schema: ExtensionSchemaReference,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extension_objects: Option<Vec<Service>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extension_schema: Option<ExtensionSchema>,
     /// Whether or not this extension is temporarily disabled; for example, a webhook extension that is repeatedly rejected by the server.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporarily_disabled: Option<bool>,
@@ -4456,7 +4459,7 @@ pub struct HandoffNotificationRule {
     pub notify_advance_in_minutes: Option<usize>,
     /// The type of handoff being created.
     pub handoff_type: HandoffNotificationRuleHandoffTypeEnum,
-    pub contact_method: ContactMethodReference,
+    pub contact_method: ContactMethod,
 }
 
 #[allow(non_camel_case_types)]
@@ -4905,7 +4908,7 @@ pub struct Incident {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub incident_key: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     /// List of all assignments for this incident. This list will be empty if the `Incident.status` is `resolved`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assignments: Option<Vec<Assignment>>,
@@ -4923,12 +4926,12 @@ pub struct Incident {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_trigger_log_entry: Option<LogEntryReference>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policy: Option<EscalationPolicyReference>,
+    pub escalation_policy: Option<EscalationPolicy>,
     /// The teams involved in the incident’s lifecycle.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub priority: Option<PriorityReference>,
+    pub priority: Option<Priority>,
     /// The current urgency of the incident.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub urgency: Option<IncidentUrgencyEnum>,
@@ -5232,7 +5235,7 @@ pub struct IncidentAddon {
     pub src: String,
     /// The services this Add-on is associated with. If non-empty, the Add-on will appear only on incidents for those services. If empty, it will appear on incidents for all services. 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub services: Option<Vec<ServiceReference>>,
+    pub services: Option<Vec<Service>>,
 }
 
 #[allow(non_camel_case_types)]
@@ -5810,7 +5813,7 @@ impl std::default::Default for IncidentUrgencyTypeUrgencyEnum {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct IncidentsAssignments {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignee: Option<UserReference>,
+    pub assignee: Option<User>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -5841,9 +5844,9 @@ pub struct IncidentsIncident {
     /// A succinct description of the nature, symptoms, cause, or effect of the incident.
     #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
-    pub service: ServiceReference,
+    pub service: Service,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub priority: Option<PriorityReference>,
+    pub priority: Option<Priority>,
     /// The urgency of the incident
     #[serde(skip_serializing_if = "Option::is_none")]
     pub urgency: Option<IncidentsIncidentUrgencyEnum>,
@@ -5856,7 +5859,7 @@ pub struct IncidentsIncident {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assignments: Option<Vec<IncidentsAssignments>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policy: Option<EscalationPolicyReference>,
+    pub escalation_policy: Option<EscalationPolicy>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conference_bridge: Option<ConferenceBridge>,
 }
@@ -5973,7 +5976,7 @@ pub struct IncidentsIncidents {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub priority: Option<PriorityReference>,
+    pub priority: Option<Priority>,
     /// Escalate the incident to this level in the escalation policy.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub escalation_level: Option<isize>,
@@ -5981,7 +5984,7 @@ pub struct IncidentsIncidents {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assignments: Option<Vec<IncidentsAssignments>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policy: Option<EscalationPolicyReference>,
+    pub escalation_policy: Option<EscalationPolicy>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conference_bridge: Option<ConferenceBridge>,
 }
@@ -6091,16 +6094,16 @@ pub struct IncidentsRespondersReference {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
     /// The message sent with the responder request
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub requester: Option<UserReference>,
+    pub requester: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_at: Option<String>,
 }
@@ -6116,7 +6119,7 @@ pub struct IncidentsidIncident {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<IncidentsidIncidentStatusEnum>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub priority: Option<PriorityReference>,
+    pub priority: Option<Priority>,
     /// The resolution for this incident if status is set to resolved.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<String>,
@@ -6130,7 +6133,7 @@ pub struct IncidentsidIncident {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub assignments: Option<Vec<IncidentsAssignments>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policy: Option<EscalationPolicyReference>,
+    pub escalation_policy: Option<EscalationPolicy>,
     /// The urgency of the incident.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub urgency: Option<IncidentsidIncidentUrgencyEnum>,
@@ -6626,7 +6629,7 @@ impl SupportingService {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Members {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
 }
@@ -6677,12 +6680,12 @@ pub struct Integration {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     /// The date/time when this integration was created.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vendor: Option<VendorReference>,
+    pub vendor: Option<Vendor>,
     /// Specify for generic_email_inbound_integration. Must be set to an email address @your-subdomain.pagerduty.com
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_email: Option<String>,
@@ -7421,14 +7424,14 @@ pub struct LogEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<Context>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
 }
@@ -7755,10 +7758,11 @@ pub struct MaintenanceWindow {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_by: Option<UserReference>,
-    pub services: Vec<ServiceReference>,
+    pub created_by: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub services: Option<Vec<Service>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub teams: Option<Vec<Team>>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -8105,7 +8109,7 @@ pub struct ModelOverride {
     /// The end date and time for the override.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end: Option<chrono::DateTime<chrono::Utc>>,
-    pub user: UserReference,
+    pub user: User,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -8151,7 +8155,7 @@ pub struct Notification {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     /// The address of the conference bridge
     #[serde(rename = "conferenceAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8241,10 +8245,13 @@ pub struct NotificationRule {
     #[serde(rename = "type")]
     pub _type: NotificationRuleTypeEnum,
     /// The delay before firing the rule, in minutes.
-    pub start_delay_in_minutes: usize,
-    pub contact_method: ContactMethodReference,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_delay_in_minutes: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_method: Option<ContactMethod>,
     /// Which incident urgency this rule is used for. Account must have the `urgencies` ability to have a low urgency notification rule.
-    pub urgency: NotificationRuleUrgencyEnum,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub urgency: Option<NotificationRuleUrgencyEnum>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -8990,14 +8997,14 @@ pub struct NotifyLogEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<Context>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
 }
@@ -9050,11 +9057,11 @@ impl std::default::Default for NotifyLogEntryTypeEnum {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Oncall {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policy: Option<EscalationPolicyReference>,
+    pub escalation_policy: Option<EscalationPolicy>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub schedule: Option<ScheduleReference>,
+    pub schedule: Option<Schedule>,
     /// The escalation level for the on-call.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub escalation_level: Option<isize>,
@@ -10870,9 +10877,9 @@ impl std::default::Default for ResolveReasonTypeEnum {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ResponderRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub requester: Option<UserReference>,
+    pub requester: Option<User>,
     /// The time the request was made
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_at: Option<String>,
@@ -11233,7 +11240,7 @@ impl std::default::Default for ResponsePlayConferenceTypeEnum {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct RunResponsePlay {
-    pub incident: IncidentReference,
+    pub incident: Incident,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -11557,8 +11564,8 @@ pub struct Schedule {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_layers: Option<Vec<ScheduleLayer>>,
     /// The time zone of the schedule.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub time_zone: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
     /// The name of the schedule
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -11571,13 +11578,13 @@ pub struct Schedule {
     pub overrides_subschedule: Option<SubSchedule>,
     /// An array of all of the escalation policies that uses this schedule.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub escalation_policies: Option<Vec<EscalationPolicyReference>>,
+    pub escalation_policies: Option<Vec<EscalationPolicy>>,
     /// An array of all of the users on the schedule.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub users: Option<Vec<UserReference>>,
+    pub users: Option<Vec<User>>,
     /// An array of all of the teams on the schedule.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
 }
 
 #[allow(clippy::derivable_impls)]
@@ -11694,7 +11701,7 @@ pub struct ScheduleLayer {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleLayerEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     /// The start time of this entry.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<chrono::DateTime<chrono::Utc>>,
@@ -11706,7 +11713,7 @@ pub struct ScheduleLayerEntry {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct ScheduleLayerUser {
-    pub user: UserReference,
+    pub user: User,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -12063,15 +12070,16 @@ pub struct Service {
     /// The date/time when the most recent incident was created for this service.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_incident_timestamp: Option<chrono::DateTime<chrono::Utc>>,
-    pub escalation_policy: EscalationPolicyReference,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub escalation_policy: Option<EscalationPolicy>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_play: Option<Value>,
     /// The set of teams associated with this service.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     /// An array containing Integration objects that belong to this service. If `integrations` is passed as an argument, these are full objects - otherwise, these are references.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub integrations: Option<Vec<IntegrationReference>>,
+    pub integrations: Option<Vec<Integration>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub incident_urgency_rule: Option<IncidentUrgencyRule>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12081,7 +12089,7 @@ pub struct Service {
     pub scheduled_actions: Option<Vec<ScheduledAction>>,
     /// The array of Add-ons associated with this service.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub addons: Option<Vec<AddonReference>>,
+    pub addons: Option<Vec<Addon>>,
     /// Whether a service creates only incidents, or both alerts and incidents. A service must create alerts in order to enable incident merging. * \"create_incidents\" - The service will create one incident and zero alerts for each incoming event. * \"create_alerts_and_incidents\" - The service will create one incident and one associated alert for each incoming event. 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alert_creation: Option<ServiceAlertCreationEnum>,
@@ -12763,14 +12771,14 @@ pub struct SnoozeLogEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<Context>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service: Option<ServiceReference>,
+    pub service: Option<Service>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserReference>,
+    pub user: Option<User>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub incident: Option<IncidentReference>,
+    pub incident: Option<Incident>,
     /// Will consist of references unless included
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_details: Option<LogEntryEventDetails>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12844,7 +12852,7 @@ pub struct StatusUpdate {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sender: Option<UserReference>,
+    pub sender: Option<User>,
     /// The subject of the custom html email status update. Present if included in request body.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
@@ -12857,7 +12865,7 @@ pub struct StatusUpdate {
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct StatusUpdateNotificationRule {
-    pub contact_method: ContactMethodReference,
+    pub contact_method: ContactMethod,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -13328,8 +13336,8 @@ pub struct Team {
     #[serde(rename = "type")]
     pub _type: TeamTypeEnum,
     /// The name of the team.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// The description of the team.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -13592,14 +13600,14 @@ pub struct User {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The name of the user.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     /// The type of object being created.
     #[serde(rename = "type")]
     pub _type: UserTypeEnum,
     /// The user's email address.
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub email: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
     /// The preferred time zone name. If null, the account's time zone will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_zone: Option<String>,
@@ -13623,13 +13631,13 @@ pub struct User {
     pub job_title: Option<String>,
     /// The list of teams to which the user belongs. Account must have the `teams` ability to set this.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub teams: Option<Vec<TeamReference>>,
+    pub teams: Option<Vec<Team>>,
     /// The list of contact methods for the user.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_methods: Option<Vec<ContactMethodReference>>,
+    pub contact_methods: Option<Vec<ContactMethod>>,
     /// The list of notification rules for the user.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notification_rules: Option<Vec<NotificationRuleReference>>,
+    pub notification_rules: Option<Vec<NotificationRule>>,
 }
 
 #[allow(clippy::derivable_impls)]

@@ -832,7 +832,7 @@ mod tests {
         let pagerduty = crate::Praiya::new("test");
         let create_incident = CreateIncident {
             incident: IncidentsIncident {
-                service: ServiceReference {
+                service: Service {
                     ..Default::default()
                 },
                 title: String::from("The building is on fire!"),
@@ -1229,7 +1229,7 @@ mod tests {
         let update_incident_alert = UpdateIncidentAlert {
             alert: Alert {
                 status: Some(AlertStatusEnum::RESOLVED),
-                incident: Some(IncidentReference {
+                incident: Some(Incident {
                     id: Some(String::from("PEYSGVF")),
                     ..Default::default()
                 }),
@@ -1281,8 +1281,9 @@ mod tests {
                 },
                 Alert {
                     id: Some(String::from("P8JOGX7")),
-                    incident: Some(IncidentReference {
+                    incident: Some(Incident {
                         id: Some(String::from("PPVZH9X")),
+                        _type: String::from("incident_reference"),
                         ..Default::default()
                     }),
                     ..Default::default()
@@ -1310,8 +1311,9 @@ mod tests {
                 },
                 IncidentsIncidents {
                     id: String::from("PQMF62U"),
-                    priority: Some(PriorityReference {
+                    priority: Some(Priority {
                         id: Some(String::from("P53ZZH5")),
+                        _type: String::from("priority_reference"),
                         ..Default::default()
                     }),
                     ..Default::default()
