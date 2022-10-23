@@ -35,7 +35,7 @@
 //! - [ ] analytics
 //! - [ ] audit
 //! - [ ] business_services
-//! - [ ] escalation_policies
+//! - [X] escalation_policies
 //! - [ ] extension_schemas
 //! - [ ] extensions
 //! - [X] incidents
