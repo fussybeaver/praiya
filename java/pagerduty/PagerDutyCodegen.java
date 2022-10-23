@@ -519,6 +519,20 @@ public class PagerDutyCodegen extends RustServerCodegen {
                     }
                 }
 
+                if (prop.baseName.equals("type") && !model.classname.endsWith("Reference") && allModels.keySet().contains(model.classname + "Reference")) {
+                    if (prop.allowableValues == null) {
+                        LOGGER.error("TODO: change this type field to an enum: " + model.classname);
+                    } else {
+                        ArrayList<String> values = (ArrayList<String>) prop.allowableValues.get("values");
+                        values.add(model.classname + "Reference");
+                        ArrayList<HashMap<String, String>> enumVars = (ArrayList<HashMap<String, String>>) prop.allowableValues.get("enumVars");
+                        HashMap<String, String> referenceType = new HashMap();
+                        referenceType.put("name", StringUtils.upperCase(underscore(model.classname + "Reference")));
+                        referenceType.put("value", "\"" + StringUtils.lowerCase(underscore(model.classname + "Reference")) + "\"");
+                        enumVars.add(referenceType);
+                    }
+                }
+
                 if (prop.datatype != null && prop.datatype.equals("String") && prop.allowableValues == null) {
                     prop.vendorExtensions.put("x-rustgen-is-string", true);
                     model.vendorExtensions.put("x-rustgen-has-string", true);
