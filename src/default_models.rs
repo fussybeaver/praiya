@@ -199,6 +199,8 @@ pub enum AddonTypeEnum {
     FULL_PAGE_ADDON,
     #[serde(rename = "incident_show_addon")]
     INCIDENT_SHOW_ADDON,
+    #[serde(rename = "addon_reference")]
+    ADDON_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -208,6 +210,7 @@ impl ::std::fmt::Display for AddonTypeEnum {
         match *self {
             AddonTypeEnum::FULL_PAGE_ADDON => write!(f, "full_page_addon"),
             AddonTypeEnum::INCIDENT_SHOW_ADDON => write!(f, "incident_show_addon"),
+            AddonTypeEnum::ADDON_REFERENCE => write!(f, "addon_reference"),
             AddonTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -219,6 +222,7 @@ impl ::std::str::FromStr for AddonTypeEnum {
         match s {
             "full_page_addon" => Ok(AddonTypeEnum::FULL_PAGE_ADDON),
             "incident_show_addon" => Ok(AddonTypeEnum::INCIDENT_SHOW_ADDON),
+            "addon_reference" => Ok(AddonTypeEnum::ADDON_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -229,6 +233,7 @@ impl ::std::convert::AsRef<str> for AddonTypeEnum {
         match self {
             AddonTypeEnum::FULL_PAGE_ADDON => "full_page_addon",
             AddonTypeEnum::INCIDENT_SHOW_ADDON => "incident_show_addon",
+            AddonTypeEnum::ADDON_REFERENCE => "addon_reference",
             AddonTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -546,6 +551,8 @@ impl Alert {
 pub enum AlertTypeEnum {
     #[serde(rename = "alert")]
     ALERT,
+    #[serde(rename = "alert_reference")]
+    ALERT_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -554,6 +561,7 @@ impl ::std::fmt::Display for AlertTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             AlertTypeEnum::ALERT => write!(f, "alert"),
+            AlertTypeEnum::ALERT_REFERENCE => write!(f, "alert_reference"),
             AlertTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -564,6 +572,7 @@ impl ::std::str::FromStr for AlertTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "alert" => Ok(AlertTypeEnum::ALERT),
+            "alert_reference" => Ok(AlertTypeEnum::ALERT_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -573,6 +582,7 @@ impl ::std::convert::AsRef<str> for AlertTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             AlertTypeEnum::ALERT => "alert",
+            AlertTypeEnum::ALERT_REFERENCE => "alert_reference",
             AlertTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -2361,6 +2371,8 @@ pub enum ContactMethodTypeEnum {
     PUSH_NOTIFICATION_CONTACT_METHOD,
     #[serde(rename = "sms_contact_method")]
     SMS_CONTACT_METHOD,
+    #[serde(rename = "contact_method_reference")]
+    CONTACT_METHOD_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -2372,6 +2384,7 @@ impl ::std::fmt::Display for ContactMethodTypeEnum {
             ContactMethodTypeEnum::PHONE_CONTACT_METHOD => write!(f, "phone_contact_method"),
             ContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => write!(f, "push_notification_contact_method"),
             ContactMethodTypeEnum::SMS_CONTACT_METHOD => write!(f, "sms_contact_method"),
+            ContactMethodTypeEnum::CONTACT_METHOD_REFERENCE => write!(f, "contact_method_reference"),
             ContactMethodTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -2385,6 +2398,7 @@ impl ::std::str::FromStr for ContactMethodTypeEnum {
             "phone_contact_method" => Ok(ContactMethodTypeEnum::PHONE_CONTACT_METHOD),
             "push_notification_contact_method" => Ok(ContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD),
             "sms_contact_method" => Ok(ContactMethodTypeEnum::SMS_CONTACT_METHOD),
+            "contact_method_reference" => Ok(ContactMethodTypeEnum::CONTACT_METHOD_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -2397,6 +2411,7 @@ impl ::std::convert::AsRef<str> for ContactMethodTypeEnum {
             ContactMethodTypeEnum::PHONE_CONTACT_METHOD => "phone_contact_method",
             ContactMethodTypeEnum::PUSH_NOTIFICATION_CONTACT_METHOD => "push_notification_contact_method",
             ContactMethodTypeEnum::SMS_CONTACT_METHOD => "sms_contact_method",
+            ContactMethodTypeEnum::CONTACT_METHOD_REFERENCE => "contact_method_reference",
             ContactMethodTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -3232,6 +3247,8 @@ impl EscalationPolicy {
 pub enum EscalationPolicyTypeEnum {
     #[serde(rename = "escalation_policy")]
     ESCALATION_POLICY,
+    #[serde(rename = "escalation_policy_reference")]
+    ESCALATION_POLICY_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -3240,6 +3257,7 @@ impl ::std::fmt::Display for EscalationPolicyTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             EscalationPolicyTypeEnum::ESCALATION_POLICY => write!(f, "escalation_policy"),
+            EscalationPolicyTypeEnum::ESCALATION_POLICY_REFERENCE => write!(f, "escalation_policy_reference"),
             EscalationPolicyTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -3250,6 +3268,7 @@ impl ::std::str::FromStr for EscalationPolicyTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "escalation_policy" => Ok(EscalationPolicyTypeEnum::ESCALATION_POLICY),
+            "escalation_policy_reference" => Ok(EscalationPolicyTypeEnum::ESCALATION_POLICY_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -3259,6 +3278,7 @@ impl ::std::convert::AsRef<str> for EscalationPolicyTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             EscalationPolicyTypeEnum::ESCALATION_POLICY => "escalation_policy",
+            EscalationPolicyTypeEnum::ESCALATION_POLICY_REFERENCE => "escalation_policy_reference",
             EscalationPolicyTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -4163,6 +4183,8 @@ impl Extension {
 pub enum ExtensionTypeEnum {
     #[serde(rename = "extension")]
     EXTENSION,
+    #[serde(rename = "extension_reference")]
+    EXTENSION_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -4171,6 +4193,7 @@ impl ::std::fmt::Display for ExtensionTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             ExtensionTypeEnum::EXTENSION => write!(f, "extension"),
+            ExtensionTypeEnum::EXTENSION_REFERENCE => write!(f, "extension_reference"),
             ExtensionTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -4181,6 +4204,7 @@ impl ::std::str::FromStr for ExtensionTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "extension" => Ok(ExtensionTypeEnum::EXTENSION),
+            "extension_reference" => Ok(ExtensionTypeEnum::EXTENSION_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -4190,6 +4214,7 @@ impl ::std::convert::AsRef<str> for ExtensionTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             ExtensionTypeEnum::EXTENSION => "extension",
+            ExtensionTypeEnum::EXTENSION_REFERENCE => "extension_reference",
             ExtensionTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -6764,6 +6789,8 @@ pub enum IntegrationTypeEnum {
     SQL_MONITOR_INBOUND_INTEGRATION,
     #[serde(rename = "events_api_v2_inbound_integration")]
     EVENTS_API_V2_INBOUND_INTEGRATION,
+    #[serde(rename = "integration_reference")]
+    INTEGRATION_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -6781,6 +6808,7 @@ impl ::std::fmt::Display for IntegrationTypeEnum {
             IntegrationTypeEnum::PINGDOM_INBOUND_INTEGRATION => write!(f, "pingdom_inbound_integration"),
             IntegrationTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION => write!(f, "sql_monitor_inbound_integration"),
             IntegrationTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION => write!(f, "events_api_v2_inbound_integration"),
+            IntegrationTypeEnum::INTEGRATION_REFERENCE => write!(f, "integration_reference"),
             IntegrationTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -6800,6 +6828,7 @@ impl ::std::str::FromStr for IntegrationTypeEnum {
             "pingdom_inbound_integration" => Ok(IntegrationTypeEnum::PINGDOM_INBOUND_INTEGRATION),
             "sql_monitor_inbound_integration" => Ok(IntegrationTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION),
             "events_api_v2_inbound_integration" => Ok(IntegrationTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION),
+            "integration_reference" => Ok(IntegrationTypeEnum::INTEGRATION_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -6818,6 +6847,7 @@ impl ::std::convert::AsRef<str> for IntegrationTypeEnum {
             IntegrationTypeEnum::PINGDOM_INBOUND_INTEGRATION => "pingdom_inbound_integration",
             IntegrationTypeEnum::SQL_MONITOR_INBOUND_INTEGRATION => "sql_monitor_inbound_integration",
             IntegrationTypeEnum::EVENTS_API_V2_INBOUND_INTEGRATION => "events_api_v2_inbound_integration",
+            IntegrationTypeEnum::INTEGRATION_REFERENCE => "integration_reference",
             IntegrationTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -7498,6 +7528,8 @@ pub enum LogEntryTypeEnum {
     TRIGGER_LOG_ENTRY,
     #[serde(rename = "unacknowledge_log_entry")]
     UNACKNOWLEDGE_LOG_ENTRY,
+    #[serde(rename = "log_entry_reference")]
+    LOG_ENTRY_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -7517,6 +7549,7 @@ impl ::std::fmt::Display for LogEntryTypeEnum {
             LogEntryTypeEnum::SNOOZE_LOG_ENTRY => write!(f, "snooze_log_entry"),
             LogEntryTypeEnum::TRIGGER_LOG_ENTRY => write!(f, "trigger_log_entry"),
             LogEntryTypeEnum::UNACKNOWLEDGE_LOG_ENTRY => write!(f, "unacknowledge_log_entry"),
+            LogEntryTypeEnum::LOG_ENTRY_REFERENCE => write!(f, "log_entry_reference"),
             LogEntryTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -7538,6 +7571,7 @@ impl ::std::str::FromStr for LogEntryTypeEnum {
             "snooze_log_entry" => Ok(LogEntryTypeEnum::SNOOZE_LOG_ENTRY),
             "trigger_log_entry" => Ok(LogEntryTypeEnum::TRIGGER_LOG_ENTRY),
             "unacknowledge_log_entry" => Ok(LogEntryTypeEnum::UNACKNOWLEDGE_LOG_ENTRY),
+            "log_entry_reference" => Ok(LogEntryTypeEnum::LOG_ENTRY_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -7558,6 +7592,7 @@ impl ::std::convert::AsRef<str> for LogEntryTypeEnum {
             LogEntryTypeEnum::SNOOZE_LOG_ENTRY => "snooze_log_entry",
             LogEntryTypeEnum::TRIGGER_LOG_ENTRY => "trigger_log_entry",
             LogEntryTypeEnum::UNACKNOWLEDGE_LOG_ENTRY => "unacknowledge_log_entry",
+            LogEntryTypeEnum::LOG_ENTRY_REFERENCE => "log_entry_reference",
             LogEntryTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -7802,6 +7837,8 @@ impl MaintenanceWindow {
 pub enum MaintenanceWindowTypeEnum {
     #[serde(rename = "maintenance_window")]
     MAINTENANCE_WINDOW,
+    #[serde(rename = "maintenance_window_reference")]
+    MAINTENANCE_WINDOW_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -7810,6 +7847,7 @@ impl ::std::fmt::Display for MaintenanceWindowTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW => write!(f, "maintenance_window"),
+            MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW_REFERENCE => write!(f, "maintenance_window_reference"),
             MaintenanceWindowTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -7820,6 +7858,7 @@ impl ::std::str::FromStr for MaintenanceWindowTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "maintenance_window" => Ok(MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW),
+            "maintenance_window_reference" => Ok(MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -7829,6 +7868,7 @@ impl ::std::convert::AsRef<str> for MaintenanceWindowTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW => "maintenance_window",
+            MaintenanceWindowTypeEnum::MAINTENANCE_WINDOW_REFERENCE => "maintenance_window_reference",
             MaintenanceWindowTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -8287,6 +8327,8 @@ impl NotificationRule {
 pub enum NotificationRuleTypeEnum {
     #[serde(rename = "assignment_notification_rule")]
     ASSIGNMENT_NOTIFICATION_RULE,
+    #[serde(rename = "notification_rule_reference")]
+    NOTIFICATION_RULE_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -8295,6 +8337,7 @@ impl ::std::fmt::Display for NotificationRuleTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE => write!(f, "assignment_notification_rule"),
+            NotificationRuleTypeEnum::NOTIFICATION_RULE_REFERENCE => write!(f, "notification_rule_reference"),
             NotificationRuleTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -8305,6 +8348,7 @@ impl ::std::str::FromStr for NotificationRuleTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "assignment_notification_rule" => Ok(NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE),
+            "notification_rule_reference" => Ok(NotificationRuleTypeEnum::NOTIFICATION_RULE_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -8314,6 +8358,7 @@ impl ::std::convert::AsRef<str> for NotificationRuleTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             NotificationRuleTypeEnum::ASSIGNMENT_NOTIFICATION_RULE => "assignment_notification_rule",
+            NotificationRuleTypeEnum::NOTIFICATION_RULE_REFERENCE => "notification_rule_reference",
             NotificationRuleTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -11626,6 +11671,8 @@ impl Schedule {
 pub enum ScheduleTypeEnum {
     #[serde(rename = "schedule")]
     SCHEDULE,
+    #[serde(rename = "schedule_reference")]
+    SCHEDULE_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -11634,6 +11681,7 @@ impl ::std::fmt::Display for ScheduleTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             ScheduleTypeEnum::SCHEDULE => write!(f, "schedule"),
+            ScheduleTypeEnum::SCHEDULE_REFERENCE => write!(f, "schedule_reference"),
             ScheduleTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -11644,6 +11692,7 @@ impl ::std::str::FromStr for ScheduleTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "schedule" => Ok(ScheduleTypeEnum::SCHEDULE),
+            "schedule_reference" => Ok(ScheduleTypeEnum::SCHEDULE_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -11653,6 +11702,7 @@ impl ::std::convert::AsRef<str> for ScheduleTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             ScheduleTypeEnum::SCHEDULE => "schedule",
+            ScheduleTypeEnum::SCHEDULE_REFERENCE => "schedule_reference",
             ScheduleTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -12155,6 +12205,8 @@ impl Service {
 pub enum ServiceTypeEnum {
     #[serde(rename = "service")]
     SERVICE,
+    #[serde(rename = "service_reference")]
+    SERVICE_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -12163,6 +12215,7 @@ impl ::std::fmt::Display for ServiceTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             ServiceTypeEnum::SERVICE => write!(f, "service"),
+            ServiceTypeEnum::SERVICE_REFERENCE => write!(f, "service_reference"),
             ServiceTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -12173,6 +12226,7 @@ impl ::std::str::FromStr for ServiceTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "service" => Ok(ServiceTypeEnum::SERVICE),
+            "service_reference" => Ok(ServiceTypeEnum::SERVICE_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -12182,6 +12236,7 @@ impl ::std::convert::AsRef<str> for ServiceTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             ServiceTypeEnum::SERVICE => "service",
+            ServiceTypeEnum::SERVICE_REFERENCE => "service_reference",
             ServiceTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -13044,6 +13099,8 @@ impl Tag {
 pub enum TagTypeEnum {
     #[serde(rename = "tag")]
     TAG,
+    #[serde(rename = "tag_reference")]
+    TAG_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -13052,6 +13109,7 @@ impl ::std::fmt::Display for TagTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             TagTypeEnum::TAG => write!(f, "tag"),
+            TagTypeEnum::TAG_REFERENCE => write!(f, "tag_reference"),
             TagTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -13062,6 +13120,7 @@ impl ::std::str::FromStr for TagTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "tag" => Ok(TagTypeEnum::TAG),
+            "tag_reference" => Ok(TagTypeEnum::TAG_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -13071,6 +13130,7 @@ impl ::std::convert::AsRef<str> for TagTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             TagTypeEnum::TAG => "tag",
+            TagTypeEnum::TAG_REFERENCE => "tag_reference",
             TagTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -13378,6 +13438,8 @@ impl Team {
 pub enum TeamTypeEnum {
     #[serde(rename = "team")]
     TEAM,
+    #[serde(rename = "team_reference")]
+    TEAM_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -13386,6 +13448,7 @@ impl ::std::fmt::Display for TeamTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             TeamTypeEnum::TEAM => write!(f, "team"),
+            TeamTypeEnum::TEAM_REFERENCE => write!(f, "team_reference"),
             TeamTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -13396,6 +13459,7 @@ impl ::std::str::FromStr for TeamTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "team" => Ok(TeamTypeEnum::TEAM),
+            "team_reference" => Ok(TeamTypeEnum::TEAM_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -13405,6 +13469,7 @@ impl ::std::convert::AsRef<str> for TeamTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             TeamTypeEnum::TEAM => "team",
+            TeamTypeEnum::TEAM_REFERENCE => "team_reference",
             TeamTypeEnum::UNKNOWN => "unknown",
         }
     }
@@ -13682,6 +13747,8 @@ impl User {
 pub enum UserTypeEnum {
     #[serde(rename = "user")]
     USER,
+    #[serde(rename = "user_reference")]
+    USER_REFERENCE,
     #[serde(other)]
     UNKNOWN,
 }
@@ -13690,6 +13757,7 @@ impl ::std::fmt::Display for UserTypeEnum {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         match *self {
             UserTypeEnum::USER => write!(f, "user"),
+            UserTypeEnum::USER_REFERENCE => write!(f, "user_reference"),
             UserTypeEnum::UNKNOWN => write!(f, "unknown"),
         }
     }
@@ -13700,6 +13768,7 @@ impl ::std::str::FromStr for UserTypeEnum {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "user" => Ok(UserTypeEnum::USER),
+            "user_reference" => Ok(UserTypeEnum::USER_REFERENCE),
             x => Err(format!("Invalid enum type: {}", x)),
         }
     }
@@ -13709,6 +13778,7 @@ impl ::std::convert::AsRef<str> for UserTypeEnum {
     fn as_ref(&self) -> &str {
         match self {
             UserTypeEnum::USER => "user",
+            UserTypeEnum::USER_REFERENCE => "user_reference",
             UserTypeEnum::UNKNOWN => "unknown",
         }
     }
