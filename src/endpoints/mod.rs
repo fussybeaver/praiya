@@ -6,6 +6,7 @@
 pub mod escalation_policies;
 pub mod incidents;
 pub mod on_calls;
+pub mod schedules;
 pub mod services;
 pub mod slack_connections;
 pub mod users;
