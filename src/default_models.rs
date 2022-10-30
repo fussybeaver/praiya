@@ -15,14 +15,13 @@ use std::fmt::{self, Display, Formatter};
 use std::hash::Hash;
 
 use chrono::DateTime;
-use chrono::Utc;
+use chrono::offset::FixedOffset;
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Acknowledgement {
     /// Time at which the acknowledgement was created.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub at: Option<chrono::DateTime<chrono::Utc>>,
+    pub at: DateTime<FixedOffset>,
     pub acknowledger: AcknowledgerReference,
 }
 
@@ -131,7 +130,7 @@ pub struct Action {
     pub id: Option<uuid::Uuid>,
     /// The date/time when this message was was sent.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub triggered_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub triggered_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub webhook: Option<Webhook>,
 }
@@ -483,7 +482,7 @@ pub struct Alert {
     pub id: Option<String>,
     /// The date/time the alert was first triggered.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     /// The type of object being created.
     #[serde(rename = "type")]
     pub _type: AlertTypeEnum,
@@ -1064,7 +1063,7 @@ impl std::default::Default for AllOfWebhooksV1AssignedToObjectTypeEnum {
 pub struct AllOfinlineResponse20036ChangeEventsItems {
     /// The time at which the emitting tool detected or generated the event.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    pub timestamp: Option<DateTime<FixedOffset>>,
     /// The type of object being created.
     #[serde(rename = "type")]
     pub _type: AllOfinlineResponse20036ChangeEventsItemsTypeEnum,
@@ -1162,12 +1161,12 @@ pub struct AllOfrulesetsBodyRuleset {
     pub routing_keys: Option<Vec<String>>,
     /// The date the Ruleset was created at.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<RulesetCreator>,
     /// The date the Ruleset was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub updated_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updater: Option<RulesetUpdater>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1551,7 +1550,7 @@ pub struct AssignLogEntry {
     pub _type: AssignLogEntryTypeEnum,
     /// Time at which the log entry was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1626,8 +1625,7 @@ impl std::default::Default for AssignLogEntryTypeEnum {
 #[allow(clippy::derive_partial_eq_without_eq)]
 pub struct Assignment {
     /// Time at which the assignment was created.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub at: Option<chrono::DateTime<chrono::Utc>>,
+    pub at: DateTime<FixedOffset>,
     pub assignee: User,
 }
 
@@ -1649,8 +1647,7 @@ pub struct AuditRecord {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub _self: Option<String>,
     /// The date/time the action executed, in ISO8601 format and millisecond precision.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub execution_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub execution_time: DateTime<FixedOffset>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_context: Option<AuditRecordExecutionContext>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2123,7 +2120,7 @@ pub struct ChangeEvent {
     pub id: Option<String>,
     /// The time at which the emitting tool detected or generated the event.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    pub timestamp: Option<DateTime<FixedOffset>>,
     /// The type of object being created.
     #[serde(rename = "type")]
     pub _type: ChangeEventTypeEnum,
@@ -3085,7 +3082,7 @@ pub struct EscalateLogEntry {
     pub _type: EscalateLogEntryTypeEnum,
     /// Time at which the log entry was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4919,7 +4916,7 @@ pub struct Incident {
     pub incident_number: Option<isize>,
     /// The date/time the incident was first triggered.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     /// The current status of the incident.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<IncidentStatusEnum>,
@@ -4945,7 +4942,7 @@ pub struct Incident {
     pub acknowledgements: Option<Vec<Acknowledgement>>,
     /// The time at which the status of the incident last changed.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status_change_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub last_status_change_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status_change_by: Option<AgentReference>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5183,8 +5180,7 @@ impl std::default::Default for IncidentUrgencyEnum {
 pub struct IncidentAction {
     #[serde(rename = "type")]
     pub _type: IncidentActionTypeEnum,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub at: Option<chrono::DateTime<chrono::Utc>>,
+    pub at: DateTime<FixedOffset>,
 }
 
 #[allow(non_camel_case_types)]
@@ -5380,7 +5376,7 @@ pub struct IncidentNote {
     pub content: String,
     /// The time at which the note was submitted
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
 }
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -5446,10 +5442,10 @@ pub struct IncidentOccurrence {
     pub category: Option<IncidentOccurrenceCategoryEnum>,
     /// The start of the date/time range over which Outlier Incident was calculated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub since: Option<chrono::DateTime<chrono::Utc>>,
+    pub since: Option<DateTime<FixedOffset>>,
     /// The end of the date/time range over which Outlier Incident was calculated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub until: Option<chrono::DateTime<chrono::Utc>>,
+    pub until: Option<DateTime<FixedOffset>>,
 }
 
 #[allow(non_camel_case_types)]
@@ -6708,7 +6704,7 @@ pub struct Integration {
     pub service: Option<Service>,
     /// The date/time when this integration was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor: Option<Vendor>,
     /// Specify for generic_email_inbound_integration. Must be set to an email address @your-subdomain.pagerduty.com
@@ -7442,7 +7438,7 @@ pub struct LogEntry {
     pub _type: LogEntryTypeEnum,
     /// Time at which the log entry was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7785,10 +7781,10 @@ pub struct MaintenanceWindow {
     pub sequence_number: Option<isize>,
     /// This maintenance window's start time. This is when the services will stop creating incidents. If this date is in the past, it will be updated to be the current time.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub start_time: Option<DateTime<FixedOffset>>,
     /// This maintenance window's end time. This is when the services will start creating incidents again. This date must be in the future and after the `start_time`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub end_time: Option<DateTime<FixedOffset>>,
     /// A description for this maintenance window.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -8144,11 +8140,9 @@ pub struct ModelOverride {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The start date and time for the override.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start: Option<chrono::DateTime<chrono::Utc>>,
+    pub start: DateTime<FixedOffset>,
     /// The end date and time for the override.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end: Option<chrono::DateTime<chrono::Utc>>,
+    pub end: DateTime<FixedOffset>,
     pub user: User,
 }
 
@@ -8190,7 +8184,7 @@ pub struct Notification {
     pub _type: NotificationTypeEnum,
     /// The time at which the notification was sent
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub started_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub started_at: Option<DateTime<FixedOffset>>,
     /// The address where the notification was sent. This will be null for notification type `push_notification`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
@@ -9030,7 +9024,7 @@ pub struct NotifyLogEntry {
     pub _type: NotifyLogEntryTypeEnum,
     /// Time at which the log entry was created
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9112,10 +9106,10 @@ pub struct Oncall {
     pub escalation_level: Option<isize>,
     /// The start of the on-call. If `null`, the on-call is a permanent user on-call.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub start: Option<chrono::DateTime<chrono::Utc>>,
+    pub start: Option<DateTime<FixedOffset>>,
     /// The end of the on-call. If `null`, the user does not go off-call.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub end: Option<chrono::DateTime<chrono::Utc>>,
+    pub end: Option<DateTime<FixedOffset>>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -9149,12 +9143,12 @@ pub struct Orchestration {
     pub routes: Option<isize>,
     /// The date the Orchestration was created at.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<OrchestrationCreatedBy>,
     /// The date the Orchestration was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub updated_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<OrchestrationUpdatedBy>,
     /// Version of the Orchestration.
@@ -9255,12 +9249,12 @@ pub struct OrchestrationRouterOrchestrationPath {
     pub catch_all: Option<OrchestrationRouterOrchestrationPathCatchAll>,
     /// The date/time the object was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<OrchestrationRouterOrchestrationPathCreatedBy>,
     /// The date/time the object was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub updated_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<OrchestrationRouterOrchestrationPathUpdatedBy>,
     /// Version of these Orchestration Rules
@@ -10357,7 +10351,7 @@ pub struct PushContactMethod {
     pub sounds: Option<Vec<PushContactMethodSound>>,
     /// Time at which the contact method was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     /// If true, this phone has been blacklisted by PagerDuty and no messages will be sent to it.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blacklisted: Option<bool>,
@@ -11405,12 +11399,12 @@ pub struct Ruleset {
     pub routing_keys: Option<Vec<String>>,
     /// The date the Ruleset was created at.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<RulesetCreator>,
     /// The date the Ruleset was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub updated_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updater: Option<RulesetUpdater>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11721,19 +11715,17 @@ pub struct ScheduleLayer {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The start time of this layer.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start: Option<chrono::DateTime<chrono::Utc>>,
+    pub start: DateTime<FixedOffset>,
     /// The end time of this layer. If `null`, the layer does not end.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub end: Option<chrono::DateTime<chrono::Utc>>,
+    pub end: Option<DateTime<FixedOffset>>,
     /// The ordered list of users on this layer. The position of the user on the list determines their order in the layer.
     pub users: Vec<ScheduleLayerUser>,
     /// An array of restrictions for the layer. A restriction is a limit on which period of the day or week the schedule layer can accept assignments.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restrictions: Option<Vec<Restriction>>,
     /// The effective start time of the layer. This can be before the start time of the schedule.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub rotation_virtual_start: Option<chrono::DateTime<chrono::Utc>>,
+    pub rotation_virtual_start: DateTime<FixedOffset>,
     /// The duration of each on-call shift in seconds.
     pub rotation_turn_length_seconds: isize,
     /// The name of the schedule layer.
@@ -11753,11 +11745,9 @@ pub struct ScheduleLayerEntry {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
     /// The start time of this entry.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub start: Option<chrono::DateTime<chrono::Utc>>,
+    pub start: DateTime<FixedOffset>,
     /// The end time of this entry. If null, the entry does not end.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub end: Option<chrono::DateTime<chrono::Utc>>,
+    pub end: DateTime<FixedOffset>,
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
@@ -12113,13 +12103,13 @@ pub struct Service {
     pub acknowledgement_timeout: Option<isize>,
     /// The date/time when this service was created
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     /// The current state of the Service. Valid statuses are:   - `active`: The service is enabled and has no open incidents. This is the only status a service can be created with. - `warning`: The service is enabled and has one or more acknowledged incidents. - `critical`: The service is enabled and has one or more triggered incidents. - `maintenance`: The service is under maintenance, no new incidents will be triggered during maintenance mode. - `disabled`: The service is disabled and will not have any new triggered incidents. 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<ServiceStatusEnum>,
     /// The date/time when the most recent incident was created for this service.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_incident_timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    pub last_incident_timestamp: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub escalation_policy: Option<EscalationPolicy>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12814,7 +12804,7 @@ pub struct SnoozeLogEntry {
     pub _type: SnoozeLogEntryTypeEnum,
     /// Time at which the log entry was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14033,8 +14023,7 @@ pub struct UserSession {
     #[serde(skip_serializing_if = "String::is_empty")]
     pub user_id: String,
     /// The date/time the user session was first created.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: DateTime<FixedOffset>,
     /// The type of the session
     #[serde(rename = "type")]
     pub _type: UserSessionTypeEnum,
@@ -14357,7 +14346,7 @@ pub struct WebhookIncidentAction {
     pub id: Option<uuid::Uuid>,
     /// The date/time when this message was was sent.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub triggered_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub triggered_at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub webhook: Option<Webhook>,
     /// The type of action being reported by this message. * `incident.trigger` - Sent when an incident is newly created/triggered. * `incident.acknowledge` - Sent when an incident is acknowledged by a user. * `incident.unacknowledge` - Sent when an incident is unacknowledged due to its acknowledgement timing out. * `incident.resolve` - Sent when an incident has been resolved. * `incident.assign` - Sent when an incident has been assigned to another user. Often occurs in concert with an `acknowledge`. * `incident.escalate` - Sent when an incident has been escalated to another user in the same escalation chain. * `incident.delegate` - Sent when an incident has been reassigned to another escalation policy. * `incident.annotate` - Sent when a note is created on an incident. 
@@ -14930,7 +14919,7 @@ pub struct CreateWebhookSubscription {
 pub struct WebhooksV1AssignedTo {
     /// Time at which the assignment was created.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub at: Option<chrono::DateTime<chrono::Utc>>,
+    pub at: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object: Option<AllOfWebhooksV1AssignedToObject>,
 }
@@ -14969,7 +14958,7 @@ pub struct WebhooksV1IncidentData {
     pub incident_number: Option<isize>,
     /// The date/time the incident was first triggered.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_on: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_on: Option<DateTime<FixedOffset>>,
     /// The current status of the incident.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<WebhooksV1IncidentDataStatusEnum>,
@@ -14990,7 +14979,7 @@ pub struct WebhooksV1IncidentData {
     pub trigger_details_html_url: Option<String>,
     /// The time at which the status of the incident last changed.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status_change_on: Option<chrono::DateTime<chrono::Utc>>,
+    pub last_status_change_on: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status_change_by: Option<WebhooksV1AssignedToUser>,
     /// Number of times the incident has been escalated.
@@ -15122,7 +15111,7 @@ pub struct WebhooksV1Message {
     pub _type: WebhooksV1MessageTypeEnum,
     /// The date/time when the incident changed state.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_on: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_on: Option<DateTime<FixedOffset>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<WebhooksV1MessageData>,
 }
@@ -15221,7 +15210,7 @@ pub struct WebhooksV1Service {
     pub html_url: Option<String>,
     /// The date/time the service was deleted, if it has been removed.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub deleted_at: Option<DateTime<FixedOffset>>,
     /// The description of the service.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,

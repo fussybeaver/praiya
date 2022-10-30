@@ -15,7 +15,7 @@ use std::fmt::{self, Display, Formatter};
 use std::hash::Hash;
 
 use chrono::DateTime;
-use chrono::Utc;
+use chrono::offset::FixedOffset;
 
 #[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]

@@ -421,10 +421,6 @@ public class PagerDutyCodegen extends RustServerCodegen {
             }
 
             for (CodegenProperty prop : model.vars) {
-                if (prop.dataFormat != null && prop.dataFormat.equals("dateTime")) {
-                    // set DateTime format on properties where appropriate
-                    prop.datatype = "DateTime<Utc>";
-                }
 
                 if (getBooleanValue(prop, CodegenConstants.IS_ENUM_EXT_NAME)) {
                     ArrayList<HashMap<String, String>> vars = (ArrayList<HashMap<String, String>>) prop.allowableValues
