@@ -31,7 +31,7 @@ pub fn builder(input: TokenStream) -> TokenStream {
                     Type::Path(syn::TypePath {
                         path: syn::Path { segments, .. },
                         ..
-                    }) if segments.iter().any(|p| p.ident == "String") => {
+                    }) if segments.iter().all(|p| p.ident == "String") => {
                         fields.push(quote! {
                             pub fn #ident(&mut self, #ident: &'req str) -> &mut Self {
                                 self.qs.append_pair(stringify!(#ident), &#ident);
@@ -52,6 +52,22 @@ pub fn builder(input: TokenStream) -> TokenStream {
                                     self
                                 }
                             });
+                    }
+                    Type::Path(syn::TypePath {
+                        path: syn::Path { segments, .. },
+                        ..
+                    }) if segments.iter().all(|p| p.ident == "bool") => {
+                        fields.push(quote! {
+                            pub fn #ident(&mut self, #ident: bool) -> &mut Self {
+                                if #ident {
+                                    self.qs.append_pair(stringify!(#ident), "true");
+                                } else {
+                                    self.qs.append_pair(stringify!(#ident), "false");
+                                }
+
+                                self
+                            }
+                        });
                     }
                     x => {
                         fields.push(quote! {

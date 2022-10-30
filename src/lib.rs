@@ -42,7 +42,7 @@
 //! - [ ] log_entries
 //! - [ ] maintenance_windows
 //! - [ ] notifications
-//! - [ ] on_calls
+//! - [X] on_calls
 //! - [ ] priorities
 //! - [ ] response_plays
 //! - [ ] rulesets
