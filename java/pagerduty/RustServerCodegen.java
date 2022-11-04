@@ -121,8 +121,8 @@ public class RustServerCodegen extends DefaultCodegenConfig {
         typeMapping.put("ByteArray", "swagger::ByteArray");
         typeMapping.put("binary", "swagger::ByteArray");
         typeMapping.put("boolean", "bool");
-        typeMapping.put("date", "chrono::DateTime<chrono::Utc>");
-        typeMapping.put("DateTime", "chrono::DateTime<chrono::Utc>");
+        typeMapping.put("date", "DateTime<FixedOffset>");
+        typeMapping.put("DateTime", "DateTime<FixedOffset>");
         typeMapping.put("password", "String");
         typeMapping.put("File", "Box<Stream<Item=Vec<u8>, Error=Error> + Send>");
         typeMapping.put("file", "Box<Stream<Item=Vec<u8>, Error=Error> + Send>");

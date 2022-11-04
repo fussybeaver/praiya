@@ -2,7 +2,7 @@
 name = "praiya"
 description = "An async PagerDuty API client"
 license = "Apache-2.0"
-version = "0.3.2"
+version = "0.4.0"
 authors = ["Praiya contributors"]
 homepage = "https://github.com/fussybeaver/praiya"
 repository = "https://github.com/fussybeaver/praiya"

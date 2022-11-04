@@ -13,7 +13,7 @@ use std::fmt::{self, Display, Formatter};
 use std::hash::Hash;
 
 use chrono::DateTime;
-use chrono::Utc;
+use chrono::offset::FixedOffset;
 {{#models}}{{#model}}{{^vendorExtensions.x-rustgen-noop}}
 
 {{#description}}/// {{{description}}}
@@ -89,7 +89,7 @@ pub type {{classname}} = i32;
 {{/vendorExtensions.x-rustgen-is-integer}}{{#vendorExtensions.x-rustgen-is-string}}
 pub type {{classname}} = String;
 {{/vendorExtensions.x-rustgen-is-string}}{{#vendorExtensions.x-rustgen-is-datetime}}
-pub type {{classname}} = DateTime<Utc>;
+pub type {{classname}} = DateTime<TimeZone>;
 {{/vendorExtensions.x-rustgen-is-datetime}}{{#vendorExtensions.x-rustgen-is-array}}
 pub type {{classname}} = Vec<{{arrayModelType}}>;
 {{/vendorExtensions.x-rustgen-is-array}}{{^vendorExtensions.has-vars}}{{! general struct}}#[derive(Debug, {{^vendorExtensions.x-rustgen-has-default-impl}}Default, {{/vendorExtensions.x-rustgen-has-default-impl}}Clone, PartialEq, Serialize, Deserialize)]{{#xmlName}}

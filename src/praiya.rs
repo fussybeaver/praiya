@@ -243,7 +243,7 @@ impl Praiya {
         }
     }
 
-    fn process_request(
+    pub(crate) fn process_request(
         &self,
         request: Result<Request<Body>, Error>,
     ) -> impl Future<Output = Result<Response<Body>, Error>> {
@@ -305,7 +305,9 @@ impl Praiya {
         Ok(string::String::from_utf8_lossy(&body).to_string())
     }
 
-    async fn decode_response<T: DeserializeOwned>(response: Response<Body>) -> Result<T, Error> {
+    pub(crate) async fn decode_response<T: DeserializeOwned>(
+        response: Response<Body>,
+    ) -> Result<T, Error> {
         let bytes = hyper::body::to_bytes(response.into_body()).await?;
 
         debug!("Decoded into string: {}", &String::from_utf8_lossy(&bytes));

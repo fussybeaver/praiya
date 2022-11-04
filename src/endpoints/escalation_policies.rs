@@ -62,8 +62,8 @@ struct ListEscalationPolicies {
 #[doc = "[EscalationPoliciesClient::list_escalation_policy_audit_records]"]
 #[allow(dead_code)]
 struct ListEscalationPolicyAuditRecords {
-    since: chrono::DateTime<chrono::Utc>,
-    until: chrono::DateTime<chrono::Utc>,
+    since: chrono::DateTime<chrono::FixedOffset>,
+    until: chrono::DateTime<chrono::FixedOffset>,
 }
 
 single_response_type!(EscalationPolicy, escalation_policy, UpdateEscalationPolicy);
@@ -181,16 +181,12 @@ impl EscalationPoliciesClient {
         id: &str,
         query_params: ListEscalationPolicyAuditRecordsParams,
     ) -> impl Stream<Item = Result<AuditRecord, Error>> + '_ {
-        let header_map = std::collections::HashMap::new();
-        // let audit_early_access: &str = PraiyaCustomHeaders::AuditEarlyAccess.into();
-        // header_map.insert(String::from(audit_early_access), String::from("true"));
-
         let base_request = BaseRequest {
             host: String::from(&self.api_endpoint),
             method: http::Method::GET,
             options: std::sync::Arc::new(query_params),
             path: format!("/escalation_policies/{}/audit/records", &id),
-            headers: header_map,
+            headers: std::collections::HashMap::new(),
         };
 
         self.client.process_into_paginated_stream::<AuditRecord, crate::praiya::PaginatedCursorResponse, crate::praiya::PaginatedCursorPosition, crate::praiya::PaginationCursorQueryComponent>(
