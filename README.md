@@ -46,7 +46,7 @@ Praiya has currently implemented the following API endpoints:
 - [ ] priorities
 - [ ] response_plays
 - [ ] rulesets
-- [ ] schedules
+- [X] schedules
 - [ ] service_dependencies
 - [X] services
 - [X] slack_connections

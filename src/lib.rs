@@ -46,7 +46,7 @@
 //! - [ ] priorities
 //! - [ ] response_plays
 //! - [ ] rulesets
-//! - [ ] schedules
+//! - [X] schedules
 //! - [ ] service_dependencies
 //! - [X] services
 //! - [X] slack_connections
