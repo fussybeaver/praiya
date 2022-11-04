@@ -90,6 +90,15 @@ jobs:
           command: test
           args: on_calls
 
+      - name: Run schedules tests
+        uses: actions-rs/cargo@v1
+        env:
+          PAGERDUTY_API_ENDPOINT: http://127.0.0.1:8081
+          RUST_LOG: praiya=debug
+        with:
+          command: test
+          args: schedule
+
       - name: Run doc tests
         uses: actions-rs/cargo@v1
         with:
