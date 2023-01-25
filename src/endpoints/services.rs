@@ -106,7 +106,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, CreateServiceResponse>(req)
+            .process_into_value::<_, _, CreateServiceResponse>(req)
             .await
     }
 
@@ -136,7 +136,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, CreateServiceEventRuleResponse>(req)
+            .process_into_value::<_, _, CreateServiceEventRuleResponse>(req)
             .await
     }
     /// ---
@@ -165,7 +165,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, CreateServiceIntegrationResponse>(req)
+            .process_into_value::<_, _, CreateServiceIntegrationResponse>(req)
             .await
     }
 
@@ -241,7 +241,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, GetServiceResponse>(req)
+            .process_into_value::<_, _, GetServiceResponse>(req)
             .await
     }
 
@@ -271,7 +271,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, GetServiceEventRuleResponse>(req)
+            .process_into_value::<_, _, GetServiceEventRuleResponse>(req)
             .await
     }
 
@@ -302,7 +302,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, GetServiceIntegrationResponse>(req)
+            .process_into_value::<_, _, GetServiceIntegrationResponse>(req)
             .await
     }
 
@@ -400,7 +400,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, UpdateServiceResponse>(req)
+            .process_into_value::<_, _, UpdateServiceResponse>(req)
             .await
     }
 
@@ -431,7 +431,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, UpdateServiceEventRuleResponse>(req)
+            .process_into_value::<_, _, UpdateServiceEventRuleResponse>(req)
             .await
     }
 
@@ -462,7 +462,7 @@ impl ServicesClient {
         );
 
         self.client
-            .process_into_value::<_, UpdateServiceIntegrationResponse>(req)
+            .process_into_value::<_, _, UpdateServiceIntegrationResponse>(req)
             .await
     }
 }

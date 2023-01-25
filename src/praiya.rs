@@ -13,11 +13,7 @@ use futures_util::stream;
 use futures_util::stream::StreamExt;
 use http::header::{HeaderName, ACCEPT, AUTHORIZATION, CONTENT_TYPE, FROM};
 use http::request::Builder;
-use hyper::body::HttpBody;
-use hyper::client::HttpConnector;
-use hyper::Uri as HyperUri;
-use hyper::{Body, Method, Request, Response};
-use hyper_rustls::HttpsConnector;
+use http::{method::Method, request::Request, response::Response};
 use log::{debug, warn};
 use serde::de::DeserializeOwned;
 use serde::ser;
@@ -27,7 +23,10 @@ use crate::errors::Error::*;
 use crate::errors::{self, Error};
 use crate::models::*;
 
-type Client = hyper::Client<HttpsConnector<HttpConnector>>;
+#[cfg(target_arch = "wasm32")]
+type Client = web_sys::Window;
+#[cfg(not(target_arch = "wasm32"))]
+type Client = hyper::Client<hyper_rustls::HttpsConnector<hyper::client::HttpConnector>>;
 
 #[derive(Clone)]
 pub struct Praiya {
@@ -41,7 +40,8 @@ pub struct Uri<'a> {
     encoded: Cow<'a, str>,
 }
 
-impl<'a> From<Uri<'a>> for HyperUri {
+#[cfg(not(target_arch = "wasm32"))]
+impl<'a> From<Uri<'a>> for hyper::Uri {
     fn from(uri: Uri<'a>) -> Self {
         uri.encoded.as_ref().parse().unwrap()
     }
@@ -70,8 +70,9 @@ impl<'req> From<PraiyaCustomHeaders<'req>> for &'static str {
 }
 
 impl Praiya {
+    #[cfg(not(target_arch = "wasm32"))]
     pub fn new(token: &str) -> Praiya {
-        let https_connector: HttpsConnector<HttpConnector> =
+        let https_connector: hyper_rustls::HttpsConnector<hyper::client::HttpConnector> =
             hyper_rustls::HttpsConnectorBuilder::new()
                 .with_native_roots()
                 .https_or_http()
@@ -81,7 +82,11 @@ impl Praiya {
         Self::with_connector(https_connector, token)
     }
 
-    pub fn with_connector(https_connector: HttpsConnector<HttpConnector>, token: &str) -> Praiya {
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn with_connector(
+        https_connector: hyper_rustls::HttpsConnector<hyper::client::HttpConnector>,
+        token: &str,
+    ) -> Praiya {
         let client_builder = hyper::Client::builder();
         let client = Arc::new(client_builder.build(https_connector));
 
@@ -92,13 +97,13 @@ impl Praiya {
         }
     }
 
-    pub(crate) fn build_request(
+    pub(crate) fn build_request<T>(
         &self,
         uri: Uri,
         builder: Builder,
-        body: Body,
-    ) -> Result<Request<Body>, Error> {
-        let request_uri: hyper::Uri = uri.into();
+        body: T,
+    ) -> Result<Request<T>, Error> {
+        let request_uri: http::Uri = uri.into();
 
         debug!("Build request uri ({:?})", &request_uri);
 
@@ -113,17 +118,17 @@ impl Praiya {
             .body(body)?)
     }
 
-    pub(crate) fn build_paginated_request(
+    pub(crate) fn build_paginated_request<T>(
         &self,
         host: &str,
         path: &str,
         builder: Builder,
         query: Arc<dyn BaseOption + Send + Sync>,
-        body: Body,
+        body: T,
         pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
-    ) -> Result<Request<Body>, Error> {
+    ) -> Result<Request<T>, Error> {
         let uri = Praiya::parse_paginated_url(host, path, query, pagination)?;
-        let request_uri: hyper::Uri = uri.into();
+        let request_uri: http::Uri = uri.into();
 
         debug!("Build request uri ({:?})", &request_uri);
 
@@ -226,9 +231,9 @@ impl Praiya {
         ))
     }
 
-    pub(crate) fn process_into_value<T, S: SingleResponse<Inner = T> + DeserializeOwned>(
+    pub(crate) fn process_into_value<T, B, S: SingleResponse<Inner = T> + DeserializeOwned>(
         &self,
-        req: Result<Request<Body>, Error>,
+        req: Result<Request<B>, Error>,
     ) -> impl Future<Output = Result<T, Error>> + '_
     where
         T: DeserializeOwned,
@@ -243,10 +248,10 @@ impl Praiya {
         }
     }
 
-    fn process_request(
+    fn process_request<T>(
         &self,
-        request: Result<Request<Body>, Error>,
-    ) -> impl Future<Output = Result<Response<Body>, Error>> {
+        request: Result<Request<T>, Error>,
+    ) -> impl Future<Output = Result<Response<T>, Error>> {
         let client = Arc::clone(&self.client);
         let timeout = self.client_timeout;
 
@@ -273,9 +278,9 @@ impl Praiya {
         }
     }
 
-    pub(crate) fn process_into_unit(
+    pub(crate) fn process_into_unit<T>(
         &self,
-        req: Result<Request<Body>, Error>,
+        req: Result<Request<T>, Error>,
     ) -> impl Future<Output = Result<(), Error>> + '_ {
         let fut = self.process_request(req);
         async move {
@@ -285,11 +290,11 @@ impl Praiya {
         }
     }
 
-    async fn execute_request(
-        client: Arc<hyper::Client<HttpsConnector<HttpConnector>>>,
-        req: Request<Body>,
+    async fn execute_request<T>(
+        client: Arc<Client>,
+        req: Request<T>,
         timeout: u64,
-    ) -> Result<Response<Body>, Error> {
+    ) -> Result<Response<T>, Error> {
         let request = client.request(req);
 
         match tokio::time::timeout(Duration::from_secs(timeout), request).await {
@@ -298,31 +303,32 @@ impl Praiya {
         }
     }
 
-    #[allow(dead_code)]
-    async fn decode_into_string(response: Response<Body>) -> Result<String, Error> {
-        let body = hyper::body::to_bytes(response.into_body()).await?;
+    async fn decode_response<T: DeserializeOwned, B>(response: Response<B>) -> Result<T, Error> {
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            let bytes = hyper::body::to_bytes(response.into_body()).await?;
 
-        Ok(string::String::from_utf8_lossy(&body).to_string())
-    }
+            debug!("Decoded into string: {}", &String::from_utf8_lossy(&bytes));
 
-    async fn decode_response<T: DeserializeOwned>(response: Response<Body>) -> Result<T, Error> {
-        let bytes = hyper::body::to_bytes(response.into_body()).await?;
-
-        debug!("Decoded into string: {}", &String::from_utf8_lossy(&bytes));
-
-        serde_json::from_slice::<T>(&bytes).map_err(|e| {
-            if e.is_data() {
-                JsonDataError {
-                    message: e.to_string(),
-                    column: e.column(),
+            serde_json::from_slice::<T>(&bytes).map_err(|e| {
+                if e.is_data() {
+                    JsonDataError {
+                        message: e.to_string(),
+                        column: e.column(),
+                    }
+                } else {
+                    e.into()
                 }
-            } else {
-                e.into()
-            }
-        })
+            })
+        }
+        #[cfg(target_arch = "wasm32")]
+        {
+            let json: JsValue = JsFuture::from(resp.json()?).await?;
+            json.into_serde()
+        }
     }
 
-    pub(crate) fn serialize_payload<S>(body: S) -> Result<Body, Error>
+    pub(crate) fn serialize_payload<T, S>(body: S) -> Result<T, Error>
     where
         S: ser::Serialize,
     {
@@ -381,11 +387,11 @@ pub(crate) struct BaseRequest {
 }
 
 trait RequestBuilder {
-    fn build_request(
+    fn build_request<T>(
         &self,
         client: &Praiya,
         pagination: Arc<dyn PaginationQueryComponent + Send + Sync>,
-    ) -> Result<Request<Body>, Error>;
+    ) -> Result<http::Request<T>, Error>;
 }
 
 impl RequestBuilder for BaseRequest {
